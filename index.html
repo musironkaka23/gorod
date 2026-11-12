@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Новый город</title>
+<title>Бишкек — город подписчиков</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
@@ -92,6 +92,50 @@
   .wopts button.on{border-color:#e8527f;background:#fff0f5}
   .wopts button.sw{width:38px;height:38px;padding:0;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #ddd}
   .wopts button.sw.on{box-shadow:0 0 0 3px #e8527f}
+
+  /* ===== mobile HUD v2 ===== */
+  #top{position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:5}
+  .hud{background:rgba(255,255,255,.95);border-radius:18px;padding:8px 14px;box-shadow:0 3px 12px rgba(0,0,0,.25)}
+  .hud .city{font:900 17px Inter,sans-serif;letter-spacing:.5px;color:#1d1d1d;display:flex;align-items:center;gap:6px}
+  .hud .stats{font:800 12px Inter,sans-serif;color:#666;margin-top:1px}.hud .stats b{color:#1d1d1d}
+  #onlineBox{position:static;transform:none;display:none;background:none;box-shadow:none;padding:0;font:800 12px Inter,sans-serif;color:#1d7a3a}
+  #coins{background:#1d1d1d;color:#ffd84a;border-radius:18px;padding:9px 14px;font:900 15px Inter,sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.3)}
+  #rail{position:fixed;right:12px;bottom:calc(26px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;align-items:center;z-index:5}
+  .rb{position:relative;width:50px;height:50px;border-radius:50%;border:none;background:rgba(255,255,255,.95);font-size:23px;box-shadow:0 4px 12px rgba(0,0,0,.3);padding:0;cursor:pointer}
+  .rb::before{content:attr(data-l);position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:1px;font:900 10px Inter,sans-serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8);white-space:nowrap}
+  .rb.big{width:62px;height:62px;background:#ffd84a;font-size:28px}
+  #buildBtn{position:relative;left:auto;top:auto;background:#ff7a1a;color:#fff;padding:0;font-size:23px}
+  #chatBtn{position:relative;right:auto;top:auto;width:50px;height:50px}
+  #findBtn{position:relative;right:auto;bottom:auto;padding:0;border-radius:50%}
+  #emos{position:fixed;right:76px;bottom:calc(150px + env(safe-area-inset-bottom));left:auto;display:grid;grid-template-columns:repeat(4,52px);gap:14px 8px;background:rgba(255,255,255,.95);border-radius:20px;padding:12px 12px 20px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:6}
+  #emos.hide{display:none}
+  .emo{position:relative;width:52px;height:46px;border-radius:14px;border:none;background:#f3f0f7;font-size:24px;box-shadow:none}
+  .emo::after{content:attr(data-l);position:absolute;left:50%;top:100%;transform:translateX(-50%);font:800 9.5px Inter,sans-serif;color:#555;white-space:nowrap;margin-top:1px}
+  .emo.anim{background:#efe7ff}
+  #joy{left:20px;bottom:calc(28px + env(safe-area-inset-bottom));width:124px;height:124px}
+  #knob{left:37px;top:37px}
+  #ctx{position:fixed;left:150px;right:84px;bottom:calc(40px + env(safe-area-inset-bottom));display:flex;flex-direction:column-reverse;align-items:center;gap:10px;pointer-events:none;z-index:5}
+  .cb,#petBtn,#driveBtn,#shopBtn{position:static;right:auto;bottom:auto;pointer-events:auto;color:#fff;border:none;border-radius:26px;padding:13px 16px;font:900 14px Inter,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.35);white-space:nowrap;max-width:100%}
+  #hint{bottom:calc(170px + env(safe-area-inset-bottom));padding:0 80px 0 20px}
+  #toast{top:calc(84px + env(safe-area-inset-top))}
+  #chat{top:calc(78px + env(safe-area-inset-top));right:76px;z-index:7}
+  #mall{position:fixed;left:0;right:0;bottom:0;z-index:55;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.35);max-height:52vh;display:flex;flex-direction:column}
+  #mall.hide{display:none}
+  #mall .wh{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}#mall .wh b{font-size:18px;font-weight:900;flex:1}
+  #mall .wh button{border:none;border-radius:20px;padding:9px 12px;font:900 13px Inter,sans-serif}
+  .mc{background:#1d1d1d;color:#ffd84a;border-radius:16px;padding:7px 11px;font:900 13px Inter,sans-serif}
+  #mTabs{display:flex;gap:6px;overflow-x:auto;padding:0 14px 8px;scrollbar-width:none}
+  #mTabs button{flex:none;border:none;background:#f1eef4;border-radius:16px;padding:8px 12px;font:800 13px Inter,sans-serif;color:#333}
+  #mTabs button.on{background:#7b4fc9;color:#fff}
+  #mBody{overflow:auto;padding:4px 14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .it{border:2px solid #eee;border-radius:14px;padding:8px 4px;text-align:center;font:800 12px Inter,sans-serif;color:#222;background:#fff}
+  .it .e{font-size:30px;line-height:1.2}.it .p{margin-top:4px;border:none;border-radius:10px;padding:6px 8px;font:900 12px Inter,sans-serif;background:#ffd84a;width:100%}
+  .it.on{border-color:#7b4fc9;background:#f6f0ff}.it .p.own{background:#efe7ff;color:#5a2fb0}.it .p.wear{background:#7b4fc9;color:#fff}
+  #plList{display:flex;flex-direction:column;gap:8px;margin:14px 0 4px}
+  #plList button{display:flex;align-items:center;gap:10px;border:none;background:#f6f4f8;border-radius:14px;padding:12px 14px;font:800 15px Inter,sans-serif;color:#222;text-align:left}
+  #plList button span{font-size:22px}
+  body.night .hud{background:rgba(30,36,60,.92)}body.night .hud .city{color:#fff}body.night .hud .stats{color:#aab}body.night .hud .stats b{color:#fff}
+  body.night .rb:not(.big):not(#buildBtn){background:rgba(40,46,72,.92)}
   .label.mayor{background:linear-gradient(90deg,#f2b417,#ffd84a);color:#3a2600;font-size:13px;border:2px solid #fff}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
@@ -99,13 +143,20 @@
 <body>
 <div id="labels"></div>
 <div id="top">
-  <div class="pill"><span class="dot"></span>НОВЫЙ ГОРОД</div>
-  <div class="count"><div class="t">ЖИТЕЛИ</div><div class="n" id="cnt">0</div></div>
+  <div class="hud"><div class="city"><span id="tod">☀️</span>БИШКЕК</div><div class="stats">👥 <b id="cnt">0</b><span id="onlineBox"> · 🟢 <span id="onl">1</span></span></div></div>
+  <div id="coins">🪙 <b id="coinN">0</b></div>
 </div>
-<div id="onlineBox">🟢 <span id="onl">1 онлайн</span></div>
-<button id="buildBtn">🏗 Построить свой дом</button>
-<button id="chatBtn">💬</button>
-<div id="emos"><button class="emo">👋</button><button class="emo">❤️</button><button class="emo">😂</button><button class="emo">🔥</button></div>
+<div id="rail">
+  <button id="emoBtn" class="rb" data-l="Эмоции">😊</button>
+  <button id="chatBtn" class="rb" data-l="Чат">💬</button>
+  <button id="buildBtn" class="rb" data-l="Дом">🏗</button>
+  <button id="placesBtn" class="rb" data-l="Места">🗺</button>
+  <button id="findBtn" class="rb big" data-l="Найти">🔍</button>
+</div>
+<div id="emos" class="hide">
+  <button class="emo anim" data-an="wave" data-l="Привет">👋</button><button class="emo anim" data-an="dance" data-l="Танец">💃</button><button class="emo anim" data-an="jump" data-l="Прыжок">🦘</button><button class="emo anim" data-an="clap" data-l="Хлопать">👏</button>
+  <button class="emo" data-l="Люблю">❤️</button><button class="emo" data-l="Смешно">😂</button><button class="emo" data-l="Огонь">🔥</button><button class="emo" data-l="Вау">😍</button>
+</div>
 <div id="chat" class="hide"><div style="display:flex;justify-content:space-between;align-items:center;font:900 15px Inter">💬 Чат города<button id="chatClose" style="border:none;background:none;font-size:18px">✕</button></div><div id="chatLog"></div>
 <form id="chatForm"><input id="chatIn" maxlength="80" placeholder="Напиши жителям…" autocomplete="off"><button>➤</button></form></div>
 <div id="toast"></div>
@@ -117,10 +168,20 @@
   <button class="btn g" id="bClose">Закрыть</button>
   <div id="bMsg"></div>
 </div></div>
-<div id="hint">Джойстик — идти · свайп — повернуть · нажми на дом</div>
+<div id="hint">Джойстик — идти · свайп — камера · нажми на дом</div>
 <div id="joy"><div id="knob"></div></div>
-<button id="petBtn" style="display:none">🐾 Взять питомца</button>
-<button id="shopBtn" style="display:none">👗 Примерочная</button>
+<div id="ctx"><button id="sitBtn" class="cb" style="display:none;background:#7b4fc9">🪑 Сесть</button><button id="mallBtn" class="cb" style="display:none;background:#7b4fc9">🛍 Войти в ТЦ</button><button id="shopBtn" class="cb" style="display:none;background:#e8527f">👗 Примерочная</button><button id="petBtn" class="cb" style="display:none;background:#3f8f6a">🐾 Взять питомца</button><button id="driveBtn" class="cb" style="display:none;background:#1d1d1d">🚗 Сесть за руль</button></div>
+<div id="mall" class="hide">
+  <div class="wh"><b>🛍 ТЦ «Бишкек»</b><span class="mc">🪙 <b id="mCoins">0</b></span><button id="mClose" style="background:#ffd84a">✅ Готово</button></div>
+  <div id="mTabs"></div>
+  <div id="mBody"></div>
+</div>
+<div class="modal hide" id="places"><div class="card">
+  <div style="font-weight:900;font-size:22px">🗺 Места Бишкека</div>
+  <div id="plList"></div>
+  <a class="btn" style="background:#fdf0f7;color:#d6249f" href="https://www.instagram.com/ai_toons_kg/" target="_blank" rel="noopener">Instagram мэра: @ai_toons_kg</a>
+  <button class="btn g" id="plClose">Закрыть</button>
+</div></div>
 <div id="ward" class="hide">
   <div class="wh"><b>👗 Образ</b><button id="wRand" style="background:#f1eef4">🎲 Случайно</button><button id="wRot" style="background:#f1eef4">🔄</button><button id="wSave" style="background:#ffd84a">✅ Готово</button></div>
   <div id="wTabs"></div>
@@ -135,12 +196,9 @@
   <button class="btn y" id="mOk">Войти как мэр</button>
   <button class="btn g" id="mNo">Я не мэр</button>
 </div></div>
-<button id="driveBtn" style="display:none">🚗 Сесть за руль</button>
-<button id="findBtn">🔍 Найти мой дом</button>
-<a id="cta" href="https://www.instagram.com/ai_toons_kg/" target="_blank" rel="noopener">Хочешь дом? <b>@ai_toons_kg</b></a>
 
 <div class="modal" id="welcome"><div class="card">
-  <div class="logo">НОВЫЙ<br><span>ГОРОД</span></div>
+  <div class="logo">ГОРОД<br><span>БИШКЕК</span></div>
   <div id="step1">
     <p>1 подписчик = 1 дом!<br><b style="color:#222">Кто ты?</b></p>
     <div style="display:flex;gap:10px">
@@ -150,7 +208,7 @@
   </div>
   <div id="step2" style="display:none">
     <input id="wNick" placeholder="Твой ник в Instagram (по желанию)" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-top:14px">
-    <p>Гуляй по городу, найди свой дом и встречай других жителей.<br><small style="color:#999">Название города выберем вместе!</small></p>
+    <p>Гуляй по городу, найди свой дом и встречай других жителей.<br><small style="color:#999">Загляни в ТЦ и в парк 🛍🌳</small></p>
     <button class="btn y" id="wFind">🔍 Найти мой дом</button>
     <button class="btn g" id="wWalk">Гулять по городу</button>
   </div>
@@ -181,8 +239,8 @@
 import * as THREE from 'three';
 
 const RESIDENTS=[["a1ka_505","house"],["smartphone__karakol","house"],["_ah_am_111","house2"],["djabbarov_ss","yurt"],["neurodann","house"],["karakol_nail","house"],["aiman114079","house"],["musironkaka","tower"],["humoraass","yurt"],["le_mon______","house"],["guka.zhenishbekova","yurt"],["kimnurel","house"],["a008_07","tower"],["rysaliev.aziz","house"],["ksenia_sergienko02","house2"],["s.m.sh.f6171","house"],["liana095_095_","house2"],["mhdykhrmy1218","house"],["abror64658","yurt"],["kaskusartur_","house"],["zhulduzturebaeva","house"],["bela.2666","house2"],["mun.ira3670","house"],["fayzullin_br","yurt"],["nazirasaidilova75","house2"],["anastasia_kistanova","yurt"],["kagosianolgav","house"],["muhhamdkim","yurt"],["kimako9372","house"],["kokounohito_14peaks","gold"],["umar_rrr9","castle"],["azi_alahu_akbar","house"],["ddbvna","nails"],["tiger_jui","villa"],["istol52","pyramid"],["akusya_00","sky"],["rahmetullaev_aaa","yurt"],["altynai46564","catcastle"],["bektemirov.20","house"],["aziretova.azi","house2"],["ramzan54736376363","yurt"],["ailyqueew.fc","melon"],["amirm_noname","circus"],["stvann01","village"],["rabbit.5618745","pizza"],["gen4ikmemes","estate"],["ymiiksa","house"],["rayka._.777","yurt"],["decor.aigerim","house2"],["jasur191931","house"],["sc4rl3tt_7709","villa"],["iamaruuke1","house2"],["mukh_zaitov","carhome"],["illxxam","eiffel"],["kanyys13","villa"],["nazy_la122","villa"],["chuba_rose","yurt"],["baiana77930","yurt"],["anelbolatova9","tower"],["mersedespredambmvne","house"],["sceptikq","house2"],["sofia_bububu","villa"],["mimojassss","villa"],["farhodvich_muxa","villa"],["dmrbkva.0","nails"],["guestmode321","mega"],["aylin_cosmos","lioncastle"],["_milana_pridvor_","bunker"],["ai.dai2948","house"],["ademi.gloww","villa"],["mgebrishvilitekla555","cathouse"],["aliya_rainbow","yurt"],["sofiiko520","villa3"],["german_empire_irl","tower"],["karina319411","villa"],["reclama_jld","yurt"],["malika05012019","house"],["anuarbek.tamerlan","house2"],["raiana32926","villa"],["aybyikeess","five"],["basi_t5596","house"],["rayana640572","white"],["kotik_pipi","house"],["luba46002","house2"],["veloura_damirovasss","house"],["abduramanovna","yurt"],["mavletsulaimanov","president"],["manyevelkhan","mountain"],["aiz5255","redroof"],["aibiike31.01","villa3"],["polinakosakova915","house2"],["_arukeya_","house"],["aruna50211","house"],["erkenaz14883","yurt"],["susedmichal","house"],["issabekova.nuri","house2"],["_mukanyan_","house"],["roma674567","house2"],["ayruna_92","house2"],["alishalee2505","house"],["malika_zholdybai","grape"],["luiza86217","village"],["liiki9176","doll"],["razanamadikova","villa"],["pokojo541","star"],["iluvmyfri","yurt"],["amiramamyrbaeva","villa"],["nurdemi0606","villa"],["anastasiya_masri","pink"],["fanat_jisoo","white"],["salye_vaaa","volley"],["veronika250112","house2"],["lyza_rozhenko","villa"],["korostelevmark","villa"],["kasiiuu_qq0","house"],["umar_kaza","yurt"],["rayakosh.zh","villa"],["_mira_da_mira_","castle"],["zhasmin64390_we","tower"],["narminx0","villa3"],["akbermet6767","yurt"],["nurbekovaziret_","village"],["mereikairzhan","gym"],["ulya_mbochka","villa3"],["rashidova7214","pink"],["mali_dooll","villa"],["_nuraiym.m_","villa"],["medina.kubatbekova","estate"],["aliia39202","yurt"],["ker1mkul0vaa","nails"],["regina97459_ami_beuti77","mosque"],["adellyo416","yurt"],["kuttubek.toichubekov","choco"],["sofi.imaeva","pink"],["konfetka_aya","sushi"],["elya_uborka","mosque"],["larin_emil","gold"],["nogoibaev_17","villa"],["janybekovna_1.7","melon"],["aman_26.16","mosque"],["tolgonaihalimova","pink"],["medinkavitaminka3","house"],["maryv4mp1","redroof"],["ainura28617","villa3"],["valeriya637226","house"],["bektur.omurov","gold"],["ademi95070","castle"],["samira.013713","mosque"],["zootbekovaaruuzatt","pineapple"],["abaymu_01","villa"],["darina_8488","white"],["kseniia76551","villa3"],["almaz_6769228","pineapple"],["anna123456789103333","redroof"],["2016_zha","circus"],["aruuke507_","gold"],["ayzada24833","villa3"],["saina.usenova","villa3"],["shuvarina_photo","cathouse"],["volleyball_topyohoo","sky"],["sofaakulic","white"],["rita_zolotih","cathouse"],["asema_limonka","strawberry"],["a1gerimm3","castle"],["aiaru_sagyntai","castle"],["alan_almazuly","house"],["mayastar1582","pink"],["t1murov1ch_x","gold"],["altynbekkyzy_z11","villa3"],["vurqe0","gold"],["shabakinalera","pandahouse"],["amina_1234807","pandahouse"],["aizat_kaidagulov","pawn"],["tolepbergenovnaa.2014","house2"],["medi22750","rocket"],["akylai5118","castle"],["__fnkx_kki_","five"],["560_iulia","village"],["nikolkosenko","star"],["kalimova_kausar_daniarkyzy","wardrobe"],["letniy.lager.iyun","pandahouse"],["ysakbaeva_2015","castle"],["anna_zherebilo_","pineapple"],["diana20_14_","gold"],["leyla_azerbayjan","melon"],["aiz_rek17","house2"],["aibi_i11","yurt"],["nina2_33224","croissant"],["kirill.taratenkov","white"],["sakhmi_myhamedhali","five"],["medina_khasen_official","pandahouse"],["fenics_2026","doll"],["arianakisil","ranch"],["sanira.20018","white"],["shakira43469","strawberry"],["esma155316","house2"],["failling82","castle"],["amir337728","villa"],["daurenkyzy.1.1","comb"],["jumgalbekovamalika","pinkcastle"],["marve.ta","estate"],["sofia.rg103","castle"],["modocmonova.08","villa"],["ayimakeneshbekova_05","strawberry"],["aizere_berdibekkyzy","circus"],["damira64921","house2"],["akiak_95","coconut"],["adelek1202","pyramid"],["akmaanaiabdyrakhmanova","five"],["kozubekovaazaliia","pink"],["ainazik66507","villa"],["zo.ro2129","castle"],["taabalgyevna","pineapple"],["nu_ra_im_20_15","villa"],["devid_2777","house"],["adis0va__16","villa"],["gulsara82506","castle"],["igor97038","fridge"],["abdulahad48674","carhome"],["usmanovvaa.ya","pink"],["kenjebekova_albina","pandahouse"],["diar.zhol","mega"],["rysbubu77","cathouse"],["baimgrofova","pinkcastle"],["ainurasaadanbekova","poop"],["nurel89131","bunker"],["aiymakoshoibaeva","gold"],["ramzan.borets16","carhome"],["aziz4ik_65","melon"],["mariya.ulanovna","villa"],["ri_nat6419","village"],["mamanchik_20","gadget"],["emir_shahmarov","pandahouse"],["fatima2949321","star"],["dysenka28","star"],["shaiyrbekova_015","star"],["bektur35078","cathouse"],["15_privet15","star"],["black_001","hat"],["kohinur06","mosque"],["eugenia15diurd","pinkcastle"],["ii.i.l.l","villa3"],["angelina72069","house2"],["liza345705","pizza"],["alzena.collections","house2"],["aika.858","house"],["polinaaaskova","village"],["roni_xs123","house"],["baian2584","white"],["cat__adventures2537638","redroof"],["david_alexandrovsky","melon"],["mnurai0","star"],["asell1yam_","circus"],["aiiosshaacat","star"],["keulimzhaykyzyy","tower"],["katjakozak2017","cathouse"],["pavlenko10894","villa"],["evak6.7","tower"],["yaroslava200814","melon"],["aybiy_7771","house2"],["adelya.786","villa3"],["kristina203201","circus"],["mariam7151995","star"],["mashulya_2016","melon"],["vl.sumenko","five"],["nyraho_o","villa"],["asel72480","villa"],["qwlimedii","white"],["a.almasbekovao","circus"],["nuri_mobilogtaph_01","white"],["1n6e0v6e","villa3"],["rinatkyzy.arna","villa3"],["n_273850","villa"],["jyrgalbekova__05","yurt"],["lerastar2026","tower"],["liubashsh","five"],["milahka3007","yurt"],["asemaiym19","pink"],["vanitezetka","redroof"],["sadraddin.sniper","white"],["medinka_vitaminka5","house"],["noni_07456","villa"],["isma1.zoda7","redroof"],["udodzlata","circus"],["ami784073","redroof"],["m_a_r_i_y_a_m_marmiladka","cathouse"],["aydemirova_javriyat","tower"],["asyawvvxz","strawberry"],["mita509020","star"],["eva_hlukha","gold"],["zumakan436","villa"],["ademi82140","melon"],["alina_244666","villa3"],["sasheeww","star"],["aklimusha9","white"],["ranel5271","villa3"],["ralina4862","villa3"],["azi_blog","pink"],["sakura303815","tower"],["_stasikkozhenov_","redroof"],["amaliiaulukbek","strawberry"],["ali1wix","house"],["tumari_016","house2"],["_xwpixx_","star"],["samiraakylbekov","melon"],["sofiiakaiacheva","redroof"],["arnz.m_","cathouse"],["kh_amarose","melon"],["mark255325","redroof"],["kilj345","house2"],["polinaershova01","house2"],["alexandra_narmaniya26","star"],["_saulekhanovv_","strawberry"],["elmara_2015","cathouse"],["arishaska","five"],["saken_a321","tower"],["milajefremova","cathouse"],["aruza699","yurt"],["kaprizuly_ya","redroof"],["zlata__smelova","pink"],["nazirbekova_56789","redroof"],["alice.bikbaeva","villa"],["aylin2000199","tower"],["siren_5269","tower"],["nurbijkeaskarova03","melon"],["arina_po213","house2"],["biskek_3452","white"],["marisqwu","house2"],["xdx.o4","yurt"],["altynai69608","pink"],["musi_195","pandahouse"],["alibekovass__","five"],["janabilova_005","house2"],["sarsenba1va.ai","five"],["ainazikktoktonbaeva","yurt"],["nktlkbbzn228","yurt"],["ayana_kanatova2015","gold"],["unicorn.8906757","villa"],["kauvsi_404","pizza"],["mm292785","melon"],["angel494023","house2"],["mavlasina","tower"],["paxom19","circus"],["adeli.a_04","house"],["sivaevss","pink"],["darina_galimu","yurt"],["3624.8916","house"],["kll.s09","house2"],["kitik.368","tower"],["sofiia11943","house"],["krk_elena","villa3"],["dasha_pasechnyk","castle"],["khadidzhazhamish","yurt"],["akumbaev_a0","redroof"],["asal686064","redroof"],["ulyan.aaa.a","pizza"],["annavramenko1404","pineapple"],["zagorodna_anastasia","five"],["mariambazarbek","house"],["dummy_lati","tower"],["nur6e_k0vna","redroof"],["dinosaur.2287079","gold"],["sergij.slobodan","house2"],["kayrzhankyzyy_22","redroof"],["ila99426","villa3"],["tomikosh27","house"],["egor_nadtochiy","pink"],["aziza29816","pink"],["zhanbii.n","redroof"],["gauuxx","tower"],["vikal.17","yurt"],["milasik21415","villa3"],["aminoska.sss","villa"],["solia2105sveta","villa3"],["akylbek0v_13","five"],["nuradilovaainazik","tower"],["medvezhonok352","redroof"],["orekhova_margarita","villa3"],["tretyakovaanna29","pizza"],["zhibek2016a","gold"],["shrn.426","pizza"],["shekhina777","pineapple"],["akylai140404","circus"],["kamolakhon16","house"],["a1bk_e","castle"],["daria70975","tower"],["kazckn","pineapple"],["eva_kuzniuk","villa"],["vinks6454","village"],["a.nael01","castle"],["nudik7069","villa"],["milesha553","redroof"],["saalikha19","house2"],["aibekowna.3","cathouse"],["khosiiat4491","star"],["ya_sply_98","house"],["barliqbay1957","house2"],["bazyr5949","white"],["orazymbetova_bb","strawberry"],["nas1rova_12","house"],["marifa1375","redroof"],["yasm.ina98989","house"],["muslim121411","villa"],["tamerlan_muay.thai","five"],["_nuraika18","house"],["lmef.3","house2"],["ami_aminora","strawberry"],["kukenovaa.a","star"],["arayeeaah_","house2"],["ollywwaa___","castle"],["aiyma80046","star"],["ainazik_krasotka","melon"],["amanovas.k","circus"],["dkiiraa","pineapple"],["sagdieva_a2015","redroof"],["ai.naz5561","white"],["fatima766976","redroof"],["sumivv__","villa"],["karaleva._sh","house2"],["diliara.bayanbekovaa","melon"],["balhadisha07","house2"],["d.dubeniuk00","cathouse"],["_toktoro_vas_","yurt"],["avilkhankyzy","pandahouse"],["xhdit8tsigzgi","yurt"],["aruuvvzx","pineapple"],["mussabayeva_alyazi","gold"],["miitochka","star"],["khdilix","house"],["kurmanbayaizat","villa"],["noname966007","villa"],["aizere_rastayeva","villa3"],["jusub954","pink"],["alis.airiska","yurt"],["dk_wzz11","house"],["kamilya56089","cathouse"],["mariska853267","star"],["l_m_hansa0_0","house2"],["amina.265905","pizza"],["nu.rel259","villa3"],["zulfiya53635","white"],["raiana415236","circus"],["el.liiza_","five"],["samir_2018.abmin","castle"],["its.aruuzatik","yurt"],["ruslanovvva_ailin","five"],["rqhmatovva","house2"],["sa_bina00019","cathouse"],["_aruuzat_2417","villa"],["ar.uuke384","white"],["ruz.777.a.134","melon"],["akmaanay3112","yurt"],["ularbekkkovna","house2"],["narmina_.15","house2"],["vickymouse_bgirl","star"],["sagimbekovnaa","village"],["adiletovas_ss","pandahouse"],["aitbekovaadina","castle"],["q3zrii","circus"],["zharkynai_tkd_itf_","pink"],["amina.baialieva","villa"],["konarevasofiaa","castle"],["indi.rachka","redroof"],["hann.ik0","house2"],["milkiveeey","redroof"],["_ml_seryu_","house"],["anel__09.06","villa"],["zhanabekaisha67","yurt"],["nassypkali","villa"],["bembi_daria_","house"],["anekat_01","gold"],["lida_dyr","star"],["emirr3498","redroof"],["ajzi719","strawberry"],["jasmin23071","house2"],["aiymnurkassymkyzy","house2"],["beka7seka","redroof"],["abdmanapova_00","house2"],["miray_031.0","yurt"],["anada._123","house"],["miss.chalngova_fati","pineapple"],["r.rakhmatullina21","house"],["adinai_orunbaeva","yurt"],["arisha_1356","melon"],["aizbeauty68","villa"],["1berryx_","house2"],["nuraipekinova","villa3"],["sezimkaaa012","strawberry"],["kartoska_top01","pineapple"],["alimbkvva_","melon"],["bereza_olka","villa"],["_nazibra","house2"],["8_.alina._","villa"],["sofianovosolova","white"],["angelina_10xd","redroof"],["aghasy_music__","house2"],["lada.creates","five"],["linka6429","strawberry"],["akmarzan953","house2"],["kausz_h","villa"],["mirlanovkalys9","villa3"],["jfffaguqcjsjwv","pink"],["natasha2444666668888888","star"],["zoyarna_19","pink"],["chyngyz10082","redroof"],["bolotbekavatasnim","white"],["unia7450","house2"],["kupisev","redroof"],["paula616423","strawberry"],["sasha_milasha1234567890","gold"],["marilyn_aile8","five"],["n70school","cathouse"],["jamalkina_2015","villa"],["abaeva_akzhan.e","circus"],["shahed64666666","circus"],["kasymkulova_aylina","villa"],["mmn__svnna","five"],["ruuda_001","redroof"],["di1aa__56","villa"],["aii_m0845","pink"],["aleksandra67544","tower"],["vuoto078","yurt"],["vv.va.vva","star"],["altair91374","villa"],["ludmilacmir","white"],["aizere6341","villa"],["me.erim.2.12","pizza"],["_ahmatkulov_011","pizza"],["msh.void23","white"],["alina_emae_","circus"],["diaradaurenkyzy_","redroof"],["user12345678904027","gold"],["poli_nkadr","house"],["begimai.ozubekova","melon"],["asylym1509","yurt"],["riro_rit_6_7","star"],["7hearts_dd","pineapple"],["aili_n6033","villa"],["begalieva.ssss","redroof"],["me_xon014","pineapple"],["maksatovichaitenir","pizza"],["adeliyabysinka","house2"],["karolina_visotcka","house2"],["talgatovaaruzhan_","white"],["karina480486","tower"],["apsamatova_akylai","yurt"],["aikol.medetova","white"],["sakina55116","house2"],["vikavoitko1979","gold"],["samikoshik","villa"],["linka_aar","five"],["aiselsabit","five"],["dinis_6266","pink"],["liliay2024","tower"],["kabdylmagzan16","house2"],["taalai6717","villa"],["caroline20155833","cathouse"],["not91165","circus"],["kgz.kyrgyzstan.kgz.2012","melon"],["lizon2702","melon"],["balausa5071","pandahouse"],["zukh.raa27","melon"],["yevhenia.musiienko","pandahouse"],["absolute.lies","star"],["emma02092017","circus"],["baatyrbekovap","villa"],["lakselly","pink"],["dosmailova.nurai","tower"],["amalishik","star"],["daria80726","tower"],["dia.ksy","five"],["alinur60221","yurt"],["_bekovva_0_0_","village"],["ler_ra.me81","village"],["arukam.077","redroof"],["galiaskarova454","gold"],["nuts_aid_are","pandahouse"],["chebyrek_arya","pizza"],["adikoch670","yurt"],["nade.jda_90","tower"],["hadica1914","gold"],["aibiike_666","gold"],["58.3740717","yurt"],["sixseven67769123","house2"],["6767maryyy","circus"],["arrs_____04","pink"],["eva2020702","star"],["koala.43934772","tower"],["sabixa215","melon"],["kiirabelle_0","house"],["muktarbekovna_13","house"],["aparaabbrahmanova","redroof"],["alinatoys_318","house"],["tenizbekova_aerke_2016","star"],["ai.ym114","pandahouse"],["aidosik451","tower"],["ivan816837","yurt"],["begmatov_2511","white"],["lebedeva.sofia.the.great","house2"],["alikaart3","house"],["anastasiia71239","house2"],["akh.arun","cathouse"],["jas67167","cathouse"],["gulzada62452","pineapple"],["1nu.rsultan1","gold"],["_8367261","villa"],["aislynxw","villa"],["emir.serikov","pineapple"],["vary_kar2501","tower"],["daubaeva_amina_0717","circus"],["kozlovskaaanna","melon"],["zeinep.1505","white"],["arseniy20022020","villa"],["asiya_w1","melon"],["cyngyzova","yurt"],["balfyiool","house"],["sami.love_ss","redroof"],["aisanochka_life_style","village"],["nurbakytovaalinura","castle"],["fks5501","tower"],["unicorn.6112384","cathouse"],["malishh43","yurt"],["aiblike6503","strawberry"],["aiasel__","cathouse"],["meowqvf","villa"],["kve_llm","castle"],["johnpierce6767","pineapple"],["zhanerke27786","cathouse"],["asel_ina_11","white"],["dari34921","pink"],["almasova536","house"],["aigul70544","pizza"],["akbota_nazik1516","castle"],["daliia.kairat","village"],["malikova_aiturgan","gold"],["sm.zlata","villa"],["1.madaminova_","melon"],["aihanym0208","house"],["2865.aziza","redroof"],["alikhan20150428","white"],["sagynbaeva.ailin","white"],["rekichinskaya.ulyana","star"],["karina_kausar","house"],["alikhan52057","strawberry"],["mayrambekovich.2","castle"],["askazha18","pizza"],["imon1azarov.zh","star"],["vanik45199","yurt"],["hanni0748","house2"],["user_sx_909","yurt"],["amanws789","five"],["suleymanova_670","redroof"],["no794944","redroof"],["as68302","circus"],["akylai_2223","villa"],["rslv1_01","yurt"],["dizasak0","pizza"],["maksymvoitiuk123","melon"],["isaxan32","cathouse"],["di_diana0619","redroof"],["mihail48771","circus"],["halima_kids_shop","house2"],["trd.usenbaev","pandahouse"],["nurahunovva_","redroof"],["aza_kur0","redroof"],["nure1_0136","castle"],["israilova7776","white"],["samolinmatvei","pandahouse"],["butterfly_okk_","yurt"],["is_m_a_i_l_o_v_a","house"],["f1chyrka","gold"],["050arm_arm","house2"],["anastasia_kistannova","gold"]];
-const PUBLIC=[[100,"🏫 Школа №1","school"],[101,"🐾 Приют для животных","shelter"],[102,"👗 Магазин одежды","shop"]];
-const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾",shop:"Магазин одежды — зайди и смени образ 👗",grape:"Дом-виноград 🍇",pineapple:"Дом-ананас 🍍",pawn:"Дом-пешка ♟️",rocket:"Дом-ракета 🚀",wardrobe:"Дом-шкаф 🚪",mosque:"Мечеть 🕌",croissant:"Дом-круассан 🥐",comb:"Дом-расчёска + кошка 🐱",doll:"Кукольный домик (6 этажей) + машина и панда 🐼",ranch:"Ранчо с лошадьми 🐴",star:"Дом-звезда ⭐",volley:"Дом — волейбольный мяч 🏐",gym:"Спортзал 🏋️",choco:"Шоколадная фабрика 🍫",sushi:"Дом-суши с бассейном 🍣",pink:"Розовый домик 💗",pinkcastle:"Нежно-розовый замок 🏰",pandahouse:"Дом-панда 🐼",strawberry:"Дом-клубника 🍓",coconut:"Дом-кокос + пальма 🥥",fridge:"Дом-холодильник 🧊",poop:"Весёлый домик-какашка 💩",gadget:"Магазин гаджетов 📱",hat:"Дом-шапочка 🧶"};
+const PUBLIC=[[100,"🏫 Школа №1","school"],[101,"🐾 Приют для животных","shelter"],[102,"👗 Магазин одежды","shop"],[103,"🛍 ТЦ «Бишкек»","mall"]];
+const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾",shop:"Магазин одежды — зайди и смени образ 👗",grape:"Дом-виноград 🍇",mall:"Торговый центр — заходи за покупками 🛍",park:"Парк для общения — сядь на лавочку, потанцуй с друзьями 🌳",pineapple:"Дом-ананас 🍍",pawn:"Дом-пешка ♟️",rocket:"Дом-ракета 🚀",wardrobe:"Дом-шкаф 🚪",mosque:"Мечеть 🕌",croissant:"Дом-круассан 🥐",comb:"Дом-расчёска + кошка 🐱",doll:"Кукольный домик (6 этажей) + машина и панда 🐼",ranch:"Ранчо с лошадьми 🐴",star:"Дом-звезда ⭐",volley:"Дом — волейбольный мяч 🏐",gym:"Спортзал 🏋️",choco:"Шоколадная фабрика 🍫",sushi:"Дом-суши с бассейном 🍣",pink:"Розовый домик 💗",pinkcastle:"Нежно-розовый замок 🏰",pandahouse:"Дом-панда 🐼",strawberry:"Дом-клубника 🍓",coconut:"Дом-кокос + пальма 🥥",fridge:"Дом-холодильник 🧊",poop:"Весёлый домик-какашка 💩",gadget:"Магазин гаджетов 📱",hat:"Дом-шапочка 🧶"};
 document.getElementById('cnt').textContent=RESIDENTS.length;
 
 // ---------- layout ----------
@@ -201,7 +259,7 @@ document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();const SKY=new THREE.Color('#f2b58e');scene.background=SKY;scene.fog=new THREE.Fog(SKY,180,1100);
 const camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.5,3000);
 addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()});
-scene.add(new THREE.HemisphereLight('#ffe6c8','#5f6e33',1.25));
+const HEMI=new THREE.HemisphereLight('#ffe6c8','#5f6e33',1.25);scene.add(HEMI);
 const sun=new THREE.DirectionalLight('#ffd2a1',2.4);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
 Object.assign(sun.shadow.camera,{left:-50,right:50,top:50,bottom:-50,near:1,far:300});sun.shadow.bias=-.0005;sun.shadow.normalBias=.03;
 scene.add(sun,sun.target);const SUN_OFF=new THREE.Vector3(-60,90,45);
@@ -229,8 +287,24 @@ for(let bx=-N;bx<=N;bx++)for(let bz=-N;bz<=N;bz++){const cx=bx*PX,cz=bz*PZ;
   for(let k=0;k<6;k++){const off=-ROAD/2+.7+k*1.2;ze.push([rx-ROAD/2-1.4,.02,rz+off,1.8,.02,.6]);ze.push([rx+off,.02,rz-ROAD/2-1.4,.6,.02,1.8])}}
 instanced(box,M('#d7a594'),sw,false);instanced(box,M('#86a043'),gr,false);instanced(box,M('#a3b85c'),ln,false);
 instanced(box,M('#e8e1d0'),da,false);instanced(box,M('#e8e1d0'),ze,false);instanced(box,M('#2c2a2c'),po);
-instanced(new THREE.SphereGeometry(.5,10,8),M('#ffe7a6',{emissive:'#ffc35a',emissiveIntensity:1.6}),bu,false);
+const BULBS=instanced(new THREE.SphereGeometry(.5,10,8),M('#ffe7a6',{emissive:'#ffc35a',emissiveIntensity:1.6}),bu,false);
 instanced(box,M('#6b4a32'),tr);instanced(new THREE.IcosahedronGeometry(.6,0),M('#4f7d34',{flatShading:true}),cr);
+
+// ---------- day / night (real local time) ----------
+const POOLS=(()=>{const g=new THREE.CircleGeometry(2.6,20);g.rotateX(-Math.PI/2);const m=new THREE.MeshBasicMaterial({color:'#ffcf6a',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});
+  const im=new THREE.InstancedMesh(g,m,bu.length),o=new THREE.Object3D();bu.forEach((p,i)=>{o.position.set(p[0],.36,p[2]);o.updateMatrix();im.setMatrixAt(i,o.matrix)});im.renderOrder=2;scene.add(im);return im})();
+const STARS=(()=>{const n=900,pos=new Float32Array(n*3);for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,e=Math.random()*1.3+.12,r=1400;pos[i*3]=Math.cos(a)*Math.cos(e)*r;pos[i*3+1]=Math.sin(e)*r;pos[i*3+2]=Math.sin(a)*Math.cos(e)*r}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));const p=new THREE.Points(g,new THREE.PointsMaterial({color:'#ffffff',size:2.2,sizeAttenuation:false,transparent:true,opacity:0,fog:false}));scene.add(p);return p})();
+const MOON=new THREE.Mesh(new THREE.SphereGeometry(28,24,16),new THREE.MeshBasicMaterial({color:'#fff6d8',fog:false,transparent:true,opacity:0}));MOON.position.set(-600,520,-900);scene.add(MOON);
+const C_DAY={sky:new THREE.Color('#f2b58e'),hemi:new THREE.Color('#ffe6c8'),sun:new THREE.Color('#ffd2a1')},C_NIGHT={sky:new THREE.Color('#141b33'),hemi:new THREE.Color('#7f93c9'),sun:new THREE.Color('#9fb4ff')};
+let NIGHT=0;
+function nightFactor(){const q=new URLSearchParams(location.search).get('time');if(q==='night')return 1;if(q==='day')return 0;if(q==='dusk')return .55;
+  const d=new Date(),h=d.getHours()+d.getMinutes()/60;if(h>=20||h<5)return 1;if(h>=18.5)return (h-18.5)/1.5;if(h<6.5)return 1-(h-5)/1.5;return 0}
+function applyNight(k){NIGHT=k;SKY.copy(C_DAY.sky).lerp(C_NIGHT.sky,k);scene.fog.color.copy(SKY);
+  HEMI.color.copy(C_DAY.hemi).lerp(C_NIGHT.hemi,k);HEMI.intensity=1.25-.5*k;sun.color.copy(C_DAY.sun).lerp(C_NIGHT.sun,k);sun.intensity=2.4-1.6*k;
+  renderer.toneMappingExposure=1.05+.25*k;BULBS.material.emissiveIntensity=1.6+3*k;POOLS.material.opacity=.5*k;STARS.material.opacity=k;MOON.material.opacity=k;
+  winMat.emissiveIntensity=.9+1.4*k;document.body.classList.toggle('night',k>.5);const ic=document.getElementById('tod');if(ic)ic.textContent=k>.5?'🌙':k>.05?'🌆':'☀️'}
+queueMicrotask(()=>applyNight(nightFactor()));setInterval(()=>applyNight(nightFactor()),30000);
 const mts=[],caps=[];
 for(let i=0;i<46;i++){const a=i/46*Math.PI*2+rnd()*.08,r=420+rnd()*120,h=85+rnd()*95,w=h*(1.1+rnd()*.5),x=Math.cos(a)*r,z=Math.sin(a)*r;
   mts.push([x,h/2,z,w,h,w,rnd()*6]);caps.push([x,h-h*.17,z,w*.34,h*.34+.5,w*.34,rnd()*6])}
@@ -664,6 +738,27 @@ const HOUSE={
     g.add(part(new THREE.SphereGeometry(.75,14,12),M('#ffffff',{roughness:1}),0,6.0,0));
     door(g,2.3,'#7a2a1a');for(const yy of[1.9,3.3])for(const x of[-1.1,1.1]){const w=part(box,winMat,x,yy,2.0-(yy>3?.25:0),.6,.6,.06);w.rotation.y=x>0?.45:-.45;g.add(w)}
     return g}},
+  mall:{h:8.4,r:3.0,make(){const g=new THREE.Group();
+    const wh=M('#f4f4f4',{roughness:.4}),gl=M('#8fc9ef',{roughness:.05,metalness:.3,emissive:'#2a6f9c',emissiveIntensity:.25}),dk=M('#2a2d34'),acc=M('#7b4fc9');
+    g.add(part(box,wh,0,.45,-.3,5.8,.3,4.6));
+    for(let f=0;f<2;f++){g.add(part(box,gl,0,1.9+f*2.8,-.3,5.4,2.5,4.2));g.add(part(box,wh,0,3.25+f*2.8,-.3,5.8,.3,4.6))}
+    for(const x of[-2.75,-1.375,0,1.375,2.75])g.add(part(box,wh,x,3.4,1.82,.14,5.8,.14));
+    // escalator inside
+    const es=part(box,dk,-1.2,2.6,-.4,.6,.15,3.4);es.rotation.x=.75;g.add(es);
+    // shops glowing inside
+    [['#ff7aa8',-1.8],['#ffd84a',0],['#3fb8c9',1.8]].forEach(([c,x],i)=>{g.add(part(box,M(c,{emissive:c,emissiveIntensity:.5}),x,4.9,-1.6,1.5,1.6,.1));g.add(part(box,M(c),x,1.6,-1.6,1.4,1.2,.1))});
+    // entrance
+    g.add(part(box,dk,0,1.5,2.0,2.2,2.2,.5));g.add(part(box,M('#bfe3ff',{roughness:.05,transparent:true,opacity:.55}),0,1.35,2.27,1.8,1.8,.05));
+    g.add(part(box,acc,0,2.8,2.2,2.6,.25,.9));
+    // sign
+    const c=document.createElement('canvas');c.width=512;c.height=128;const x=c.getContext('2d');x.fillStyle='#7b4fc9';x.fillRect(0,0,512,128);x.fillStyle='#fff';x.font='900 58px Inter,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('ТЦ БИШКЕК',256,68);
+    const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;g.add(part(box,new THREE.MeshStandardMaterial({map:tx,emissive:'#fff',emissiveMap:tx,emissiveIntensity:.5}),0,6.75,1.9,4.6,1.15,.1));
+    // shopping bag on roof
+    const bag=new THREE.Group();bag.position.set(0,7.6,-.3);bag.userData.spin2=1;g.add(bag);bag.add(part(box,M('#ff7aa8'),0,0,0,1.1,1.2,.5));bag.add(part(new THREE.TorusGeometry(.3,.06,6,14,Math.PI),M('#ff7aa8'),0,.6,0));
+    // flags + planters
+    for(const x of[-2.6,2.6]){g.add(part(new THREE.CylinderGeometry(.05,.05,3.4,6),M('#bbb',{metalness:.6}),x,2.0,2.5));g.add(part(box,M(x<0?'#e2452f':'#f2c230'),x+.35,3.3,2.5,.6,.9,.03));
+      g.add(part(box,M('#c9c4bb'),x*.55,.65,2.6,.7,.5,.7));g.add(part(new THREE.IcosahedronGeometry(.45,0),M('#4f8a34',{flatShading:true}),x*.55,1.15,2.6))}
+    return g}},
   pizza:{h:4.2,r:2.8,make(){const g=new THREE.Group();
     const sh=new THREE.Shape();sh.moveTo(0,-2.4);sh.lineTo(2.3,2.0);sh.quadraticCurveTo(0,2.7,-2.3,2.0);sh.lineTo(0,-2.4);
     const dough=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:2.6,bevelEnabled:false}),M('#f2c879'));dough.rotation.x=-Math.PI/2;dough.position.y=.4;dough.castShadow=dough.receiveShadow=true;g.add(dough);
@@ -942,13 +1037,50 @@ const HOUSE={
     g.add(part(box,M('#8f8270'),0,12.55,0,4.9,.3,4.9));g.add(part(box,M('#7e7466'),.8,13,-.6,1.2,.7,1.2));g.add(part(box,M('#4a3a2e'),0,.9,2.32,1.4,1.7,.06));return g}}};
 
 const houseOf=new WeakMap();const houses=[],labelBox=document.getElementById('labels');
-const RES_LOTS=new Set(PUBLIC.map(x=>x[0]));let slotK=0;function nextSlot(){while(RES_LOTS.has(slotK))slotK++;return slotK++}const slotOf=RESIDENTS.map(()=>nextSlot());
+const PARK_BLOCK=13;const RES_LOTS=new Set([...PUBLIC.map(x=>x[0]),...Array.from({length:8},(_,i)=>PARK_BLOCK*8+i)]);let slotK=0;function nextSlot(){while(RES_LOTS.has(slotK))slotK++;return slotK++}const slotOf=RESIDENTS.map(()=>nextSlot());
 const ALL=[...RESIDENTS.map((r,i)=>[r[0],r[1],slotOf[i],false]),...PUBLIC.map(p=>[p[1],p[2],p[0],true])];
 function buildHouse(nick,type,lot,pub){const L=lotInfo(lot),def=HOUSE[type]||HOUSE.house,g=def.make();
   g.position.set(L.x,.32,L.z);g.rotation.y=L.rot;scene.add(g);
   const el=document.createElement('div');el.className='label'+(pub?' pub':'');el.innerHTML='<span class="d"></span>'+nick;labelBox.appendChild(el);
   const h={nick,type,L,g,el,top:def.h+1,r:def.r,pub};g.traverse(o=>houseOf.set(o,h));houses.push(h);return h}
 ALL.forEach(([nick,type,lot,pub])=>buildHouse(nick,type,lot,pub));
+// ---------- park ----------
+const BENCHES=[],parkAnim=[];
+const parkH=(()=>{const b=blocks[PARK_BLOCK],cx=b[0]*PX,cz=b[1]*PZ,g=new THREE.Group();g.position.set(cx,0,cz);scene.add(g);
+  const lawn=M('#7fbf4f'),path=M('#e9d9b8'),stone=M('#cfc8bb'),wood=M('#9a6a3a'),iron=M('#2c2a2c');
+  g.add(part(box,lawn,0,.34,0,BW,.06,BD));g.add(part(box,path,0,.38,0,BW,.04,1.8));g.add(part(box,path,0,.38,0,1.8,.04,BD));
+  g.add(part(new THREE.CylinderGeometry(3.3,3.3,.05,32),path,0,.39,0));
+  // fountain
+  g.add(part(new THREE.CylinderGeometry(2.2,2.4,.7,28),stone,0,.7,0));g.add(part(new THREE.CylinderGeometry(1.95,1.95,.1,28),M('#5fc3ef',{roughness:.05,metalness:.2,emissive:'#1f6f9f',emissiveIntensity:.3}),0,.98,0));
+  g.add(part(new THREE.CylinderGeometry(.25,.35,1.6,12),stone,0,1.6,0));g.add(part(new THREE.CylinderGeometry(.9,.6,.25,20),stone,0,2.45,0));
+  const spray=part(new THREE.ConeGeometry(.7,1.6,16,1,true),new THREE.MeshStandardMaterial({color:'#bfe9ff',transparent:true,opacity:.55,roughness:.1,side:THREE.DoubleSide}),0,3.3,0);spray.rotation.x=Math.PI;g.add(spray);
+  parkAnim.push(t=>{const s=1+Math.sin(t*6)*.08;spray.scale.set(s,1+Math.sin(t*4)*.15,s)});
+  // benches facing fountain
+  const bench=(x,z,ry)=>{const bg=new THREE.Group();bg.position.set(x,.36,z);bg.rotation.y=ry;g.add(bg);
+    bg.add(part(box,wood,0,.55,0,1.8,.1,.55));bg.add(part(box,wood,0,.95,-.25,1.8,.45,.08));for(const sx of[-.8,.8])bg.add(part(box,iron,sx,.28,0,.08,.55,.5));
+    BENCHES.push({x:cx+x,z:cz+z,h:ry})};
+  for(const [x,z] of[[-5,-1.6],[5,-1.6],[-5,1.6],[5,1.6]])bench(x,z,z<0?0:Math.PI);
+  for(const [x,z] of[[-1.6,4.3],[1.6,4.3]])bench(x,z,Math.PI);for(const [x,z] of[[-1.6,-4.3],[1.6,-4.3]])bench(x,z,0);
+  // flowerbeds + trees
+  const fl=['#ff4f7b','#ffd84a','#ffffff','#b07cff','#ff8a3d'];
+  for(const [x,z] of[[-8,-3.6],[8,-3.6],[-8,3.6],[8,3.6]]){g.add(part(box,M('#6b4a32'),x,.45,z,3.2,.2,1.6));for(let i=0;i<14;i++)g.add(part(new THREE.SphereGeometry(.17,8,6),M(fl[i%5]),x-1.35+(i%7)*.45,.65,z-.35+Math.floor(i/7)*.7))}
+  for(const [x,z] of[[-11,-5],[11,-5],[-11,5],[11,5],[-3.5,-5.2],[3.5,5.2]]){g.add(part(box,M('#6b4a32'),x,1.0,z,.3,1.6,.3));g.add(part(new THREE.IcosahedronGeometry(1.3,0),M('#4f9a3a',{flatShading:true}),x,2.5,z))}
+  // playground (east)
+  const pg=new THREE.Group();pg.position.set(8.5,.36,0);g.add(pg);
+  for(const sx of[-1.3,1.3]){const l=part(new THREE.CylinderGeometry(.07,.07,2.6,8),M('#e2452f'),sx,1.2,0);pg.add(l)}pg.add(part(new THREE.CylinderGeometry(.07,.07,2.7,8),M('#e2452f'),0,2.5,0).rotateZ(Math.PI/2));
+  for(const sx of[-.6,.6]){const sw=new THREE.Group();sw.position.set(sx,2.5,0);pg.add(sw);sw.add(part(box,M('#999'),-.18,-.8,0,.03,1.6,.03));sw.add(part(box,M('#999'),.18,-.8,0,.03,1.6,.03));sw.add(part(box,M('#2f63c9'),0,-1.6,0,.5,.07,.3));parkAnim.push(t=>{sw.rotation.x=Math.sin(t*2+sx)*.5})}
+  const car=new THREE.Group();car.position.set(-.2,0,-2.6);pg.add(car);car.add(part(new THREE.CylinderGeometry(1.1,1.1,.15,20),M('#ffd84a'),0,.25,0));for(let i=0;i<4;i++){const a=i/4*Math.PI*2;car.add(part(box,M(['#e2452f','#2f9e6a','#7b4fc9','#ff7aa8'][i]),Math.cos(a)*.75,.55,Math.sin(a)*.75,.25,.45,.25))}car.add(part(new THREE.CylinderGeometry(.06,.06,1,8),M('#999'),0,.7,0));parkAnim.push(t=>{car.rotation.y=t*1.2});
+  const sl=new THREE.Group();sl.position.set(-.3,0,2.7);pg.add(sl);sl.add(part(box,M('#2f9e6a'),-.9,.9,0,.8,1.8,.8));const sd=part(box,M('#ffd84a'),.3,.9,0,2.0,.12,.7);sd.rotation.z=-.65;sl.add(sd);
+  // stage (west)
+  const st=new THREE.Group();st.position.set(-8.6,.36,0);g.add(st);st.add(part(new THREE.CylinderGeometry(2.4,2.5,.4,24,1,false,0,Math.PI),M('#c9a27a'),0,.2,0).rotateY(Math.PI/2));
+  st.add(part(new THREE.TorusGeometry(2.3,.14,8,24,Math.PI),M('#7b4fc9'),0,.4,0).rotateY(Math.PI/2));
+  const c=document.createElement('canvas');c.width=384;c.height=96;const x=c.getContext('2d');x.fillStyle='#7b4fc9';x.fillRect(0,0,384,96);x.fillStyle='#fff';x.font='900 44px Inter,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('ПАРК 🌳',192,52);
+  const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;const sg=part(box,new THREE.MeshStandardMaterial({map:tx,emissive:'#fff',emissiveMap:tx,emissiveIntensity:.4}),-.9,3.0,0,.08,.8,3.0);st.add(sg);
+  // lamps
+  for(const [x,z] of[[-3,-2.6],[3,-2.6],[-3,2.6],[3,2.6]]){g.add(part(new THREE.CylinderGeometry(.06,.08,2.8,8),iron,x,1.8,z));g.add(part(new THREE.SphereGeometry(.28,10,8),BULBS.material,x,3.3,z))}
+  const el=document.createElement('div');el.className='label pub';el.innerHTML='<span class="d"></span>🌳 Парк общения';labelBox.appendChild(el);
+  const h={nick:'🌳 Парк общения',type:'park',L:{x:cx,z:cz,rot:0,front:1},g,el,top:5.2,r:2.5,pub:true};g.traverse(o=>houseOf.set(o,h));houses.push(h);return h})();
+
 
 // ---------- drivable cars ----------
 scene.updateMatrixWorld(true);
@@ -963,12 +1095,17 @@ const WARD={
   top:['Футболка','Худи','Чапан','Платье','Куртка','Свитер'],
   bottom:['Джинсы','Юбка','Шорты','Брюки'],
   hat:['Нет','Калпак','Топу','Кепка','Бини','Корона','Цилиндр','Наушники','Ковбойская'],
-  glasses:['Нет','Очки','Тёмные','Звёздные']};
-const LOOK_DEF={g:'m',sk:1,hs:0,hc:0,tp:2,tc:0,bt:0,bc:6,ht:1,gl:0,shc:6};
-function lookFix(l){const o={...LOOK_DEF,...(l||{})};const lim={sk:5,hs:5,hc:8,tp:6,tc:12,bt:4,bc:12,ht:9,gl:4,shc:12};
+  glasses:['Нет','Очки','Тёмные','Звёздные'],
+  hand:['Пусто','Мороженое','Кофе','Бургер','Сладкая вата','Телефон','Букет','Мишка'],
+  back:['Пусто','Рюкзак','Крылья','Плащ героя','Гитара'],
+  float:['Пусто','Красный шарик','Шарик-сердце','Синий шарик','Шарик-звезда']};
+const SHOP={hand:[0,15,20,25,20,80,40,60],back:[0,50,300,150,120],float:[0,10,15,10,25]};
+const SHOP_EMO={hand:['✋','🍦','☕','🍔','🍭','📱','💐','🧸'],back:['✋','🎒','🪽','🦸','🎸'],float:['✋','🎈','💗','🔵','⭐']};
+const LOOK_DEF={g:'m',sk:1,hs:0,hc:0,tp:2,tc:0,bt:0,bc:6,ht:1,gl:0,shc:6,hi:0,bk:0,fl:0};
+function lookFix(l){const o={...LOOK_DEF,...(l||{})};const lim={sk:5,hs:5,hc:8,tp:6,tc:12,bt:4,bc:12,ht:9,gl:4,shc:12,hi:8,bk:5,fl:5};
   for(const k in lim){o[k]=Math.max(0,Math.min(lim[k]-1,(o[k]|0)))}o.g=o.g==='f'?'f':'m';return o}
-const lookStr=l=>[l.g,l.sk,l.hs,l.hc,l.tp,l.tc,l.bt,l.bc,l.ht,l.gl,l.shc].join('.');
-function lookParse(s){if(typeof s!=='string')return null;const a=s.split('.');if(a.length<11)return null;const k=['g','sk','hs','hc','tp','tc','bt','bc','ht','gl','shc'];const o={};k.forEach((x,i)=>o[x]=i?(+a[i]||0):a[i]);return lookFix(o)}
+const lookStr=l=>[l.g,l.sk,l.hs,l.hc,l.tp,l.tc,l.bt,l.bc,l.ht,l.gl,l.shc,l.hi,l.bk,l.fl].join('.');
+function lookParse(s){if(typeof s!=='string')return null;const a=s.split('.');if(a.length<11)return null;const k=['g','sk','hs','hc','tp','tc','bt','bc','ht','gl','shc','hi','bk','fl'];const o={};k.forEach((x,i)=>o[x]=i?(+a[i]||0):a[i]);return lookFix(o)}
 const _mc={};const MC=(c,o)=>{const k=c+JSON.stringify(o||{});return _mc[k]||(_mc[k]=M(c,o))};
 // builds a character into root (clears it); returns limbs {legL,legR,armL,armR}
 function buildCharacter(root,look,mayor){
@@ -1041,6 +1178,29 @@ function buildCharacter(root,look,mayor){
     const sash=part(box,gold,0,1.62,.47,.16,1.35,.04);sash.rotation.z=.75;add(sash);
     add(part(new THREE.SphereGeometry(.09,8,6),MC('#e2452f',{emissive:'#e2452f',emissiveIntensity:.5}),.18,1.85,.5));
     const ring=part(new THREE.TorusGeometry(1.0,.06,6,32),MC('#ffd84a',{emissive:'#ffb800',emissiveIntensity:1.2}),0,.06,0);ring.rotation.x=Math.PI/2;ring.userData.aura=1;add(ring)}
+  if(true){
+  // ---- shop items ----
+  const hand=new THREE.Group();hand.position.set(0,-.85,.12);armR.add(hand);
+  const hi=look.hi;
+  if(hi===1){hand.add(part(new THREE.ConeGeometry(.12,.35,10),MC('#e3a04a'),0,.05,0).rotateX(Math.PI));hand.add(part(new THREE.SphereGeometry(.14,10,8),MC('#ff9ccf'),0,.27,0))}
+  if(hi===2){hand.add(part(new THREE.CylinderGeometry(.1,.08,.26,10),MC('#f4f4f4'),0,.1,0));hand.add(part(new THREE.CylinderGeometry(.105,.105,.08,10),MC('#8a5a2b'),0,.14,0))}
+  if(hi===3){hand.add(part(new THREE.CylinderGeometry(.16,.16,.08,12),MC('#e3a04a'),0,.2,0));hand.add(part(new THREE.CylinderGeometry(.17,.17,.06,12),MC('#6b3a1e'),0,.13,0));hand.add(part(new THREE.CylinderGeometry(.17,.15,.07,12),MC('#e3a04a'),0,.06,0))}
+  if(hi===4){hand.add(part(new THREE.CylinderGeometry(.02,.02,.4,6),MC('#f4f4f4'),0,.1,0));hand.add(part(new THREE.SphereGeometry(.22,12,10),MC('#ffb3d9'),0,.38,0))}
+  if(hi===5){hand.add(part(box,MC('#1d1d1d'),0,.1,.05,.16,.3,.03));hand.add(part(box,MC('#4fc3e8',{emissive:'#2a8fd0',emissiveIntensity:.7}),0,.1,.07,.13,.25,.01))}
+  if(hi===6){hand.add(part(new THREE.ConeGeometry(.12,.35,8),MC('#2f9e6a'),0,0,0).rotateX(Math.PI));for(let i=0;i<5;i++){const a=i/5*Math.PI*2;hand.add(part(new THREE.SphereGeometry(.08,8,6),MC(['#ff4f7b','#ffd84a','#ffffff','#ff8a3d','#b07cff'][i]),Math.cos(a)*.1,.22,Math.sin(a)*.1))}}
+  if(hi===7){const b=MC('#b07a4a');hand.add(part(new THREE.SphereGeometry(.17,10,8),b,0,.08,.05));hand.add(part(new THREE.SphereGeometry(.12,10,8),b,0,.3,.05));for(const x of[-.08,.08])hand.add(part(new THREE.SphereGeometry(.05,8,6),b,x,.4,.05))}
+  const bk=look.bk;
+  if(bk===1){add(part(box,MC('#e2452f'),0,1.65,-.5,.62,.75,.28));add(part(box,MC('#b3122e'),0,1.45,-.66,.45,.3,.06))}
+  if(bk===2){const wm=MC('#ffffff',{emissive:'#cfe6ff',emissiveIntensity:.4});for(const s of[-1,1]){const w=part(new THREE.SphereGeometry(.55,12,8),wm,s*.55,1.85,-.55);w.scale.set(1.1,.7,.15);w.rotation.z=s*.5;add(w);const w2=part(new THREE.SphereGeometry(.4,12,8),wm,s*.75,1.35,-.55);w2.scale.set(1,.6,.14);w2.rotation.z=s*.9;add(w2)}}
+  if(bk===3){const cp=part(box,MC('#2f63c9'),0,1.35,-.52,.9,1.6,.05);cp.rotation.x=.15;add(cp);add(part(new THREE.SphereGeometry(.09,8,6),MC('#f2c230'),0,2.1,.45))}
+  if(bk===4){const gt=new THREE.Group();gt.position.set(0,1.6,-.52);gt.rotation.z=.6;add(gt);const bd=part(new THREE.SphereGeometry(.32,12,10),MC('#c97a2a'),0,-.2,0);bd.scale.set(1,1.2,.35);gt.add(bd);gt.add(part(box,MC('#5a3a24'),0,.45,0,.09,.9,.06))}
+  const fl=look.fl;
+  if(fl){const col=['','#e2452f','#ff4f7b','#2f63c9','#ffd84a'][fl];const bg=new THREE.Group();bg.position.set(.75,4.1,.1);add(bg);bg.userData.balloon=1;
+    if(fl===4){const s=new THREE.Shape();for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2,r=i%2?.18:.42;i?s.lineTo(Math.cos(a)*r,-Math.sin(a)*r):s.moveTo(Math.cos(a)*r,-Math.sin(a)*r)}const gg=new THREE.ExtrudeGeometry(s,{depth:.12,bevelEnabled:false});gg.translate(0,0,-.06);bg.add(new THREE.Mesh(gg,MC(col,{roughness:.2,metalness:.3})))}
+    else if(fl===2){const h=new THREE.Shape();h.moveTo(0,-.38);h.bezierCurveTo(.5,0,.4,.42,0,.2);h.bezierCurveTo(-.4,.42,-.5,0,0,-.38);const gg=new THREE.ExtrudeGeometry(h,{depth:.16,bevelEnabled:true,bevelSize:.05,bevelThickness:.05,bevelSegments:2});gg.translate(0,0,-.08);bg.add(new THREE.Mesh(gg,MC(col,{roughness:.2})))}
+    else{const b=part(new THREE.SphereGeometry(.36,14,12),MC(col,{roughness:.2}),0,0,0);b.scale.y=1.2;bg.add(b)}
+    const str=part(new THREE.CylinderGeometry(.008,.008,2.0,4),MC('#ffffff'),0,-1.4,0);bg.add(str)}
+  }
   return {legL,legR,armL,armR};
 }
 window.__mayor=(()=>{try{return localStorage.getItem('gorod_mayor')==='1'}catch(e){return false}})();
@@ -1195,8 +1355,8 @@ function renderWard(){
   $('wBody').querySelectorAll('button[data-g]').forEach(b=>b.onclick=()=>{LOOK.g=b.dataset.g;window.__gender=LOOK.g;lookChanged()});
 }
 function lookChanged(){try{localStorage.setItem('gorod_look_custom','1')}catch(e){}applyLook();renderWard()}
-function openWard(){if(wardOpen)return;wardOpen=true;camSave={camDist,camEl,camYaw};target=null;arrow.visible=false;
-  if(shopH){player.position.set(shopH.L.x,player.position.y,shopH.L.z+shopH.L.front*(shopH.r+1.6));heading=shopH.L.front>0?0:Math.PI;camT.copy(player.position)}camDist=8;camEl=.12;camYaw=heading;$('ward').classList.remove('hide');labelBox.style.opacity=0;$('shopBtn').style.display='none';renderWard()}
+function openWard(noTp){if(wardOpen)return;wardOpen=true;if(!mallOpen)camSave={camDist,camEl,camYaw};target=null;arrow.visible=false;
+  if(shopH&&!noTp){player.position.set(shopH.L.x,player.position.y,shopH.L.z+shopH.L.front*(shopH.r+1.6));heading=shopH.L.front>0?0:Math.PI;camT.copy(player.position)}camDist=8;camEl=.12;camYaw=heading;$('ward').classList.remove('hide');labelBox.style.opacity=0;$('shopBtn').style.display='none';renderWard()}
 function closeWard(){if(!wardOpen)return;wardOpen=false;$('ward').classList.add('hide');labelBox.style.opacity=1;if(camSave){camDist=camSave.camDist;camEl=camSave.camEl}
   if(window.__sendPresence)window.__sendPresence(true)}
 $('shopBtn').onclick=openWard;$('wSave').onclick=()=>{closeWard();toast2('✨ Новый образ сохранён! Его видят все онлайн')};
@@ -1218,11 +1378,74 @@ function updateShopMayor(dt,t,project){
   const ns=shopH&&!driving&&!wardOpen&&Math.hypot(player.position.x-shopH.L.x,player.position.z-shopH.L.z)<7.5;
   $('shopBtn').style.display=ns?'block':'none';
   if(wardOpen&&Math.hypot(jx,jy)>.3)closeWard();
+  if(mallOpen&&Math.hypot(jx,jy)>.3)closeMall();
   if(window.__mayor&&player.visible){project(meEl,player.position.x,player.position.y+4.0,player.position.z)}else meEl.style.display='none';
   for(const o of charRoot.children)if(o.userData.aura){const s=1+Math.sin(t*3)*.08;o.scale.set(s,s,s)}
   for(const o of spin2)o.rotation.y=t*1.2}
 const spin2=[];scene.traverse(o=>{if(o.userData.spin2)spin2.push(o)});
-window.__G={THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet}};
+// ---------- coins ----------
+let COINS=(()=>{try{const v=localStorage.getItem('gorod_coins');return v==null?100:+v||0}catch(e){return 100}})();
+const OWNED=new Set((()=>{try{return JSON.parse(localStorage.getItem('gorod_owned')||'[]')}catch(e){return[]}})());
+function saveCoins(){try{localStorage.setItem('gorod_coins',String(COINS));localStorage.setItem('gorod_owned',JSON.stringify([...OWNED]))}catch(e){}
+  const s=window.__mayor?'∞':String(COINS);$('coinN').textContent=s;$('mCoins').textContent=s}
+(()=>{const d=new Date().toDateString();let last='';try{last=localStorage.getItem('gorod_bonus')||''}catch(e){}if(last!==d){COINS+=50;try{localStorage.setItem('gorod_bonus',d)}catch(e){}setTimeout(()=>toast2('🎁 Ежедневный бонус мэра: +50 🪙'),2500)}saveCoins()})();
+setInterval(()=>{if(!document.hidden&&$('welcome').classList.contains('hide')){COINS+=1;saveCoins()}},10000);
+$('coins').style.pointerEvents='auto';$('coins').onclick=()=>toast2('🪙 Монеты капают каждые 10 секунд в городе + бонус каждый день. Трать в ТЦ «Бишкек»!');
+// ---------- mall ----------
+const mallH=houses.find(h=>h.type==='mall');let mallOpen=false,mTab='hand';
+const M_TABS=[['cafe','🍦 Кафе'],['gift','🎁 Подарки'],['back','🎒 Аксессуары'],['float','🎈 Шарики'],['wear','👗 Одежда']];
+const TAB_ITEMS={cafe:['hand',[1,2,3,4]],gift:['hand',[5,6,7]],back:['back',[1,2,3,4]],float:['float',[1,2,3,4]]};
+const SLOT_KEY={hand:'hi',back:'bk',float:'fl'};
+function renderMall(){
+  $('mTabs').innerHTML=M_TABS.map(([k,n])=>`<button data-t="${k}" class="${k===mTab?'on':''}">${n}</button>`).join('');
+  $('mTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.t==='wear'){closeMall(true);openWard(true);return}mTab=b.dataset.t;renderMall()});
+  const [slot,ids]=TAB_ITEMS[mTab]||TAB_ITEMS.cafe;const key=SLOT_KEY[slot];
+  $('mBody').innerHTML=ids.map(i=>{const id=slot+':'+i,own=OWNED.has(id)||window.__mayor,wear=LOOK[key]===i;
+    return `<div class="it ${wear?'on':''}"><div class="e">${SHOP_EMO[slot][i]}</div>${WARD[slot][i]}<button class="p ${wear?'wear':own?'own':''}" data-s="${slot}" data-i="${i}">${wear?'Снять':own?'Надеть':SHOP[slot][i]+' 🪙'}</button></div>`}).join('');
+  $('mBody').querySelectorAll('button.p').forEach(b=>b.onclick=()=>{const slot=b.dataset.s,i=+b.dataset.i,key=SLOT_KEY[slot],id=slot+':'+i;
+    if(LOOK[key]===i){LOOK[key]=0}
+    else if(OWNED.has(id)||window.__mayor){LOOK[key]=i}
+    else{const p=SHOP[slot][i];if(COINS<p){toast2(`Не хватает монет 😢 Нужно ${p} 🪙, у тебя ${COINS}. Гуляй по городу — монеты капают!`);return}
+      COINS-=p;OWNED.add(id);LOOK[key]=i;toast2(`🛍 Куплено: ${WARD[slot][i]} ${SHOP_EMO[slot][i]}  −${p} 🪙`)}
+    saveCoins();applyLook();renderMall();if(window.__sendPresence)window.__sendPresence(true)})}
+function openMall(){if(mallOpen)return;mallOpen=true;camSave={camDist,camEl,camYaw};target=null;arrow.visible=false;
+  if(mallH){player.position.set(mallH.L.x,player.position.y,mallH.L.z+mallH.L.front*(mallH.r+1.6));heading=mallH.L.front>0?0:Math.PI;camT.copy(player.position)}
+  camDist=8;camEl=.12;camYaw=heading;$('mall').classList.remove('hide');labelBox.style.opacity=0;mTab='cafe';renderMall()}
+function closeMall(keepCam){if(!mallOpen)return;mallOpen=false;$('mall').classList.add('hide');if(!keepCam){labelBox.style.opacity=1;if(camSave){camDist=camSave.camDist;camEl=camSave.camEl}}
+  if(window.__sendPresence)window.__sendPresence(true)}
+$('mallBtn').onclick=openMall;$('mClose').onclick=()=>{closeMall();toast2('✨ Покупки видят все жители онлайн!')};
+// ---------- places ----------
+function placesList(){const my=(()=>{try{return localStorage.getItem('gorod_nick')||''}catch(e){return''}})();const L=[];
+  const mh=my&&houses.find(h=>h.nick===my);if(mh)L.push(['🏠','Мой дом',mh]);
+  for(const [t,e,n] of[['mall','🛍','ТЦ «Бишкек» — покупки'],['park','🌳','Парк общения'],['shop','👗','Магазин одежды'],['shelter','🐾','Приют — взять питомца'],['school','🏫','Школа №1']]){const h=houses.find(x=>x.type===t);if(h)L.push([e,n,h])}
+  $('plList').innerHTML='';L.forEach(([e,n,h])=>{const b=document.createElement('button');b.innerHTML=`<span>${e}</span>${n}`;b.onclick=()=>{$('places').classList.add('hide');goTo(h)};$('plList').appendChild(b)})}
+$('placesBtn').onclick=()=>{placesList();$('places').classList.remove('hide')};$('plClose').onclick=()=>$('places').classList.add('hide');
+// ---------- emotes & animations ----------
+$('emoBtn').onclick=()=>$('emos').classList.toggle('hide');
+let myAnim='',animT0=0,sitSpot=null;
+function setAnim(a){myAnim=a;animT0=performance.now()/1000;if(window.__sendPresence)window.__sendPresence(true)}
+document.querySelectorAll('#emos .emo').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.an)setAnim(b.dataset.an);setTimeout(()=>$('emos').classList.add('hide'),150)}));
+function animChar(L,root,an,t){root.position.y=0;root.rotation.set(0,0,0);if(!L)return;
+  for(const k of['legL','legR','armL','armR'])L[k].rotation.z=0;
+  if(an==='dance'){const s=Math.sin(t*8);root.position.y=Math.abs(s)*.25;root.rotation.y=Math.sin(t*4)*.6;L.armL.rotation.set(0,0,-2.3+s*.5);L.armR.rotation.set(0,0,2.3+s*.5);L.legL.rotation.x=s*.4;L.legR.rotation.x=-s*.4}
+  else if(an==='wave'){L.armR.rotation.set(0,0,2.7+Math.sin(t*10)*.35);L.armL.rotation.x=0;L.legL.rotation.x=L.legR.rotation.x=0}
+  else if(an==='clap'){const s=Math.abs(Math.sin(t*9));L.armL.rotation.set(-1.3,0,-.3-s*.5);L.armR.rotation.set(-1.3,0,.3+s*.5);root.position.y=Math.abs(Math.sin(t*4.5))*.08}
+  else if(an==='jump'){const p=(t*1.4)%1,y=Math.sin(p*Math.PI);root.position.y=y*1.5;L.armL.rotation.set(0,0,-2.6*y);L.armR.rotation.set(0,0,2.6*y);L.legL.rotation.x=-y*.6;L.legR.rotation.x=-y*.6}
+  else if(an==='sit'){root.position.y=-.42;L.legL.rotation.x=L.legR.rotation.x=-1.45;L.armL.rotation.x=L.armR.rotation.x=-.35}}
+window.__animChar=animChar;
+$('sitBtn').onclick=()=>{if(myAnim==='sit'){setAnim('');return}const b=nearBench();if(!b)return;sitSpot=b;player.position.set(b.x+Math.sin(b.h)*.15,player.position.y,b.z+Math.cos(b.h)*.15);heading=b.h;setAnim('sit')};
+function nearBench(){let best=null,bd=2.4;for(const b of BENCHES){const d=Math.hypot(player.position.x-b.x,player.position.z-b.z);if(d<bd){bd=d;best=b}}return best}
+function updateAnim(dt,t,moving){
+  if(myAnim&&moving&&!fly){myAnim='';sitSpot=null;if(window.__sendPresence)window.__sendPresence(true)}
+  if(myAnim&&myAnim!=='sit'&&myAnim!=='dance'&&t-animT0>4.5&&false){}
+  if(myAnim){animChar({legL,legR,armL,armR},charRoot,myAnim,performance.now()/1000-animT0);if(myAnim==='sit'&&sitSpot){player.position.x=sitSpot.x+Math.sin(sitSpot.h)*.15;player.position.z=sitSpot.z+Math.cos(sitSpot.h)*.15;heading=sitSpot.h}}
+  else{charRoot.position.y=0;charRoot.rotation.set(0,0,0);for(const l of[legL,legR,armL,armR])l.rotation.z=0}
+  for(const o of charRoot.children)if(o.userData.balloon){o.position.y=4.1+Math.sin(t*2)*.12;o.rotation.z=Math.sin(t*1.3)*.15}
+  const nb=!driving&&!wardOpen&&!mallOpen&&nearBench();$('sitBtn').style.display=(nb||myAnim==='sit')?'block':'none';$('sitBtn').textContent=myAnim==='sit'?'🚶 Встать':'🪑 Сесть';
+  const nm=mallH&&!driving&&!mallOpen&&!wardOpen&&Math.hypot(player.position.x-mallH.L.x,player.position.z-mallH.L.z)<7.5;$('mallBtn').style.display=nm?'block':'none';
+  for(const fn of parkAnim)fn(t)}
+
+window.__G={THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet},get anim(){return myAnim}};
 // ---------- loop ----------
 let cullT=0;const clock=new THREE.Clock(),v=new THREE.Vector3();let driving=null,nearCar=null,lookH=2,walkT=0,camT=new THREE.Vector3().copy(player.position);
 const spinners=[];const blinkers=[];scene.traverse(o=>{if(o.userData.spin)spinners.push(o);if(o.userData.blink)blinkers.push(o)});
@@ -1240,14 +1463,14 @@ function frame(){const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
     const want=Math.atan2(wx,wz);let d=want-heading;d=Math.atan2(Math.sin(d),Math.cos(d));heading+=d*Math.min(1,dt*(driving?5:12));walkT+=dt*sp*1.1}
   if(!fly){collide(player.position);player.position.y+=(groundY(player.position.x,player.position.z)-player.position.y)*Math.min(1,dt*15)}
   player.rotation.y=heading;
-  const sw=mag>.05&&!fly?Math.sin(walkT)*.7:0;legL.rotation.x=sw;legR.rotation.x=-sw;armL.rotation.x=-sw*.8;armR.rotation.x=sw*.8;
+  const sw=mag>.05&&!fly?Math.sin(walkT)*.7:0;legL.rotation.x=sw;legR.rotation.x=-sw;armL.rotation.x=-sw*.8;armR.rotation.x=sw*.8;updateAnim(dt,t,mag>.05);
   if(driving){driving.position.set(player.position.x,player.position.y,player.position.z);driving.rotation.set(0,heading,0)}
   {let near=null;if(!driving){const wp=new THREE.Vector3();for(const c of drivables){if(!c.visible)continue;c.getWorldPosition(wp);if(Math.hypot(wp.x-player.position.x,wp.z-player.position.z)<4.5){near=c;break}}}
    nearCar=near;const db=$('driveBtn');db.style.display=(near||driving)?'block':'none';db.textContent=driving?'🚶 Выйти из машины':'🚗 Сесть за руль'}
   // camera
   camT.lerp(player.position,Math.min(1,dt*6));
   const off=v.set(Math.cos(camEl)*Math.sin(camYaw),Math.sin(camEl),Math.cos(camEl)*Math.cos(camYaw)).multiplyScalar(camDist);
-  camera.position.copy(camT).add(off);camera.position.y=Math.max(camera.position.y,2);const near=target&&target.top>15&&Math.hypot(player.position.x-target.L.x,player.position.z-target.L.z)<14;lookH+=((wardOpen?1.0:near?target.top*.42:2)-lookH)*Math.min(1,dt*3);camera.lookAt(camT.x,camT.y+lookH,camT.z);
+  camera.position.copy(camT).add(off);camera.position.y=Math.max(camera.position.y,2);const near=target&&target.top>15&&Math.hypot(player.position.x-target.L.x,player.position.z-target.L.z)<14;lookH+=((wardOpen||mallOpen?1.0:near?target.top*.42:2)-lookH)*Math.min(1,dt*3);camera.lookAt(camT.x,camT.y+lookH,camT.z);
   sun.position.copy(camT).add(SUN_OFF);sun.target.position.copy(camT);
   if(target){arrow.visible=true;arrow.position.set(target.L.x,target.top+2.2+Math.sin(t*4)*.5,target.L.z);arrow.rotation.y=t*2}
   renderer.render(scene,camera);
@@ -1348,7 +1571,7 @@ let lastSent = 0, lastKey = "", myEmote = "", emoteUntil = 0;
 function sendPresence(force) {
   if (hiddenOut) return;
   const p = G.player.position, now = performance.now();
-  const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", lk: G.look, m: G.mayor ? 1 : 0, n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
+  const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", lk: G.look, m: G.mayor ? 1 : 0, an: G.anim || "", n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
   const key = JSON.stringify(st);
   if (!force && (key === lastKey ? now - lastSent < 8000 : now - lastSent < 250)) return;
   lastKey = key; lastSent = now;
@@ -1359,7 +1582,7 @@ document.querySelectorAll(".emo").forEach(b => b.onclick = () => { myEmote = b.t
 // avatars of other people
 const peers = new Map();
 function makeAvatar(g, lk, mayor) {
-  const a = new THREE.Group(); const body = new THREE.Group(); a.add(body);
+  const a = new THREE.Group(); const body = new THREE.Group(); a.add(body); a.userData.body = body;
   const look = G.lookParse(lk) || G.lookFix({ g: g === "f" ? "f" : "m", ht: g === "f" ? 2 : 1, tp: g === "f" ? 3 : 2, tc: g === "f" ? 1 : 0 });
   a.userData.limbs = G.buildCharacter(body, look, mayor);
   const car = new THREE.Group(); car.visible = false; a.add(car);
@@ -1379,7 +1602,7 @@ onValue(ref(db, "online"), snap => {
       const bub = document.createElement("div"); bub.className = "bubble emo-b"; bub.style.display = "none"; labelBox.appendChild(bub);
       P = { obj, el, bub, g: v.g, akey,  tx: v.x, tz: v.z, th: v.h || 0, pet: null, petEl: null, pk: "" }; peers.set(id, P);
     }
-    P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; P.e = v.e || ""; P.seen = nowL; P.ts = v.ts;
+    P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; P.e = v.e || ""; P.an = v.an || ""; P.seen = nowL; P.ts = v.ts;
     if (v.m && !P.wasM) toast("👑 Мэр города вышла на прогулку!"); P.wasM = !!v.m;
     P.el.textContent = (v.m ? "👑 Мэр @" : "🟢 ") + String(v.n || "гость").slice(0, 30); P.el.classList.toggle("mayor", !!v.m);
     if ((v.pk || "") !== P.pk) {
@@ -1426,7 +1649,7 @@ window.__onlineTick = (dt, t) => {
     if (isStale(P.ts) || nowL - P.seen > 60000) { dropPeer(id); continue }
     const o = P.obj, k = Math.min(1, dt * 8), dx = P.tx - o.position.x, dz = P.tz - o.position.z;
     o.position.x += dx * k; o.position.z += dz * k;
-    { const L = o.userData.limbs, mv = Math.hypot(dx, dz) > .08, sw = mv ? Math.sin(t * 10) * .7 : 0; if (L) { L.legL.rotation.x = sw; L.legR.rotation.x = -sw; L.armL.rotation.x = -sw * .8; L.armR.rotation.x = sw * .8 } }
+    { const L = o.userData.limbs, mv = Math.hypot(dx, dz) > .08, sw = mv ? Math.sin(t * 10) * .7 : 0; if (P.an && !mv && window.__animChar) window.__animChar(L, o.userData.body, P.an, t); else if (L) { window.__animChar && window.__animChar(L, o.userData.body, '', t); L.legL.rotation.x = sw; L.legR.rotation.x = -sw; L.armL.rotation.x = -sw * .8; L.armR.rotation.x = sw * .8 } }
     o.position.y = 0.24;
     let dh = P.th - o.rotation.y; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); o.rotation.y += dh * k;
     o.userData.car.visible = P.d; o.children.forEach(c => { if (c !== o.userData.car) c.visible = !P.d });
@@ -1442,7 +1665,7 @@ window.__onlineTick = (dt, t) => {
     }
   }
 };
-$("onlineBox").style.display = "flex";
+$("onlineBox").style.display = "inline";
 $("wNick").value = myNick;
 for (const id of ["wFind", "wWalk"]) $(id).addEventListener("click", () => { const n = cleanNick($("wNick").value); if (n && (n !== "ai_toons_kg" || G.mayor)) { myNick = n; ls.set("gorod_nick", n) } sendPresence(true) });
 window.__onMayor = () => { myNick = "ai_toons_kg"; ls.set("gorod_nick", myNick); $("wNick").value = myNick; sendPresence(true) };
