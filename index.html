@@ -1141,8 +1141,16 @@ const myId = (() => { let v = null; try { v = sessionStorage.getItem("gorod_id")
 let myNick = ls.get("gorod_nick") || ""; if (myNick === "ai_toons_kg" && !G.mayor) myNick = "";
 const meRef = ref(db, "online/" + myId);
 onDisconnect(meRef).remove();
+let tsOff = 0; onValue(ref(db, ".info/serverTimeOffset"), s => { const o = s.val(); if (typeof o === "number") tsOff = o });
+const STALE = 25000; const isStale = ts => typeof ts === "number" && Date.now() + tsOff - ts > STALE;
+let hiddenOut = false;
+function goAway() { if (hiddenOut) return; hiddenOut = true; set(meRef, null).catch(() => { }) }
+function comeBack() { if (!hiddenOut) return; hiddenOut = false; onDisconnect(meRef).remove(); lastKey = ""; sendPresence(true) }
+document.addEventListener("visibilitychange", () => { document.hidden ? goAway() : comeBack() });
+addEventListener("pagehide", goAway); addEventListener("pageshow", comeBack);
 let lastSent = 0, lastKey = "", myEmote = "", emoteUntil = 0;
 function sendPresence(force) {
+  if (hiddenOut) return;
   const p = G.player.position, now = performance.now();
   const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", lk: G.look, m: G.mayor ? 1 : 0, n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
   const key = JSON.stringify(st);
@@ -1165,7 +1173,7 @@ function makeAvatar(g, lk, mayor) {
 onValue(ref(db, "online"), snap => {
   const seen = new Set(); const nowL = performance.now();
   snap.forEach(c => {
-    const id = c.key, v = c.val(); if (id === myId || !v || typeof v.x !== "number") return; seen.add(id);
+    const id = c.key, v = c.val(); if (id === myId || !v || typeof v.x !== "number" || isStale(v.ts)) return; seen.add(id);
     let P = peers.get(id);
     const akey = (v.g || "m") + "|" + (v.lk || "") + "|" + (v.m ? 1 : 0);
     if (!P || P.akey !== akey) {
@@ -1175,7 +1183,7 @@ onValue(ref(db, "online"), snap => {
       const bub = document.createElement("div"); bub.className = "bubble emo-b"; bub.style.display = "none"; labelBox.appendChild(bub);
       P = { obj, el, bub, g: v.g, akey,  tx: v.x, tz: v.z, th: v.h || 0, pet: null, petEl: null, pk: "" }; peers.set(id, P);
     }
-    P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; P.e = v.e || ""; P.seen = nowL;
+    P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; P.e = v.e || ""; P.seen = nowL; P.ts = v.ts;
     if (v.m && !P.wasM) toast("👑 Мэр города вышла на прогулку!"); P.wasM = !!v.m;
     P.el.textContent = (v.m ? "👑 Мэр @" : "🟢 ") + String(v.n || "гость").slice(0, 30); P.el.classList.toggle("mayor", !!v.m);
     if ((v.pk || "") !== P.pk) {
@@ -1219,7 +1227,7 @@ window.__onlineTick = (dt, t) => {
   sendPresence(false);
   const nowL = performance.now();
   for (const [id, P] of peers) {
-    if (nowL - P.seen > 30000) { dropPeer(id); continue }
+    if (isStale(P.ts) || nowL - P.seen > 60000) { dropPeer(id); continue }
     const o = P.obj, k = Math.min(1, dt * 8), dx = P.tx - o.position.x, dz = P.tz - o.position.z;
     o.position.x += dx * k; o.position.z += dz * k;
     { const L = o.userData.limbs, mv = Math.hypot(dx, dz) > .08, sw = mv ? Math.sin(t * 10) * .7 : 0; if (L) { L.legL.rotation.x = sw; L.legR.rotation.x = -sw; L.armL.rotation.x = -sw * .8; L.armR.rotation.x = sw * .8 } }
