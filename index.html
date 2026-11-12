@@ -59,7 +59,7 @@
   #joy{position:fixed;left:24px;bottom:40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);touch-action:none}
   #knob{position:absolute;left:40px;top:40px;width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.3)}
   #hint{position:fixed;left:0;right:0;bottom:236px;text-align:center;color:#fff;font-weight:800;font-size:13px;text-shadow:0 2px 4px rgba(0,0,0,.6);pointer-events:none;transition:opacity .5s}
-  .modal{position:fixed;inset:0;background:rgba(15,12,25,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal{position:fixed;inset:0;z-index:50;background:rgba(15,12,25,.55);display:flex;align-items:center;justify-content:center;padding:20px}
   .modal.hide{display:none}
   .card{background:#fff;border-radius:22px;padding:22px 20px;width:100%;max-width:360px;max-height:92vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4);text-align:center}
   .logo{font-weight:900;font-size:46px;line-height:.95;letter-spacing:-1px;color:#222}
@@ -76,6 +76,23 @@
   #info .nick{font-weight:900;font-size:24px;color:#222;word-break:break-all}
   #info .type{font-weight:700;color:#777;margin-top:4px}
   a.btn{text-decoration:none;box-sizing:border-box}
+  #shopBtn{position:fixed;right:14px;bottom:240px;background:#e8527f;color:#fff;border:none;border-radius:30px;padding:14px 18px;font:900 15px Inter,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.35)}
+  #ward{position:fixed;left:0;right:0;bottom:0;z-index:55;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.35);max-height:50vh;display:flex;flex-direction:column}
+  #ward.hide{display:none}
+  #ward .wh{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
+  #ward .wh b{font-size:18px;font-weight:900;flex:1}
+  #ward .wh button{border:none;border-radius:20px;padding:9px 12px;font:900 13px Inter,sans-serif;cursor:pointer}
+  #wTabs{display:flex;gap:6px;overflow-x:auto;padding:0 14px 8px;scrollbar-width:none}
+  #wTabs button{flex:none;border:none;background:#f1eef4;border-radius:16px;padding:8px 12px;font:800 13px Inter,sans-serif;cursor:pointer;color:#333}
+  #wTabs button.on{background:#e8527f;color:#fff}
+  #wBody{overflow:auto;padding:4px 14px 18px}
+  .wsec{font:900 12px Inter,sans-serif;color:#999;letter-spacing:.5px;margin:10px 0 6px;text-transform:uppercase}
+  .wopts{display:flex;flex-wrap:wrap;gap:7px}
+  .wopts button{border:2px solid #eee;background:#fff;border-radius:12px;padding:9px 11px;font:800 13px Inter,sans-serif;cursor:pointer;color:#222}
+  .wopts button.on{border-color:#e8527f;background:#fff0f5}
+  .wopts button.sw{width:38px;height:38px;padding:0;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #ddd}
+  .wopts button.sw.on{box-shadow:0 0 0 3px #e8527f}
+  .label.mayor{background:linear-gradient(90deg,#f2b417,#ffd84a);color:#3a2600;font-size:13px;border:2px solid #fff}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 </head>
@@ -103,6 +120,21 @@
 <div id="hint">Джойстик — идти · свайп — повернуть · нажми на дом</div>
 <div id="joy"><div id="knob"></div></div>
 <button id="petBtn" style="display:none">🐾 Взять питомца</button>
+<button id="shopBtn" style="display:none">👗 Примерочная</button>
+<div id="ward" class="hide">
+  <div class="wh"><b>👗 Образ</b><button id="wRand" style="background:#f1eef4">🎲 Случайно</button><button id="wRot" style="background:#f1eef4">🔄</button><button id="wSave" style="background:#ffd84a">✅ Готово</button></div>
+  <div id="wTabs"></div>
+  <div id="wBody"></div>
+</div>
+<div class="modal hide" id="mayorModal"><div class="card">
+  <div style="font-size:44px">👑</div>
+  <div style="font-weight:900;font-size:22px">Вход для мэра</div>
+  <p style="margin:8px 0 12px">Этот ник принадлежит мэру города. Введи пароль мэра:</p>
+  <input id="mPass" type="password" placeholder="Пароль" autocomplete="off">
+  <div id="mMsg" style="color:#e2452f;font-weight:800;font-size:13px;min-height:18px;margin-top:6px"></div>
+  <button class="btn y" id="mOk">Войти как мэр</button>
+  <button class="btn g" id="mNo">Я не мэр</button>
+</div></div>
 <button id="driveBtn" style="display:none">🚗 Сесть за руль</button>
 <button id="findBtn">🔍 Найти мой дом</button>
 <a id="cta" href="https://www.instagram.com/ai_toons_kg/" target="_blank" rel="noopener">Хочешь дом? <b>@ai_toons_kg</b></a>
@@ -149,8 +181,8 @@
 import * as THREE from 'three';
 
 const RESIDENTS=[["a1ka_505","house"],["smartphone__karakol","house"],["_ah_am_111","house2"],["djabbarov_ss","yurt"],["neurodann","house"],["karakol_nail","house"],["aiman114079","house"],["musironkaka","tower"],["humoraass","yurt"],["le_mon______","house"],["guka.zhenishbekova","yurt"],["kimnurel","house"],["a008_07","tower"],["rysaliev.aziz","house"],["ksenia_sergienko02","house2"],["s.m.sh.f6171","house"],["liana095_095_","house2"],["mhdykhrmy1218","house"],["abror64658","yurt"],["kaskusartur_","house"],["zhulduzturebaeva","house"],["bela.2666","house2"],["mun.ira3670","house"],["fayzullin_br","yurt"],["nazirasaidilova75","house2"],["anastasia_kistanova","yurt"],["kagosianolgav","house"],["muhhamdkim","yurt"],["kimako9372","house"],["kokounohito_14peaks","gold"],["umar_rrr9","castle"],["azi_alahu_akbar","house"],["ddbvna","nails"],["tiger_jui","villa"],["istol52","pyramid"],["akusya_00","sky"],["rahmetullaev_aaa","yurt"],["altynai46564", "catcastle"],["bektemirov.20", "house"],["aziretova.azi", "house2"],["ramzan54736376363","yurt"],["ailyqueew.fc","melon"],["amirm_noname","circus"],["stvann01","village"],["rabbit.5618745","pizza"],["gen4ikmemes","estate"],["ymiiksa","house"],["rayka._.777","yurt"],["decor.aigerim","house2"],["jasur191931","house"],["sc4rl3tt_7709","villa"],["iamaruuke1","house2"],["mukh_zaitov","carhome"],["illxxam","eiffel"],["kanyys13","villa"],["nazy_la122","villa"],["chuba_rose","yurt"],["baiana77930","yurt"],["anelbolatova9","tower"],["mersedespredambmvne","house"],["sceptikq","house2"],["sofia_bububu","villa"],["mimojassss","villa"],["farhodvich_muxa","villa"],["dmrbkva.0","nails"],["guestmode321","mega"],["aylin_cosmos","lioncastle"],["_milana_pridvor_","bunker"],["ai.dai2948","house"],["ademi.gloww","villa"],["mgebrishvilitekla555","cathouse"],["aliya_rainbow","yurt"],["sofiiko520","villa3"],["german_empire_irl","tower"],["karina319411","villa"],["reclama_jld","yurt"],["malika05012019","house"],["anuarbek.tamerlan","house2"],["raiana32926","villa"],["aybyikeess","five"],["basi_t5596","house"],["rayana640572","white"],["kotik_pipi","house"],["luba46002","house2"],["veloura_damirovasss","house"],["abduramanovna","yurt"],["mavletsulaimanov","president"],["manyevelkhan","mountain"],["aiz5255","redroof"],["aibiike31.01","villa3"],["polinakosakova915","house2"],["_arukeya_","house"],["aruna50211","house"],["erkenaz14883","yurt"],["susedmichal","house"],["issabekova.nuri","house2"],["_mukanyan_","house"],["roma674567","house2"],["ayruna_92","house2"],["alishalee2505","house"]];
-const PUBLIC=[[100,"🏫 Школа №1","school"],[101,"🐾 Приют для животных","shelter"]];
-const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾"};
+const PUBLIC=[[100,"🏫 Школа №1","school"],[101,"🐾 Приют для животных","shelter"],[102,"👗 Магазин одежды","shop"]];
+const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾",shop:"Магазин одежды — зайди и смени образ 👗"};
 document.getElementById('cnt').textContent=RESIDENTS.length;
 
 // ---------- layout ----------
@@ -657,6 +689,40 @@ const HOUSE={
     g.add(part(new THREE.CylinderGeometry(.04,.04,2.6,6),M('#bbb',{metalness:.5}),2.6,1.6,-.1));
     g.add(part(box,M('#2f63c9'),2.95,2.6,-.1,.7,.45,.04));
     return g}},
+  shop:{h:5.6,r:3.0,make(){const g=new THREE.Group();
+    const wall=M('#fbe3ec'),pink=M('#e8527f'),wh=M('#ffffff'),dark=M('#2a2030');
+    g.add(part(box,wall,0,2.1,-.9,5.6,3.8,2.6));
+    g.add(part(box,pink,0,4.1,-.9,5.8,.3,2.8));
+    g.add(part(box,wh,0,.42,-.9,5.7,.2,2.7));
+    // display windows with mannequins
+    for(const x of[-1.75,1.75]){g.add(part(box,M('#bfe3ff',{roughness:.1,metalness:.1,transparent:true,opacity:.55}),x,1.75,.42,1.9,2.2,.05));
+      g.add(part(box,pink,x,.62,.42,2.0,.18,.1));g.add(part(box,pink,x,2.9,.42,2.0,.12,.1))}
+    const MANC=[['#e2452f','#2f63c9'],['#ffd84a','#1d1d1d'],['#7b4fc9','#f4f4f4'],['#2f9e6a','#8a5a3a']];
+    MANC.forEach(([t,b],i)=>{const x=[-2.3,-1.2,1.2,2.3][i];const mq=new THREE.Group();mq.position.set(x,.75,-.1);g.add(mq);
+      mq.add(part(new THREE.CylinderGeometry(.04,.04,.6,6),M('#999'),0,.3,0));
+      mq.add(part(new THREE.CylinderGeometry(.22,i%2?.4:.26,.55,10),M(b),0,.75,0));
+      mq.add(part(new THREE.CylinderGeometry(.2,.23,.55,10),M(t),0,1.3,0));
+      mq.add(part(new THREE.SphereGeometry(.14,10,8),M('#f3efe8'),0,1.72,0))});
+    // door
+    g.add(part(box,M('#bfe3ff',{roughness:.1,transparent:true,opacity:.6}),0,1.35,.42,1.0,1.9,.05));
+    g.add(part(box,pink,0,2.4,.42,1.15,.12,.1));
+    // striped awning
+    for(let i=0;i<10;i++){const a=part(box,i%2?wh:pink,-2.7+i*.6,3.15,.85,.6,.08,.95);a.rotation.x=.35;g.add(a)}
+    // sign
+    const c=document.createElement('canvas');c.width=320;c.height=96;const x=c.getContext('2d');
+    x.fillStyle='#e8527f';x.fillRect(0,0,320,96);x.fillStyle='#fff';x.font='900 46px Inter,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('ОДЕЖДА',160,52);
+    const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;
+    g.add(part(box,new THREE.MeshStandardMaterial({map:tx,emissive:'#fff',emissiveMap:tx,emissiveIntensity:.35}),0,3.75,.47,3.0,.9,.06));
+    // hanger on the roof
+    const hg=new THREE.Group();hg.position.set(0,4.95,-.9);hg.userData.spin2=1;g.add(hg);
+    const gold=M('#f2b417',{metalness:.5,roughness:.3});
+    const tor=part(new THREE.TorusGeometry(.18,.05,6,12,Math.PI*1.5),gold,0,.55,0);hg.add(tor);
+    const l=part(box,gold,-.45,.05,0,1.0,.07,.07);l.rotation.z=.45;hg.add(l);const r=part(box,gold,.45,.05,0,1.0,.07,.07);r.rotation.z=-.45;hg.add(r);
+    hg.add(part(box,gold,0,-.17,0,1.85,.07,.07));
+    // clothes rack outside
+    g.add(part(box,M('#999',{metalness:.5}),2.5,1.5,1.9,.05,.05,1.6));for(const z of[1.15,2.65])g.add(part(new THREE.CylinderGeometry(.03,.03,1.2,6),M('#999'),2.5,.95,z));
+    ['#2f63c9','#ff7aa8','#ffd84a','#2f9e6a'].forEach((c,i)=>g.add(part(box,M(c),2.5,1.15,1.35+i*.42,.05,.65,.38)));
+    return g}},
   shelter:{h:5.0,r:3.0,make(){const g=new THREE.Group();
     const wood=M('#c98f55'),wood2=M('#a8703c'),roof=M('#3f8f6a'),wh=M('#fff7ea');
     g.add(part(box,wood,-.8,1.4,-1.0,3.8,2.2,2.6));
@@ -693,33 +759,103 @@ ALL.forEach(([nick,type,lot,pub])=>buildHouse(nick,type,lot,pub));
 // ---------- drivable cars ----------
 scene.updateMatrixWorld(true);
 const drivables=[];scene.traverse(o=>{if(o.userData.drivable)drivables.push(o)});
-// ---------- player (in a kalpak) ----------
+// ---------- player: customizable character ----------
 const player=new THREE.Group();scene.add(player);
-const chapan=M('#2f5d9e');
-const torso=part(new THREE.CylinderGeometry(.42,.55,1.2,10),chapan,0,1.55,0);player.add(torso);
-const belt=part(new THREE.CylinderGeometry(.5,.5,.12,10),M('#c9a227'),0,1.25,0);player.add(belt);
-const head=part(new THREE.SphereGeometry(.38,14,12),M('#e7b894'),0,2.5,0);player.add(head);
-const kalpak=part(new THREE.ConeGeometry(.42,.75,12),M('#f6f2e8'),0,3.05,0);player.add(kalpak);
-const brim=part(new THREE.CylinderGeometry(.46,.46,.1,12),M('#222'),0,2.72,0);player.add(brim);
-const legL=new THREE.Group(),legR=new THREE.Group();
-[legL,legR].forEach((lg,i)=>{lg.position.set(i?.2:-.2,.95,0);lg.add(part(box,M('#3a2a20'),0,-.45,0,.24,.9,.28));player.add(lg)});
-const armL=new THREE.Group(),armR=new THREE.Group();
-[armL,armR].forEach((a,i)=>{a.position.set(i?.58:-.58,2,0);a.add(part(box,chapan,0,-.45,0,.2,.85,.22));player.add(a)});
-// girl: dress, braids, red cap with owl feathers (үкү)
-const girl=new THREE.Group();player.add(girl);
-const dressM=M('#a5243b');
-girl.add(part(new THREE.CylinderGeometry(.36,.5,.9,12),dressM,0,1.85,0));
-girl.add(part(new THREE.CylinderGeometry(.5,.85,1.3,14),dressM,0,.95,0));
-girl.add(part(new THREE.CylinderGeometry(.52,.52,.1,12),M('#e8b03a'),0,1.4,0));
-girl.add(part(new THREE.SphereGeometry(.42,14,12),M('#1f1612'),0,2.55,-.08));
-for(const x of[-.22,.22])girl.add(part(new THREE.CylinderGeometry(.08,.06,1.1,6),M('#1f1612'),x,1.95,-.32));
-girl.add(part(new THREE.CylinderGeometry(.3,.36,.3,14),M('#b8322a'),0,2.9,0));
-girl.add(part(new THREE.ConeGeometry(.07,.6,6),M('#f7f4ee'),.05,3.3,0));
-girl.add(part(new THREE.ConeGeometry(.06,.5,6),M('#f7f4ee'),-.07,3.25,.03));
-const boyParts=[torso,belt,kalpak,brim];
-function setGender(g){const f=g==='f';girl.visible=f;boyParts.forEach(o=>o.visible=!f);
-  armL.children[0].material=armR.children[0].material=f?dressM:chapan;legL.visible=legR.visible=true;}
-setGender('m');
+const WARD={
+  skin:['#f6d2b8','#efc39f','#e0ac85','#c68b62','#8d5a3c'],
+  col:['#2f63c9','#e2452f','#2f9e6a','#f2c230','#7b4fc9','#ff7aa8','#1d1d1d','#f4f4f4','#ff9f43','#8a5a3a','#3fb8c9','#9aa0a6'],
+  hairc:['#1b1414','#4a2c1a','#8a5a2b','#d9a441','#c0392b','#7b4fc9','#2f80ed','#f4f4f4'],
+  hairF:['Длинные','Косички','Каре','Хвост','Пучок'],hairM:['Короткие','Ёжик','Кудри','Лысый','Длинные'],
+  top:['Футболка','Худи','Чапан','Платье','Куртка','Свитер'],
+  bottom:['Джинсы','Юбка','Шорты','Брюки'],
+  hat:['Нет','Калпак','Топу','Кепка','Бини','Корона','Цилиндр','Наушники','Ковбойская'],
+  glasses:['Нет','Очки','Тёмные','Звёздные']};
+const LOOK_DEF={g:'m',sk:1,hs:0,hc:0,tp:2,tc:0,bt:0,bc:6,ht:1,gl:0,shc:6};
+function lookFix(l){const o={...LOOK_DEF,...(l||{})};const lim={sk:5,hs:5,hc:8,tp:6,tc:12,bt:4,bc:12,ht:9,gl:4,shc:12};
+  for(const k in lim){o[k]=Math.max(0,Math.min(lim[k]-1,(o[k]|0)))}o.g=o.g==='f'?'f':'m';return o}
+const lookStr=l=>[l.g,l.sk,l.hs,l.hc,l.tp,l.tc,l.bt,l.bc,l.ht,l.gl,l.shc].join('.');
+function lookParse(s){if(typeof s!=='string')return null;const a=s.split('.');if(a.length<11)return null;const k=['g','sk','hs','hc','tp','tc','bt','bc','ht','gl','shc'];const o={};k.forEach((x,i)=>o[x]=i?(+a[i]||0):a[i]);return lookFix(o)}
+const _mc={};const MC=(c,o)=>{const k=c+JSON.stringify(o||{});return _mc[k]||(_mc[k]=M(c,o))};
+// builds a character into root (clears it); returns limbs {legL,legR,armL,armR}
+function buildCharacter(root,look,mayor){
+  look=lookFix(look);while(root.children.length)root.remove(root.children[0]);
+  const f=look.g==='f',skin=MC(WARD.skin[look.sk]),topC=MC(WARD.col[look.tc]),botC=MC(WARD.col[look.bc]),hairM=MC(WARD.hairc[look.hc]),shoe=MC(WARD.col[look.shc],{roughness:.6}),dk=MC('#151515',{roughness:.3});
+  const add=(o)=>{root.add(o);return o};
+  const tp=look.tp,bt=look.bt;
+  const legL=new THREE.Group(),legR=new THREE.Group(),armL=new THREE.Group(),armR=new THREE.Group();
+  // legs
+  [legL,legR].forEach((lg,i)=>{lg.position.set(i?.19:-.19,1.0,0);root.add(lg);
+    if(bt===2){lg.add(part(box,botC,0,-.18,0,.27,.38,.3));lg.add(part(box,skin,0,-.62,0,.2,.52,.22))}
+    else if(bt===1){lg.add(part(box,skin,0,-.5,0,.2,.8,.22))}
+    else lg.add(part(box,botC,0,-.45,0,.25,.9,.29));
+    lg.add(part(box,shoe,0,-.95,.06,.3,.16,.42))});
+  if(bt===1)add(part(new THREE.CylinderGeometry(.48,.72,.6,14),botC,0,.8,0));
+  // torso
+  if(tp===3){add(part(new THREE.CylinderGeometry(.38,.5,1.0,12),topC,0,1.7,0));add(part(new THREE.CylinderGeometry(.5,.85,1.25,14),topC,0,.85,0))}
+  else if(tp===2){add(part(new THREE.CylinderGeometry(.43,.62,1.55,12),topC,0,1.4,0));add(part(new THREE.CylinderGeometry(.58,.58,.12,12),MC('#c9a227'),0,1.3,0));
+    add(part(box,MC('#c9a227'),0,1.4,.5,.08,1.4,.04))}
+  else{add(part(new THREE.CylinderGeometry(.42,.48,1.15,12),topC,0,1.6,0));
+    if(tp===1){add(part(new THREE.SphereGeometry(.36,12,8,0,Math.PI*2,0,Math.PI/2),topC,0,2.12,-.22));add(part(box,MC('#2a2a2a'),0,1.35,.44,.5,.25,.04));for(const x of[-.1,.1])add(part(box,MC('#f4f4f4'),x,1.9,.44,.03,.3,.02))}
+    if(tp===4){add(part(box,MC('#f4f4f4'),0,1.6,.45,.18,1.1,.03));add(part(new THREE.CylinderGeometry(.46,.46,.18,12),topC,0,2.15,0))}
+    if(tp===5){for(const y of[1.3,1.6,1.9])add(part(new THREE.CylinderGeometry(.445,.465,.08,12),MC('#ffffff'),0,y,0))}}
+  add(part(new THREE.CylinderGeometry(.12,.12,.22,8),skin,0,2.25,0));
+  // arms
+  const longS=tp!==0;
+  [armL,armR].forEach((a,i)=>{a.position.set(i?.56:-.56,2.05,0);root.add(a);
+    if(longS){a.add(part(box,topC,0,-.38,0,.22,.76,.24));a.add(part(new THREE.SphereGeometry(.1,8,6),skin,0,-.82,0))}
+    else{a.add(part(box,topC,0,-.18,0,.24,.36,.26));a.add(part(box,skin,0,-.6,0,.18,.5,.2))}});
+  // head
+  const hg=new THREE.Group();hg.position.set(0,2.6,0);root.add(hg);
+  hg.add(part(new THREE.SphereGeometry(.38,16,14),skin,0,0,0));
+  for(const x of[-.13,.13])hg.add(part(new THREE.SphereGeometry(.05,8,6),dk,x,.02,.35));
+  hg.add(part(box,MC('#b03a3a'),0,-.17,.36,.12,.03,.02));
+  if(f)for(const x of[-.2,.2])hg.add(part(new THREE.SphereGeometry(.045,8,6),MC('#f19a9a'),x,-.09,.31));
+  // hair
+  const hs=look.hs;
+  if(f){
+    hg.add(part(new THREE.SphereGeometry(.41,16,12,0,Math.PI*2,0,Math.PI*.55),hairM,0,.03,-.04));
+    hg.add(part(box,hairM,0,.2,.3,.56,.14,.1));
+    if(hs===0){hg.add(part(box,hairM,0,-.45,-.22,.7,.95,.22));for(const x of[-.34,.34])hg.add(part(box,hairM,x,-.3,.02,.12,.7,.24))}
+    if(hs===1)for(const x of[-.24,.24])hg.add(part(new THREE.CylinderGeometry(.08,.05,1.0,6),hairM,x,-.6,-.28));
+    if(hs===2){for(const x of[-.34,.34])hg.add(part(box,hairM,x,-.12,.0,.12,.42,.3));hg.add(part(box,hairM,0,-.14,-.3,.66,.42,.12))}
+    if(hs===3){hg.add(part(new THREE.SphereGeometry(.13,8,6),hairM,0,.12,-.42));const tl=part(new THREE.CylinderGeometry(.09,.05,.75,6),hairM,0,-.25,-.5);tl.rotation.x=.25;hg.add(tl)}
+    if(hs===4)hg.add(part(new THREE.SphereGeometry(.2,10,8),hairM,0,.42,-.12));
+  }else{
+    if(hs===0)hg.add(part(new THREE.SphereGeometry(.4,16,12,0,Math.PI*2,0,Math.PI*.42),hairM,0,.04,-.03));
+    if(hs===1)for(let i=0;i<10;i++){const a=i/10*Math.PI*2;const sp=part(new THREE.ConeGeometry(.07,.22,4),hairM,Math.cos(a)*.2,.38,Math.sin(a)*.2-.04);sp.rotation.set(Math.sin(a)*.5,0,-Math.cos(a)*.5);hg.add(sp)}
+    if(hs===2)for(let i=0;i<12;i++){const a=i/12*Math.PI*2,r=i%2?.22:.3;hg.add(part(new THREE.SphereGeometry(.13,8,6),hairM,Math.cos(a)*r,.3+(i%3)*.04,Math.sin(a)*r-.04))}
+    if(hs===4){hg.add(part(new THREE.SphereGeometry(.41,16,12,0,Math.PI*2,0,Math.PI*.5),hairM,0,.03,-.04));hg.add(part(box,hairM,0,-.3,-.25,.62,.6,.16))}
+  }
+  // hats
+  const ht=look.ht;
+  if(ht===1){hg.add(part(new THREE.ConeGeometry(.42,.75,12),MC('#f6f2e8'),0,.5,0));hg.add(part(new THREE.CylinderGeometry(.46,.46,.1,12),MC('#222'),0,.18,0))}
+  if(ht===2){hg.add(part(new THREE.CylinderGeometry(.3,.36,.3,14),MC('#b8322a'),0,.38,0));hg.add(part(new THREE.ConeGeometry(.07,.6,6),MC('#f7f4ee'),.05,.8,0));hg.add(part(new THREE.ConeGeometry(.06,.5,6),MC('#f7f4ee'),-.07,.75,.03))}
+  if(ht===3){hg.add(part(new THREE.SphereGeometry(.41,14,10,0,Math.PI*2,0,Math.PI/2),topC,0,.12,0));hg.add(part(box,topC,0,.13,.42,.5,.05,.35))}
+  if(ht===4){hg.add(part(new THREE.SphereGeometry(.42,14,10,0,Math.PI*2,0,Math.PI*.55),MC(WARD.col[(look.tc+4)%12]),0,.08,0));hg.add(part(new THREE.SphereGeometry(.1,8,6),MC('#f4f4f4'),0,.5,0))}
+  if(ht===5){const gold=MC('#f2b417',{metalness:.4,roughness:.3,emissive:'#7a5200',emissiveIntensity:.3});hg.add(part(new THREE.CylinderGeometry(.32,.32,.18,14,1,true),gold,0,.42,0));for(let i=0;i<5;i++){const a=i/5*Math.PI*2;hg.add(part(new THREE.ConeGeometry(.07,.22,5),gold,Math.cos(a)*.3,.6,Math.sin(a)*.3))}}
+  if(ht===6){hg.add(part(new THREE.CylinderGeometry(.3,.3,.6,14),MC('#1d1d1d'),0,.62,0));hg.add(part(new THREE.CylinderGeometry(.5,.5,.05,16),MC('#1d1d1d'),0,.33,0));hg.add(part(new THREE.CylinderGeometry(.305,.305,.1,14),MC('#c0392b'),0,.4,0))}
+  if(ht===7){const r=MC('#d42a2a',{roughness:.5});const b=part(new THREE.TorusGeometry(.42,.05,6,16,Math.PI),r,0,.05,0);hg.add(b);for(const x of[-.42,.42]){const c=part(new THREE.CylinderGeometry(.15,.15,.12,12),r,x,0,0);c.rotation.z=Math.PI/2;hg.add(c)}}
+  if(ht===8){const br=MC('#8a5a2b');hg.add(part(new THREE.CylinderGeometry(.62,.62,.05,18),br,0,.28,0));hg.add(part(new THREE.CylinderGeometry(.26,.32,.4,12),br,0,.5,0));hg.add(part(new THREE.CylinderGeometry(.33,.33,.06,12),MC('#2a1a10'),0,.36,0))}
+  // glasses
+  const gl=look.gl;
+  if(gl){const fr=gl===3?MC('#ff4fa0'):dk,ln=gl===1?MC('#cfe3ff',{roughness:.1}):MC('#141414',{roughness:.1});
+    for(const x of[-.14,.14]){if(gl===3){const s=part(new THREE.OctahedronGeometry(.12,0),fr,x,.02,.38);s.scale.z=.3;hg.add(s)}else{hg.add(part(box,fr,x,.02,.38,.22,.15,.03));hg.add(part(box,ln,x,.02,.395,.18,.1,.02))}}
+    hg.add(part(box,fr,0,.05,.38,.08,.03,.03))}
+  if(mayor){const red=MC('#b3122e',{roughness:.6}),gold=MC('#f2b417',{metalness:.5,roughness:.3,emissive:'#7a5200',emissiveIntensity:.35});
+    const cape=part(box,red,0,1.4,-.5,.95,1.55,.06);cape.rotation.x=.12;add(cape);
+    add(part(box,gold,0,.66,-.6,.97,.09,.07));add(part(new THREE.TorusGeometry(.47,.07,6,18),gold,0,2.17,0)).rotation.x=Math.PI/2;
+    const sash=part(box,gold,0,1.62,.47,.16,1.35,.04);sash.rotation.z=.75;add(sash);
+    add(part(new THREE.SphereGeometry(.09,8,6),MC('#e2452f',{emissive:'#e2452f',emissiveIntensity:.5}),.18,1.85,.5));
+    const ring=part(new THREE.TorusGeometry(1.0,.06,6,32),MC('#ffd84a',{emissive:'#ffb800',emissiveIntensity:1.2}),0,.06,0);ring.rotation.x=Math.PI/2;ring.userData.aura=1;add(ring)}
+  return {legL,legR,armL,armR};
+}
+window.__mayor=(()=>{try{return localStorage.getItem('gorod_mayor')==='1'}catch(e){return false}})();
+let LOOK=(()=>{try{return lookFix(JSON.parse(localStorage.getItem('gorod_look')||'null'))}catch(e){return lookFix(null)}})();
+const charRoot=new THREE.Group();player.add(charRoot);
+let legL,legR,armL,armR;
+function applyLook(){({legL,legR,armL,armR}=buildCharacter(charRoot,LOOK,window.__mayor));try{localStorage.setItem('gorod_look',JSON.stringify(LOOK))}catch(e){}window.__lookStr=lookStr(LOOK)}
+function setGender(g){if(LOOK.g!==g){LOOK.g=g;if(!localStorage.getItem('gorod_look_custom')){LOOK.hs=0;LOOK.ht=g==='f'?2:1;LOOK.tp=g==='f'?3:2;LOOK.tc=g==='f'?1:0}}applyLook()}
+applyLook();
 player.position.set(PX/2,0,PZ/2+1);let heading=Math.PI;
 
 // marker arrow
@@ -765,14 +901,15 @@ cv.addEventListener('wheel',e=>{camDist=Math.max(10,Math.min(120,camDist*(1+e.de
 // ---------- UI ----------
 const $=id=>document.getElementById(id);
 let hintShown=true;function hideHint(){if(hintShown){hintShown=false;$('hint').style.opacity=0}}
-document.querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);window.__gender=b.dataset.g;$('step1').style.display='none';$('step2').style.display='block'});
+document.querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{if(!window.__mayor||!localStorage.getItem('gorod_look_custom'))setGender(b.dataset.g);window.__gender=b.dataset.g;$('step1').style.display='none';$('step2').style.display='block'});
 $('wWalk').onclick=()=>$('welcome').classList.add('hide');
 const openSearch=()=>{$('welcome').classList.add('hide');$('search').classList.remove('hide');$('q').value='';renderResults('');setTimeout(()=>$('q').focus(),50)};
 $('wFind').onclick=openSearch;$('findBtn').onclick=openSearch;$('sClose').onclick=()=>$('search').classList.add('hide');
 $('q').addEventListener('input',e=>renderResults(e.target.value));
 function renderResults(q){q=q.trim().toLowerCase().replace(/^@/,'');
   const list=houses.filter(h=>h.nick.toLowerCase().includes(q));
-  $('results').innerHTML=list.length?'':'<div class="res" style="color:#777;display:block;line-height:1.4">Не нашли 😔 Подпишись на <b style="color:#d6249f">@ai_toons_kg</b> — построим твой дом!</div>';
+  $('results').innerHTML=list.length?'':'<div class="res" style="color:#777;display:block;line-height:1.4">Такого дома пока нет 😔<br>Построй его сам — это 10 секунд!</div><button class="btn y" id="goBuild">🏗 Построить дом</button>';
+  const gb=document.getElementById('goBuild');if(gb)gb.onclick=()=>{$('search').classList.add('hide');const bb=document.getElementById('buildBtn');if(bb){bb.click();const ni=document.getElementById('bNick');if(ni)ni.value=q}};
   list.forEach(h=>{const d=document.createElement('div');d.className='res';d.innerHTML=`<span>${h.nick}</span><small>${TYPE_NAME[h.type]}</small>`;
     d.onclick=()=>{$('search').classList.add('hide');goTo(h)};$('results').appendChild(d)})}
 function goTo(h){target=h;houses.forEach(x=>x.el.classList.toggle('me',x===h));
@@ -829,7 +966,7 @@ function updatePetsCops(dt,t,project){
   if(near){cop.rotation.y=Math.atan2(player.position.x-c.x,player.position.z-c.z)}else cop.rotation.y=c.h;
   const sw=near?0:Math.sin(t*8)*.6;copLegs[0].rotation.x=sw;copLegs[1].rotation.x=-sw;
   project(copEl,cop.position.x,3.5,cop.position.z);
-  copBub.style.display=near?'block':'none';if(near)project(copBub,cop.position.x,4.3,cop.position.z,true);
+  copBub.textContent=window.__mayor?'🫡 Здравия желаю, госпожа мэр!':'🚨 Закон №1: отписка — штраф!';copBub.style.display=near?'block':'none';if(near)project(copBub,cop.position.x,4.3,cop.position.z,true);
   // shelter button
   const ns=shelterH&&!driving&&Math.hypot(player.position.x-shelterH.L.x,player.position.z-shelterH.L.z)<7;
   $('petBtn').style.display=ns?'block':'none';
@@ -840,7 +977,58 @@ function updatePetsCops(dt,t,project){
     const gy=groundY(petObj.position.x,petObj.position.z);petObj.position.y=gy+(d>.4?Math.abs(Math.sin(t*12))*.25:0);
     petObj.visible=!driving;project(petEl,petObj.position.x,petObj.position.y+1.4,petObj.position.z,false,driving)}
 }
-window.__G={THREE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return window.__gender||'m'},get pet(){return myPet}};
+
+// ---------- clothing store & mayor ----------
+const shopH=houses.find(h=>h.type==='shop');
+const MAYOR_NICK='ai_toons_kg',MAYOR_HASH='a673420b4fdbcfd06d8578ccdd9da99855453488394eda1ecd72abac9b59c6b9';
+const meEl=document.createElement('div');meEl.className='label mayor';meEl.textContent='👑 Мэр города';meEl.style.display='none';labelBox.appendChild(meEl);
+const W_TABS=[['look','🙂 Внешность'],['hair','💇 Волосы'],['top','👕 Верх'],['bottom','👖 Низ'],['hat','🎩 Головные уборы'],['acc','🕶 Очки и обувь']];
+let wTab='look',wardOpen=false,camSave=null;
+function wOpts(title,key,names){return `<div class="wsec">${title}</div><div class="wopts">`+names.map((n,i)=>`<button data-k="${key}" data-v="${i}" class="${LOOK[key]===i?'on':''}">${n}</button>`).join('')+'</div>'}
+function wSw(title,key,cols){return `<div class="wsec">${title}</div><div class="wopts">`+cols.map((c,i)=>`<button data-k="${key}" data-v="${i}" class="sw ${LOOK[key]===i?'on':''}" style="background:${c}"></button>`).join('')+'</div>'}
+function renderWard(){
+  $('wTabs').innerHTML=W_TABS.map(([k,n])=>`<button data-t="${k}" class="${k===wTab?'on':''}">${n}</button>`).join('');
+  $('wTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{wTab=b.dataset.t;renderWard()});
+  let h='';
+  if(wTab==='look')h=`<div class="wsec">Пол</div><div class="wopts"><button data-g="f" class="${LOOK.g==='f'?'on':''}">👧 Девушка</button><button data-g="m" class="${LOOK.g==='m'?'on':''}">👦 Парень</button></div>`+wSw('Цвет кожи','sk',WARD.skin);
+  if(wTab==='hair')h=wOpts('Причёска','hs',LOOK.g==='f'?WARD.hairF:WARD.hairM)+wSw('Цвет волос','hc',WARD.hairc);
+  if(wTab==='top')h=wOpts('Одежда','tp',WARD.top)+wSw('Цвет','tc',WARD.col);
+  if(wTab==='bottom')h=wOpts('Низ','bt',WARD.bottom)+wSw('Цвет','bc',WARD.col);
+  if(wTab==='hat')h=wOpts('Головной убор','ht',WARD.hat);
+  if(wTab==='acc')h=wOpts('Очки','gl',WARD.glasses)+wSw('Обувь','shc',WARD.col);
+  $('wBody').innerHTML=h;
+  $('wBody').querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{LOOK[b.dataset.k]=+b.dataset.v;lookChanged()});
+  $('wBody').querySelectorAll('button[data-g]').forEach(b=>b.onclick=()=>{LOOK.g=b.dataset.g;window.__gender=LOOK.g;lookChanged()});
+}
+function lookChanged(){try{localStorage.setItem('gorod_look_custom','1')}catch(e){}applyLook();renderWard()}
+function openWard(){if(wardOpen)return;wardOpen=true;camSave={camDist,camEl,camYaw};target=null;arrow.visible=false;
+  if(shopH){player.position.set(shopH.L.x,player.position.y,shopH.L.z+shopH.L.front*(shopH.r+1.6));heading=shopH.L.front>0?0:Math.PI;camT.copy(player.position)}camDist=8;camEl=.12;camYaw=heading;$('ward').classList.remove('hide');labelBox.style.opacity=0;$('shopBtn').style.display='none';renderWard()}
+function closeWard(){if(!wardOpen)return;wardOpen=false;$('ward').classList.add('hide');labelBox.style.opacity=1;if(camSave){camDist=camSave.camDist;camEl=camSave.camEl}
+  if(window.__sendPresence)window.__sendPresence(true)}
+$('shopBtn').onclick=openWard;$('wSave').onclick=()=>{closeWard();toast2('✨ Новый образ сохранён! Его видят все онлайн')};
+$('wRot').onclick=()=>{camYaw+=Math.PI*.5};
+$('wRand').onclick=()=>{const r=n=>Math.floor(Math.random()*n);Object.assign(LOOK,{sk:r(5),hs:r(5),hc:r(8),tp:r(6),tc:r(12),bt:r(4),bc:r(12),ht:r(9),gl:r(4),shc:r(12)});lookChanged()};
+function toast2(t){const el=document.getElementById('toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3500)}
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function checkMayorNick(n){n=(n||'').trim().toLowerCase().replace(/^@/,'');if(n===MAYOR_NICK&&!window.__mayor){$('mPass').value='';$('mMsg').textContent='';$('mayorModal').classList.remove('hide');setTimeout(()=>$('mPass').focus(),50)}}
+$('mOk').onclick=async()=>{const h=await sha('gorod:'+$('mPass').value.trim());
+  if(h!==MAYOR_HASH){$('mMsg').textContent='Неверный пароль';return}
+  window.__mayor=true;try{localStorage.setItem('gorod_mayor','1')}catch(e){}
+  const custom=localStorage.getItem('gorod_look_custom');try{localStorage.setItem('gorod_look_custom','1')}catch(e){}
+  if(!custom)Object.assign(LOOK,{g:'f',sk:1,hs:0,hc:0,tp:0,tc:0,bt:0,bc:0,ht:7,gl:1,shc:7});
+  window.__gender=LOOK.g;applyLook();$('mayorModal').classList.add('hide');
+  if(window.__onMayor)window.__onMayor();toast2('👑 Добро пожаловать, госпожа мэр!')};
+$('mNo').onclick=()=>{$('mayorModal').classList.add('hide');const i=$('wNick');if(i&&i.value.trim().toLowerCase().replace(/^@/,'')===MAYOR_NICK)i.value=''};
+for(const id of['wFind','wWalk'])$(id).addEventListener('click',()=>checkMayorNick($('wNick').value));
+function updateShopMayor(dt,t,project){
+  const ns=shopH&&!driving&&!wardOpen&&Math.hypot(player.position.x-shopH.L.x,player.position.z-shopH.L.z)<7.5;
+  $('shopBtn').style.display=ns?'block':'none';
+  if(wardOpen&&Math.hypot(jx,jy)>.3)closeWard();
+  if(window.__mayor&&player.visible){project(meEl,player.position.x,player.position.y+4.0,player.position.z)}else meEl.style.display='none';
+  for(const o of charRoot.children)if(o.userData.aura){const s=1+Math.sin(t*3)*.08;o.scale.set(s,s,s)}
+  for(const o of spin2)o.rotation.y=t*1.2}
+const spin2=[];scene.traverse(o=>{if(o.userData.spin2)spin2.push(o)});
+window.__G={THREE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet}};
 // ---------- loop ----------
 const clock=new THREE.Clock(),v=new THREE.Vector3();let driving=null,nearCar=null,lookH=2,walkT=0,camT=new THREE.Vector3().copy(player.position);
 const spinners=[];const blinkers=[];scene.traverse(o=>{if(o.userData.spin)spinners.push(o);if(o.userData.blink)blinkers.push(o)});
@@ -865,7 +1053,7 @@ function frame(){const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
   // camera
   camT.lerp(player.position,Math.min(1,dt*6));
   const off=v.set(Math.cos(camEl)*Math.sin(camYaw),Math.sin(camEl),Math.cos(camEl)*Math.cos(camYaw)).multiplyScalar(camDist);
-  camera.position.copy(camT).add(off);camera.position.y=Math.max(camera.position.y,2);const near=target&&target.top>15&&Math.hypot(player.position.x-target.L.x,player.position.z-target.L.z)<14;lookH+=((near?target.top*.42:2)-lookH)*Math.min(1,dt*3);camera.lookAt(camT.x,camT.y+lookH,camT.z);
+  camera.position.copy(camT).add(off);camera.position.y=Math.max(camera.position.y,2);const near=target&&target.top>15&&Math.hypot(player.position.x-target.L.x,player.position.z-target.L.z)<14;lookH+=((wardOpen?1.0:near?target.top*.42:2)-lookH)*Math.min(1,dt*3);camera.lookAt(camT.x,camT.y+lookH,camT.z);
   sun.position.copy(camT).add(SUN_OFF);sun.target.position.copy(camT);
   if(target){arrow.visible=true;arrow.position.set(target.L.x,target.top+2.2+Math.sin(t*4)*.5,target.L.z);arrow.rotation.y=t*2}
   renderer.render(scene,camera);
@@ -875,6 +1063,7 @@ function frame(){const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
     if(v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1||(dist>camDist*2.2&&h!==target)){h.el.style.display='none';continue}
     h.el.style.display='flex';h.el.style.left=((v.x+1)/2*innerWidth)+'px';h.el.style.top=((1-v.y)/2*innerHeight)+'px'}
   updatePetsCops(dt,t,(el,x,y,z,flex,hide)=>{v.set(x,y,z).project(camera);if(hide||v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1){el.style.display='none';return}el.style.display=flex?'block':'flex';el.style.left=((v.x+1)/2*innerWidth)+'px';el.style.top=((1-v.y)/2*innerHeight)+'px'});
+  updateShopMayor(dt,t,(el,x,y,z)=>{v.set(x,y,z).project(camera);if(v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1){el.style.display='none';return}el.style.display='flex';el.style.left=((v.x+1)/2*innerWidth)+'px';el.style.top=((1-v.y)/2*innerHeight)+'px'});
   if(window.__onlineTick)window.__onlineTick(dt,t,v);
   requestAnimationFrame(frame)}
 frame();
@@ -940,7 +1129,7 @@ $("bOk").onclick = async () => {
   try {
     await set(ref(db, "houses/" + n.replace(/\./g, ",")), { nick: n, type: buildPick, t: serverTimestamp() });
     ls.set("gorod_nick", n); myNick = n; sendPresence(true);
-    $("buildModal").classList.add("hide"); pendingGo = n;
+    $("buildModal").classList.add("hide"); { const hh = houses.find(x => x.nick === n); if (hh) G.goTo(hh); else pendingGo = n; }
     toast("🎉 Дом построен! Добро пожаловать в город, @" + n);
   } catch (e) { $("bMsg").textContent = "Не получилось 😔 Возможно, этот ник уже занят." }
   $("bOk").disabled = false;
@@ -949,13 +1138,13 @@ function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add(
 
 // ---------- presence ----------
 const myId = (() => { let v = null; try { v = sessionStorage.getItem("gorod_id") } catch (e) { } if (!v) { v = Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4); try { sessionStorage.setItem("gorod_id", v) } catch (e) { } } return v })();
-let myNick = ls.get("gorod_nick") || "";
+let myNick = ls.get("gorod_nick") || ""; if (myNick === "ai_toons_kg" && !G.mayor) myNick = "";
 const meRef = ref(db, "online/" + myId);
 onDisconnect(meRef).remove();
 let lastSent = 0, lastKey = "", myEmote = "", emoteUntil = 0;
 function sendPresence(force) {
   const p = G.player.position, now = performance.now();
-  const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
+  const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", lk: G.look, m: G.mayor ? 1 : 0, n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
   const key = JSON.stringify(st);
   if (!force && (key === lastKey ? now - lastSent < 8000 : now - lastSent < 250)) return;
   lastKey = key; lastSent = now;
@@ -965,14 +1154,10 @@ document.querySelectorAll(".emo").forEach(b => b.onclick = () => { myEmote = b.t
 
 // avatars of other people
 const peers = new Map();
-function makeAvatar(g) {
-  const a = new THREE.Group(); const f = g === "f";
-  const body = M(f ? "#a5243b" : "#2f5d9e");
-  a.add(part(new THREE.CylinderGeometry(.4, f ? .7 : .5, 1.6, 10), body, 0, 1.3, 0));
-  a.add(part(new THREE.SphereGeometry(.37, 12, 10), M("#e7b894"), 0, 2.45, 0));
-  if (f) { a.add(part(new THREE.SphereGeometry(.4, 12, 10), M("#1f1612"), 0, 2.5, -.08)); a.add(part(new THREE.CylinderGeometry(.28, .33, .26, 12), M("#b8322a"), 0, 2.85, 0)) }
-  else { a.add(part(new THREE.ConeGeometry(.4, .7, 12), M("#f6f2e8"), 0, 3.0, 0)); a.add(part(new THREE.CylinderGeometry(.44, .44, .1, 12), M("#222"), 0, 2.68, 0)) }
-  for (const x of [-.13, .13]) a.add(part(new THREE.SphereGeometry(.05, 6, 4), M("#111"), x, 2.5, .34));
+function makeAvatar(g, lk, mayor) {
+  const a = new THREE.Group(); const body = new THREE.Group(); a.add(body);
+  const look = G.lookParse(lk) || G.lookFix({ g: g === "f" ? "f" : "m", ht: g === "f" ? 2 : 1, tp: g === "f" ? 3 : 2, tc: g === "f" ? 1 : 0 });
+  a.userData.limbs = G.buildCharacter(body, look, mayor);
   const car = new THREE.Group(); car.visible = false; a.add(car);
   car.add(part(box, M("#2b2d33", { roughness: .3, metalness: .4 }), 0, .45, 0, 1.25, .5, 2.8)); car.add(part(box, M("#1a2533"), 0, .85, -.1, 1.05, .4, 1.4));
   a.userData.car = car; return a;
@@ -982,15 +1167,17 @@ onValue(ref(db, "online"), snap => {
   snap.forEach(c => {
     const id = c.key, v = c.val(); if (id === myId || !v || typeof v.x !== "number") return; seen.add(id);
     let P = peers.get(id);
-    if (!P || P.g !== v.g) {
+    const akey = (v.g || "m") + "|" + (v.lk || "") + "|" + (v.m ? 1 : 0);
+    if (!P || P.akey !== akey) {
       if (P) { scene.remove(P.obj); P.el.remove(); P.bub.remove(); if (P.pet) { scene.remove(P.pet); P.petEl.remove() } }
-      const obj = makeAvatar(v.g); obj.position.set(v.x, 0, v.z); scene.add(obj);
+      const obj = makeAvatar(v.g, v.lk, !!v.m); obj.position.set(v.x, 0, v.z); scene.add(obj);
       const el = document.createElement("div"); el.className = "label peer"; labelBox.appendChild(el);
       const bub = document.createElement("div"); bub.className = "bubble emo-b"; bub.style.display = "none"; labelBox.appendChild(bub);
-      P = { obj, el, bub, g: v.g, tx: v.x, tz: v.z, th: v.h || 0, pet: null, petEl: null, pk: "" }; peers.set(id, P);
+      P = { obj, el, bub, g: v.g, akey,  tx: v.x, tz: v.z, th: v.h || 0, pet: null, petEl: null, pk: "" }; peers.set(id, P);
     }
     P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; P.e = v.e || ""; P.seen = nowL;
-    P.el.textContent = "🟢 " + String(v.n || "гость").slice(0, 30);
+    if (v.m && !P.wasM) toast("👑 Мэр города вышла на прогулку!"); P.wasM = !!v.m;
+    P.el.textContent = (v.m ? "👑 Мэр @" : "🟢 ") + String(v.n || "гость").slice(0, 30); P.el.classList.toggle("mayor", !!v.m);
     if ((v.pk || "") !== P.pk) {
       if (P.pet) { scene.remove(P.pet); P.petEl.remove(); P.pet = null }
       P.pk = v.pk || "";
@@ -1008,7 +1195,7 @@ const chatQ = query(ref(db, "chat"), orderByChild("ts"), limitToLast(40));
 onChildAdded(chatQ, c => {
   const v = c.val(); if (!v || typeof v.m !== "string") return;
   const row = document.createElement("div"); row.className = "msg";
-  const b = document.createElement("b"); b.textContent = String(v.n || "гость").slice(0, 30) + ": ";
+  const b = document.createElement("b"); b.textContent = (v.n === "ai_toons_kg" ? "👑 " : "") + String(v.n || "гость").slice(0, 30) + ": ";
   const s = document.createElement("span"); s.textContent = v.m.slice(0, 80);
   row.append(b, s); $("chatLog").appendChild(row);
   while ($("chatLog").children.length > 40) $("chatLog").firstChild.remove();
@@ -1035,6 +1222,7 @@ window.__onlineTick = (dt, t) => {
     if (nowL - P.seen > 30000) { dropPeer(id); continue }
     const o = P.obj, k = Math.min(1, dt * 8), dx = P.tx - o.position.x, dz = P.tz - o.position.z;
     o.position.x += dx * k; o.position.z += dz * k;
+    { const L = o.userData.limbs, mv = Math.hypot(dx, dz) > .08, sw = mv ? Math.sin(t * 10) * .7 : 0; if (L) { L.legL.rotation.x = sw; L.legR.rotation.x = -sw; L.armL.rotation.x = -sw * .8; L.armR.rotation.x = sw * .8 } }
     o.position.y = 0.24;
     let dh = P.th - o.rotation.y; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); o.rotation.y += dh * k;
     o.userData.car.visible = P.d; o.children.forEach(c => { if (c !== o.userData.car) c.visible = !P.d });
@@ -1052,7 +1240,9 @@ window.__onlineTick = (dt, t) => {
 };
 $("onlineBox").style.display = "flex";
 $("wNick").value = myNick;
-for (const id of ["wFind", "wWalk"]) $(id).addEventListener("click", () => { const n = cleanNick($("wNick").value); if (n) { myNick = n; ls.set("gorod_nick", n) } sendPresence(true) });
+for (const id of ["wFind", "wWalk"]) $(id).addEventListener("click", () => { const n = cleanNick($("wNick").value); if (n && (n !== "ai_toons_kg" || G.mayor)) { myNick = n; ls.set("gorod_nick", n) } sendPresence(true) });
+window.__onMayor = () => { myNick = "ai_toons_kg"; ls.set("gorod_nick", myNick); $("wNick").value = myNick; sendPresence(true) };
+window.__sendPresence = sendPresence;
 
 </script>
 </body>
