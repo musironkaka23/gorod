@@ -23,7 +23,7 @@
   .count .t{font-size:9px;font-weight:800;color:#777;letter-spacing:.6px}
   .count .n{font-size:24px;font-weight:900;color:#1f1f1f;line-height:1}
   #petBtn{position:fixed;right:14px;bottom:176px;background:#3f8f6a;color:#fff;border:none;border-radius:30px;padding:14px 18px;font:900 15px Inter,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.35)}
-  .pets{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0}
+  .pets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
   .pets button{border:2px solid #eee;background:#fff;border-radius:12px;padding:8px 0;font:800 11px Inter,sans-serif;cursor:pointer}
   .pets button span{display:block;font-size:24px}
   .pets button.on{border-color:#3f8f6a;background:#eaf7f0}
@@ -180,9 +180,9 @@
 <script type="module">
 import * as THREE from 'three';
 
-const RESIDENTS=[["a1ka_505","house"],["smartphone__karakol","house"],["_ah_am_111","house2"],["djabbarov_ss","yurt"],["neurodann","house"],["karakol_nail","house"],["aiman114079","house"],["musironkaka","tower"],["humoraass","yurt"],["le_mon______","house"],["guka.zhenishbekova","yurt"],["kimnurel","house"],["a008_07","tower"],["rysaliev.aziz","house"],["ksenia_sergienko02","house2"],["s.m.sh.f6171","house"],["liana095_095_","house2"],["mhdykhrmy1218","house"],["abror64658","yurt"],["kaskusartur_","house"],["zhulduzturebaeva","house"],["bela.2666","house2"],["mun.ira3670","house"],["fayzullin_br","yurt"],["nazirasaidilova75","house2"],["anastasia_kistanova","yurt"],["kagosianolgav","house"],["muhhamdkim","yurt"],["kimako9372","house"],["kokounohito_14peaks","gold"],["umar_rrr9","castle"],["azi_alahu_akbar","house"],["ddbvna","nails"],["tiger_jui","villa"],["istol52","pyramid"],["akusya_00","sky"],["rahmetullaev_aaa","yurt"],["altynai46564", "catcastle"],["bektemirov.20", "house"],["aziretova.azi", "house2"],["ramzan54736376363","yurt"],["ailyqueew.fc","melon"],["amirm_noname","circus"],["stvann01","village"],["rabbit.5618745","pizza"],["gen4ikmemes","estate"],["ymiiksa","house"],["rayka._.777","yurt"],["decor.aigerim","house2"],["jasur191931","house"],["sc4rl3tt_7709","villa"],["iamaruuke1","house2"],["mukh_zaitov","carhome"],["illxxam","eiffel"],["kanyys13","villa"],["nazy_la122","villa"],["chuba_rose","yurt"],["baiana77930","yurt"],["anelbolatova9","tower"],["mersedespredambmvne","house"],["sceptikq","house2"],["sofia_bububu","villa"],["mimojassss","villa"],["farhodvich_muxa","villa"],["dmrbkva.0","nails"],["guestmode321","mega"],["aylin_cosmos","lioncastle"],["_milana_pridvor_","bunker"],["ai.dai2948","house"],["ademi.gloww","villa"],["mgebrishvilitekla555","cathouse"],["aliya_rainbow","yurt"],["sofiiko520","villa3"],["german_empire_irl","tower"],["karina319411","villa"],["reclama_jld","yurt"],["malika05012019","house"],["anuarbek.tamerlan","house2"],["raiana32926","villa"],["aybyikeess","five"],["basi_t5596","house"],["rayana640572","white"],["kotik_pipi","house"],["luba46002","house2"],["veloura_damirovasss","house"],["abduramanovna","yurt"],["mavletsulaimanov","president"],["manyevelkhan","mountain"],["aiz5255","redroof"],["aibiike31.01","villa3"],["polinakosakova915","house2"],["_arukeya_","house"],["aruna50211","house"],["erkenaz14883","yurt"],["susedmichal","house"],["issabekova.nuri","house2"],["_mukanyan_","house"],["roma674567","house2"],["ayruna_92","house2"],["alishalee2505","house"],["malika_zholdybai","grape"]];
+const RESIDENTS=[["a1ka_505","house"],["smartphone__karakol","house"],["_ah_am_111","house2"],["djabbarov_ss","yurt"],["neurodann","house"],["karakol_nail","house"],["aiman114079","house"],["musironkaka","tower"],["humoraass","yurt"],["le_mon______","house"],["guka.zhenishbekova","yurt"],["kimnurel","house"],["a008_07","tower"],["rysaliev.aziz","house"],["ksenia_sergienko02","house2"],["s.m.sh.f6171","house"],["liana095_095_","house2"],["mhdykhrmy1218","house"],["abror64658","yurt"],["kaskusartur_","house"],["zhulduzturebaeva","house"],["bela.2666","house2"],["mun.ira3670","house"],["fayzullin_br","yurt"],["nazirasaidilova75","house2"],["anastasia_kistanova","yurt"],["kagosianolgav","house"],["muhhamdkim","yurt"],["kimako9372","house"],["kokounohito_14peaks","gold"],["umar_rrr9","castle"],["azi_alahu_akbar","house"],["ddbvna","nails"],["tiger_jui","villa"],["istol52","pyramid"],["akusya_00","sky"],["rahmetullaev_aaa","yurt"],["altynai46564","catcastle"],["bektemirov.20","house"],["aziretova.azi","house2"],["ramzan54736376363","yurt"],["ailyqueew.fc","melon"],["amirm_noname","circus"],["stvann01","village"],["rabbit.5618745","pizza"],["gen4ikmemes","estate"],["ymiiksa","house"],["rayka._.777","yurt"],["decor.aigerim","house2"],["jasur191931","house"],["sc4rl3tt_7709","villa"],["iamaruuke1","house2"],["mukh_zaitov","carhome"],["illxxam","eiffel"],["kanyys13","villa"],["nazy_la122","villa"],["chuba_rose","yurt"],["baiana77930","yurt"],["anelbolatova9","tower"],["mersedespredambmvne","house"],["sceptikq","house2"],["sofia_bububu","villa"],["mimojassss","villa"],["farhodvich_muxa","villa"],["dmrbkva.0","nails"],["guestmode321","mega"],["aylin_cosmos","lioncastle"],["_milana_pridvor_","bunker"],["ai.dai2948","house"],["ademi.gloww","villa"],["mgebrishvilitekla555","cathouse"],["aliya_rainbow","yurt"],["sofiiko520","villa3"],["german_empire_irl","tower"],["karina319411","villa"],["reclama_jld","yurt"],["malika05012019","house"],["anuarbek.tamerlan","house2"],["raiana32926","villa"],["aybyikeess","five"],["basi_t5596","house"],["rayana640572","white"],["kotik_pipi","house"],["luba46002","house2"],["veloura_damirovasss","house"],["abduramanovna","yurt"],["mavletsulaimanov","president"],["manyevelkhan","mountain"],["aiz5255","redroof"],["aibiike31.01","villa3"],["polinakosakova915","house2"],["_arukeya_","house"],["aruna50211","house"],["erkenaz14883","yurt"],["susedmichal","house"],["issabekova.nuri","house2"],["_mukanyan_","house"],["roma674567","house2"],["ayruna_92","house2"],["alishalee2505","house"],["malika_zholdybai","grape"],["luiza86217","village"],["liiki9176","doll"],["razanamadikova","villa"],["pokojo541","star"],["iluvmyfri","yurt"],["amiramamyrbaeva","villa"],["nurdemi0606","villa"],["anastasiya_masri","pink"],["fanat_jisoo","white"],["salye_vaaa","volley"],["veronika250112","house2"],["lyza_rozhenko","villa"],["korostelevmark","villa"],["kasiiuu_qq0","house"],["umar_kaza","yurt"],["rayakosh.zh","villa"],["_mira_da_mira_","castle"],["zhasmin64390_we","tower"],["narminx0","villa3"],["akbermet6767","yurt"],["nurbekovaziret_","village"],["mereikairzhan","gym"],["ulya_mbochka","villa3"],["rashidova7214","pink"],["mali_dooll","villa"],["_nuraiym.m_","villa"],["medina.kubatbekova","estate"],["aliia39202","yurt"],["ker1mkul0vaa","nails"],["regina97459_ami_beuti77","mosque"],["adellyo416","yurt"],["kuttubek.toichubekov","choco"],["sofi.imaeva","pink"],["konfetka_aya","sushi"],["elya_uborka","mosque"],["larin_emil","gold"],["nogoibaev_17","villa"],["janybekovna_1.7","melon"],["aman_26.16","mosque"],["tolgonaihalimova","pink"],["medinkavitaminka3","house"],["maryv4mp1","redroof"],["ainura28617","villa3"],["valeriya637226","house"],["bektur.omurov","gold"],["ademi95070","castle"],["samira.013713","mosque"],["zootbekovaaruuzatt","pineapple"],["abaymu_01","villa"],["darina_8488","white"],["kseniia76551","villa3"],["almaz_6769228","pineapple"],["anna123456789103333","redroof"],["2016_zha","circus"],["aruuke507_","gold"],["ayzada24833","villa3"],["saina.usenova","villa3"],["shuvarina_photo","cathouse"],["volleyball_topyohoo","sky"],["sofaakulic","white"],["rita_zolotih","cathouse"],["asema_limonka","strawberry"],["a1gerimm3","castle"],["aiaru_sagyntai","castle"],["alan_almazuly","house"],["mayastar1582","pink"],["t1murov1ch_x","gold"],["altynbekkyzy_z11","villa3"],["vurqe0","gold"],["shabakinalera","pandahouse"],["amina_1234807","pandahouse"],["aizat_kaidagulov","pawn"],["tolepbergenovnaa.2014","house2"],["medi22750","rocket"],["akylai5118","castle"],["__fnkx_kki_","five"],["560_iulia","village"],["nikolkosenko","star"],["kalimova_kausar_daniarkyzy","wardrobe"],["letniy.lager.iyun","pandahouse"],["ysakbaeva_2015","castle"],["anna_zherebilo_","pineapple"],["diana20_14_","gold"],["leyla_azerbayjan","melon"],["aiz_rek17","house2"],["aibi_i11","yurt"],["nina2_33224","croissant"],["kirill.taratenkov","white"],["sakhmi_myhamedhali","five"],["medina_khasen_official","pandahouse"],["fenics_2026","doll"],["arianakisil","ranch"],["sanira.20018","white"],["shakira43469","strawberry"],["esma155316","house2"],["failling82","castle"],["amir337728","villa"],["daurenkyzy.1.1","comb"],["jumgalbekovamalika","pinkcastle"],["marve.ta","estate"],["sofia.rg103","castle"],["modocmonova.08","villa"],["ayimakeneshbekova_05","strawberry"],["aizere_berdibekkyzy","circus"],["damira64921","house2"],["akiak_95","coconut"],["adelek1202","pyramid"],["akmaanaiabdyrakhmanova","five"],["kozubekovaazaliia","pink"],["ainazik66507","villa"],["zo.ro2129","castle"],["taabalgyevna","pineapple"],["nu_ra_im_20_15","villa"],["devid_2777","house"],["adis0va__16","villa"],["gulsara82506","castle"],["igor97038","fridge"],["abdulahad48674","carhome"],["usmanovvaa.ya","pink"],["kenjebekova_albina","pandahouse"],["diar.zhol","mega"],["rysbubu77","cathouse"],["baimgrofova","pinkcastle"],["ainurasaadanbekova","poop"],["nurel89131","bunker"],["aiymakoshoibaeva","gold"],["ramzan.borets16","carhome"],["aziz4ik_65","melon"],["mariya.ulanovna","villa"],["ri_nat6419","village"],["mamanchik_20","gadget"],["emir_shahmarov","pandahouse"],["fatima2949321","star"],["dysenka28","star"],["shaiyrbekova_015","star"],["bektur35078","cathouse"],["15_privet15","star"],["black_001","hat"]];
 const PUBLIC=[[100,"🏫 Школа №1","school"],[101,"🐾 Приют для животных","shelter"],[102,"👗 Магазин одежды","shop"]];
-const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾",shop:"Магазин одежды — зайди и смени образ 👗",grape:"Дом-виноград 🍇"};
+const TYPE_NAME={yurt:"Юрта",house:"Домик",house2:"Двухэтажный дом",tower:"Многоэтажка",gold:"Золотой дом",castle:"Замок",nails:"Салон маникюра",villa:"Дом с бассейном",pyramid:"Пирамида Хеопса",sky:"Небоскрёб 🏙️",catcastle:"Кошачий замок 🐱",melon:"Дом-арбуз 🍉 + будка для собаки",circus:"Дом-цирк 🎪",village:"Старый деревенский домик",pizza:"Дом-пицца 🍕",estate:"Пятиэтажка с бассейном, двором и собакой",carhome:"Двухэтажный дом + чёрный спорт-седан 🏎️ (можно сесть за руль!)",eiffel:"Эйфелева башня 🗼",mega:"Самое высокое здание города 👑",lioncastle:"Замок со львами 🦁",bunker:"Бункер",cathouse:"Красивый дом с кошками 🐱",villa3:"Трёхэтажная вилла с бассейном",five:"Пятиэтажный дом",white:"Белый дом 🤍",president:"Президентский дворец 🏛️",mountain:"Дом в горе ⛰️",redroof:"Двухэтажный дом с красной крышей",school:"Городская школа — для всех жителей 📚",shelter:"Приют для животных — подойди и возьми питомца 🐾",shop:"Магазин одежды — зайди и смени образ 👗",grape:"Дом-виноград 🍇",pineapple:"Дом-ананас 🍍",pawn:"Дом-пешка ♟️",rocket:"Дом-ракета 🚀",wardrobe:"Дом-шкаф 🚪",mosque:"Мечеть 🕌",croissant:"Дом-круассан 🥐",comb:"Дом-расчёска + кошка 🐱",doll:"Кукольный домик (6 этажей) + машина и панда 🐼",ranch:"Ранчо с лошадьми 🐴",star:"Дом-звезда ⭐",volley:"Дом — волейбольный мяч 🏐",gym:"Спортзал 🏋️",choco:"Шоколадная фабрика 🍫",sushi:"Дом-суши с бассейном 🍣",pink:"Розовый домик 💗",pinkcastle:"Нежно-розовый замок 🏰",pandahouse:"Дом-панда 🐼",strawberry:"Дом-клубника 🍓",coconut:"Дом-кокос + пальма 🥥",fridge:"Дом-холодильник 🧊",poop:"Весёлый домик-какашка 💩",gadget:"Магазин гаджетов 📱",hat:"Дом-шапочка 🧶"};
 document.getElementById('cnt').textContent=RESIDENTS.length;
 
 // ---------- layout ----------
@@ -261,10 +261,12 @@ let towerTex;function getTowerTex(){if(towerTex)return towerTex;const c=document
   for(let row=0;row<16;row++)for(let col=0;col<4;col++){x.fillStyle=r()<.45?'#ffd27a':'#4a5568';x.fillRect(10+col*30,14+row*31,18,20)}
   towerTex=new THREE.CanvasTexture(c);towerTex.colorSpace=THREE.SRGBColorSpace;return towerTex}
 
-const PET_TYPES={dog:{name:'Собака',col:'#c58a4a',ear:'#7a4a22'},cat:{name:'Кошка',col:'#ff9f43',ear:'#ff9f43'},rabbit:{name:'Кролик',col:'#f4f4f4',ear:'#f4f4f4'},fox:{name:'Лиса',col:'#e8662a',ear:'#2a1a10'},panda:{name:'Панда',col:'#f6f6f6',ear:'#1d1d1d'}};
+const PET_TYPES={dog:{name:'Собака',col:'#c58a4a',ear:'#7a4a22'},cat:{name:'Кошка',col:'#ff9f43',ear:'#ff9f43'},rabbit:{name:'Кролик',col:'#f4f4f4',ear:'#f4f4f4'},fox:{name:'Лиса',col:'#e8662a',ear:'#2a1a10'},panda:{name:'Панда',col:'#f6f6f6',ear:'#1d1d1d'},hamster:{name:'Хомячок',col:'#e8b77a',ear:'#f4d6b0'},rooster:{name:'Петушок',col:'#b8322a',ear:'#e2452f'}};
 function makePet(kind){const T=PET_TYPES[kind]||PET_TYPES.dog;const g=new THREE.Group();const m=M(T.col),e=M(T.ear),dk=M('#1d1d1d');
   const body=part(box,m,0,.26,0,.32,.28,.52);g.add(body);
   if(kind==='panda'){g.add(part(box,dk,0,.26,0,.34,.3,.2));}
+  if(kind==='rooster'){g.remove(body);g.add(part(box,m,0,.4,0,.3,.34,.42));g.add(part(box,M('#f2c230'),0,.62,.24,.18,.24,.18));g.add(part(box,e,0,.82,.24,.05,.14,.16));g.add(part(box,M('#ffb000'),0,.62,.36,.06,.05,.1));for(const x of[-.06,.06])g.add(part(box,dk,x,.66,.33,.03,.03,.02));const tl=part(box,M('#1d3a2a'),0,.58,-.25,.06,.36,.2);tl.rotation.x=-.5;g.add(tl);for(const x of[-.08,.08])g.add(part(box,M('#ffb000'),x,.12,0,.04,.24,.04));return g}
+  if(kind==='hamster'){g.remove(body);const hb=part(new THREE.SphereGeometry(.26,12,10),m,0,.24,0);hb.scale.set(1,.85,1.2);g.add(hb);g.add(part(new THREE.SphereGeometry(.14,10,8),M('#fff3e0'),0,.18,.16));for(const x of[-.12,.12])g.add(part(new THREE.SphereGeometry(.06,8,6),e,x,.44,.06));for(const x of[-.07,.07])g.add(part(box,dk,x,.32,.28,.04,.04,.02));g.add(part(box,M('#ff9aa8'),0,.27,.31,.04,.03,.02));return g}
   g.add(part(box,m,0,.48,.3,.3,.28,.28));
   if(kind==='rabbit'){for(const x of[-.07,.07])g.add(part(box,e,x,.78,.28,.07,.3,.06));}
   else if(kind==='dog'){for(const x of[-.14,.14])g.add(part(box,e,x,.46,.3,.06,.22,.14));}
@@ -276,6 +278,7 @@ function makePet(kind){const T=PET_TYPES[kind]||PET_TYPES.dog;const g=new THREE.
   const tail=part(box,kind==='fox'?M('#e8662a'):m,0,.38,-.3,kind==='fox'?.12:.06,kind==='fox'?.12:.06,kind==='rabbit'||kind==='panda'?.08:.28);tail.rotation.x=.5;g.add(tail);
   for(const [x,z] of [[-.1,.16],[.1,.16],[-.1,-.16],[.1,-.16]])g.add(part(box,kind==='panda'?dk:m,x,.08,z,.08,.16,.08));
   return g}
+function door(g,z,col,s=1){g.add(part(box,M(col),0,.75*s+.05,z,.9*s,1.5*s,.1));g.add(part(new THREE.SphereGeometry(.06,8,6),M('#f2c230',{metalness:.6}),.28*s,.75*s,z+.07))}
 const HOUSE={
   house:{h:4.6,r:2.7,make(){const g=new THREE.Group();g.add(part(box,M('#f1cf9f'),0,1.3,0,4.2,2.6,3.6));
     const r=prismRoof(4.7,1.7,4.1,M('#6b3a28'));r.position.y=2.6;g.add(r);g.add(part(box,M('#5a3524'),1.2,3.5,.6,.5,1.4,.5));
@@ -493,6 +496,173 @@ const HOUSE={
     g.add(part(box,M('#d9c7ef'),0,.36,2.5,1.0,.04,1.4));
     for(const x of[-2.4,2.4]){for(let i=0;i<3;i++)g.add(part(new THREE.CylinderGeometry(.05,.05,.9,6),M('#8a5a2b'),x,.75,1.6+i*.7));
       g.add(part(box,M('#8a5a2b'),x,1.1,2.3,.06,.06,1.5));for(let i=0;i<4;i++)g.add(part(new THREE.SphereGeometry(.13,8,6),mats[i%4],x,.85-((i%2)*.15),1.7+i*.4))}
+    return g}},
+  // ===== batch: custom houses from comments =====
+  pineapple:{h:7.4,r:2.7,make(){const g=new THREE.Group();const y=M('#f2b417',{roughness:.5}),d=M('#c98a10'),gr=M('#3f9a3a',{roughness:.6});
+    const b=part(new THREE.SphereGeometry(2.1,18,16),y,0,2.6,0);b.scale.set(1,1.3,1);g.add(b);
+    for(let r=0;r<6;r++)for(let i=0;i<10;i++){const a=i/10*Math.PI*2+(r%2)*.31,yy=.9+r*.62,rad=Math.sqrt(Math.max(0,1-Math.pow((yy-2.6)/2.75,2)))*2.12;const k=part(box,d,Math.sin(a)*rad,yy,Math.cos(a)*rad,.22,.22,.08);k.rotation.y=a;k.rotation.z=Math.PI/4;g.add(k)}
+    for(let i=0;i<9;i++){const a=i/9*Math.PI*2;const l=part(new THREE.ConeGeometry(.28,2.2,4),gr,Math.sin(a)*.35,5.9,Math.cos(a)*.35);l.rotation.set(Math.cos(a)*.5,0,-Math.sin(a)*.5);g.add(l)}
+    g.add(part(new THREE.ConeGeometry(.3,2.6,4),gr,0,6.3,0));
+    door(g,1.75,'#3a6fb5');for(const [x,yy] of[[-1,3.4],[1.05,2.6]]){const w=part(new THREE.CylinderGeometry(.35,.35,.1,14),winMat,x,yy,1.85);w.rotation.x=Math.PI/2;g.add(w)}
+    return g}},
+  pawn:{h:7.2,r:2.6,make(){const g=new THREE.Group();const wh=M('#f4efe6',{roughness:.3}),bk=M('#1d1d1d',{roughness:.3});
+    for(let i=0;i<4;i++)for(let j=0;j<4;j++)g.add(part(box,(i+j)%2?bk:wh,-1.65+i*1.1,.37,-1.65+j*1.1,1.1,.06,1.1));
+    g.add(part(new THREE.CylinderGeometry(2.0,2.3,.7,24),wh,0,.7,0));g.add(part(new THREE.CylinderGeometry(1.6,1.8,.4,24),wh,0,1.25,0));
+    g.add(part(new THREE.CylinderGeometry(.85,1.45,3.2,24),wh,0,3.0,0));g.add(part(new THREE.CylinderGeometry(1.25,1.25,.3,24),wh,0,4.65,0));
+    g.add(part(new THREE.SphereGeometry(1.3,22,18),wh,0,5.85,0));
+    door(g,1.45,'#6b4424',.9);for(const yy of[3.0,5.85]){const w=part(new THREE.CylinderGeometry(.3,.3,.1,14),winMat,0,yy,yy>5?1.27:1.2);w.rotation.x=Math.PI/2;g.add(w)}
+    return g}},
+  rocket:{h:10.5,r:2.6,make(){const g=new THREE.Group();const wh=M('#eef1f5',{metalness:.3,roughness:.35}),rd=M('#e2452f'),gl=M('#8fd3ff',{roughness:.1,metalness:.2,emissive:'#3a8fd0',emissiveIntensity:.3});
+    g.add(part(new THREE.CylinderGeometry(1.3,1.3,6.2,24),wh,0,3.9,0));g.add(part(new THREE.ConeGeometry(1.3,2.6,24),rd,0,8.3,0));
+    g.add(part(new THREE.CylinderGeometry(1.32,1.32,.4,24),rd,0,6.3,0));
+    for(let i=0;i<3;i++){const a=i/3*Math.PI*2+Math.PI/6;const f=part(box,rd,Math.sin(a)*1.55,1.5,Math.cos(a)*1.55,.15,2.6,1.1);f.rotation.y=a;g.add(f)}
+    g.add(part(new THREE.CylinderGeometry(.9,1.15,.6,20),M('#555'),0,.6,0));
+    const fl=part(new THREE.ConeGeometry(.75,1.1,14),M('#ffb648',{emissive:'#ff7a00',emissiveIntensity:1.4}),0,.6,0);fl.rotation.x=Math.PI;g.add(fl);
+    for(const yy of[4.6,6.9]){const w=part(new THREE.CylinderGeometry(.42,.42,.1,18),gl,0,yy,1.3);w.rotation.x=Math.PI/2;g.add(w);const fr=part(new THREE.TorusGeometry(.44,.07,6,18),M('#9aa0a6',{metalness:.6}),0,yy,1.33);g.add(fr)}
+    door(g,1.25,'#9aa0a6',1.6);return g}},
+  wardrobe:{h:6.6,r:2.8,make(){const g=new THREE.Group();const w=M('#b07a4a',{roughness:.6}),w2=M('#8a5a2f'),gold=M('#f2c230',{metalness:.6,roughness:.3});
+    g.add(part(box,w,0,3.0,0,4.6,5.6,2.6));g.add(part(box,w2,0,5.95,0,4.9,.3,2.9));g.add(part(box,w2,0,.3,0,4.8,.3,2.8));
+    for(const x of[-1.15,1.15]){g.add(part(box,M('#c48c58'),x,3.25,1.32,2.1,4.7,.08));g.add(part(box,winMat,x,4.1,1.38,1.3,1.4,.04));g.add(part(new THREE.SphereGeometry(.12,8,6),gold,x>0?-.2+x-.85:x+.85,2.9,1.42))}
+    g.add(part(box,w2,0,.85,1.36,4.4,.6,.06));g.add(part(box,gold,0,.85,1.42,.6,.08,.04));
+    for(const x of[-1.9,1.9])g.add(part(new THREE.CylinderGeometry(.12,.08,.4,8),w2,x,.05,1.0));
+    return g}},
+  mosque:{h:9.5,r:3.0,make(){const g=new THREE.Group();const wh=M('#f6f1e7'),gr=M('#2f9e6a',{roughness:.35,metalness:.2}),gold=M('#f2c230',{metalness:.6,roughness:.3,emissive:'#7a5200',emissiveIntensity:.3});
+    g.add(part(box,wh,0,1.7,-.4,4.4,3.0,3.4));g.add(part(new THREE.CylinderGeometry(1.5,1.6,.6,20),wh,0,3.5,-.4));
+    const dm=part(new THREE.SphereGeometry(1.6,22,16,0,Math.PI*2,0,Math.PI/2),gr,0,3.8,-.4);g.add(dm);
+    g.add(part(new THREE.CylinderGeometry(.05,.05,.7,6),gold,0,5.7,-.4));const cr=part(new THREE.TorusGeometry(.22,.06,6,14,Math.PI*1.5),gold,0,6.2,-.4);cr.rotation.z=Math.PI*.75;g.add(cr);
+    for(const x of[-2.4,2.4]){g.add(part(new THREE.CylinderGeometry(.32,.38,6.6,12),wh,x,3.3,-.4));g.add(part(new THREE.CylinderGeometry(.5,.5,.25,12),gr,x,5.3,-.4));g.add(part(new THREE.ConeGeometry(.36,1.2,12),gr,x,7.2,-.4));g.add(part(new THREE.SphereGeometry(.09,8,6),gold,x,7.9,-.4))}
+    const ar=new THREE.Shape();ar.moveTo(-.55,0);ar.lineTo(-.55,1.2);ar.absarc(0,1.2,.55,Math.PI,0,true);ar.lineTo(.55,0);
+    const dg=new THREE.ExtrudeGeometry(ar,{depth:.1,bevelEnabled:false});const d=new THREE.Mesh(dg,gr);d.position.set(0,.35,1.32);g.add(d);
+    for(const x of[-1.4,1.4]){const w=new THREE.Mesh(new THREE.ExtrudeGeometry(ar,{depth:.08,bevelEnabled:false}),winMat);w.scale.setScalar(.55);w.position.set(x,1.5,1.33);g.add(w)}
+    g.add(part(box,gr,0,3.0,1.31,4.4,.15,.06));
+    return g}},
+  croissant:{h:4.6,r:2.9,make(){const g=new THREE.Group();const c1=M('#e3a04a',{roughness:.45}),c2=M('#c97a2a',{roughness:.45});
+    for(let i=0;i<9;i++){const t=i/8,a=(t-.5)*2.4,r=2.6*(.45+.55*Math.sin(t*Math.PI));const s=part(new THREE.SphereGeometry(1,16,12),i%2?c1:c2,Math.sin(a)*2.0,.4+r*.62,-Math.cos(a)*1.2+.6);s.scale.set(.75+.35*Math.sin(t*Math.PI),r*.6,r*.6);s.rotation.y=a;g.add(s)}
+    g.add(part(box,M('#7a4a2a'),0,.95,2.05,.9,1.3,.1));for(const x of[-1.1,1.1]){const w=part(new THREE.CylinderGeometry(.28,.28,.1,14),winMat,x,1.8,1.75);w.rotation.x=Math.PI/2;g.add(w)}
+    return g}},
+  comb:{h:5.6,r:2.9,make(){const g=new THREE.Group();const p=M('#ff7aa8',{roughness:.3}),p2=M('#e8527f');
+    g.add(part(box,p,0,3.9,0,5.4,1.8,1.2));g.add(part(box,p2,0,4.85,0,5.5,.2,1.3));
+    for(let i=0;i<13;i++)g.add(part(box,p,-2.5+i*.417,1.6,0,.22,3.0,1.1));
+    for(const x of[-1.6,0,1.6])g.add(part(box,winMat,x,3.9,.62,.7,.7,.04));
+    g.add(part(box,M('#7a2a4a'),0,1.1,.6,.4,1.4,.06));
+    const cat=makePet('cat');cat.position.set(1.9,.1,1.9);cat.scale.setScalar(1.8);g.add(cat);
+    return g}},
+  doll:{h:9.6,r:3.0,make(){const g=new THREE.Group();const pk=M('#ffb6d5'),pk2=M('#ff7aa8'),wh=M('#ffffff');
+    for(let f=0;f<6;f++){g.add(part(box,f%2?pk:M('#ffd0e4'),0,.75+f*1.3,-.5,4.2,1.3,3.0));for(const x of[-1.2,0,1.2])g.add(part(box,winMat,x,.85+f*1.3,1.02,.55,.6,.05));g.add(part(box,wh,0,1.4+f*1.3,1.05,4.3,.08,.12))}
+    const r=prismRoof(4.8,1.9,3.5,pk2);r.position.set(0,7.9,-.5);g.add(r);g.add(part(new THREE.SphereGeometry(.3,12,10),M('#ffd84a',{emissive:'#ffb800',emissiveIntensity:.6}),0,9.95,-.5));
+    door(g,1.07,'#e8527f');
+    // little pink car
+    const car=new THREE.Group();car.position.set(2.3,0,2.2);car.rotation.y=-.4;g.add(car);
+    car.add(part(box,pk2,0,.45,0,1.0,.45,1.9));car.add(part(box,M('#bfe3ff',{roughness:.1}),0,.85,-.1,.85,.35,1.0));
+    for(const [x,z] of[[-.5,.6],[.5,.6],[-.5,-.6],[.5,-.6]]){const wl=part(new THREE.CylinderGeometry(.22,.22,.15,12),M('#222'),x,.22,z);wl.rotation.z=Math.PI/2;car.add(wl)}
+    const pd=makePet('panda');pd.position.set(-2.2,.05,2.1);pd.scale.setScalar(1.6);g.add(pd);
+    return g}},
+  ranch:{h:5.4,r:3.0,make(){const g=new THREE.Group();const red=M('#b8322a'),wh=M('#f4efe6'),wood=M('#8a5a2b');
+    g.add(part(box,red,0,1.5,-1.1,4.0,2.6,2.6));const r=prismRoof(4.4,1.5,2.9,M('#3a2a20'));r.position.set(0,2.8,-1.1);g.add(r);
+    g.add(part(box,wh,0,1.1,.21,1.4,1.8,.06));const x1=part(box,wh,0,1.1,.24,.08,2.1,.04);x1.rotation.z=.66;g.add(x1);const x2=part(box,wh,0,1.1,.24,.08,2.1,.04);x2.rotation.z=-.66;g.add(x2);
+    for(let i=0;i<7;i++){g.add(part(box,wood,-2.7+i*.9,.75,2.7,.12,.9,.12))}g.add(part(box,wood,0,1.0,2.7,5.5,.08,.06));g.add(part(box,wood,0,.65,2.7,5.5,.08,.06));
+    const horse=(col,x,z,ry)=>{const h=new THREE.Group();h.position.set(x,.35,z);h.rotation.y=ry;g.add(h);const m=M(col),mn=M('#2a1a10');
+      h.add(part(box,m,0,1.0,0,.55,.6,1.3));h.add(part(box,m,0,1.45,.7,.35,.75,.4));h.add(part(box,m,0,1.8,.95,.3,.3,.55));h.add(part(box,mn,0,1.6,.55,.08,.6,.2));
+      for(const [lx,lz] of[[-.2,.45],[.2,.45],[-.2,-.45],[.2,-.45]])h.add(part(box,m,lx,.35,lz,.14,.75,.14));h.add(part(box,mn,0,1.05,-.75,.1,.6,.1))};
+    horse('#8a5a2b',-1.4,1.3,.6);horse('#f4f4f4',1.3,1.5,-.9);
+    return g}},
+  star:{h:6.6,r:2.8,make(){const g=new THREE.Group();const s=new THREE.Shape();for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2,r=i%2?1.25:2.9;i?s.lineTo(Math.cos(a)*r,-Math.sin(a)*r):s.moveTo(Math.cos(a)*r,-Math.sin(a)*r)}
+    const geo=new THREE.ExtrudeGeometry(s,{depth:1.6,bevelEnabled:true,bevelSize:.15,bevelThickness:.15,bevelSegments:2});geo.translate(0,0,-.8);
+    const st=new THREE.Mesh(geo,M('#ffd84a',{roughness:.3,metalness:.2,emissive:'#ffb800',emissiveIntensity:.25}));st.position.y=3.1;st.castShadow=true;g.add(st);
+    g.add(part(box,M('#8a5a2b'),0,1.3,.98,.8,1.3,.06));for(const [x,y] of[[-1.4,3.6],[1.4,3.6],[0,4.9]]){const w=part(new THREE.CylinderGeometry(.27,.27,.1,12),M('#7fd3ff',{emissive:'#3a8fd0',emissiveIntensity:.6}),x,y,.99);w.rotation.x=Math.PI/2;g.add(w)}
+    return g}},
+  volley:{h:5.8,r:2.8,make(){const g=new THREE.Group();const y=M('#ffd84a',{roughness:.4}),b=M('#2f63c9',{roughness:.4}),wh=M('#f7f7f7',{roughness:.4});
+    const mk=(mat,rx,rz)=>{const s=part(new THREE.SphereGeometry(2.5,24,18,0,Math.PI*2,0,Math.PI/3),mat,0,2.7,0);s.rotation.set(rx,0,rz);return s};
+    g.add(part(new THREE.SphereGeometry(2.46,24,18),wh,0,2.7,0));g.add(mk(y,0,0));g.add(mk(b,Math.PI*.66,0));g.add(mk(y,Math.PI*1.33,0));g.add(mk(b,Math.PI/2,Math.PI/2));
+    door(g,2.3,'#2f63c9',.9);const w=part(new THREE.CylinderGeometry(.35,.35,.1,14),winMat,1.1,3.6,2.0);w.rotation.x=Math.PI/2;g.add(w);
+    // net
+    g.add(part(new THREE.CylinderGeometry(.05,.05,1.8,6),M('#999'),-2.6,.9,2.4));g.add(part(new THREE.CylinderGeometry(.05,.05,1.8,6),M('#999'),2.6,.9,2.4));g.add(part(box,M('#ffffff',{transparent:true,opacity:.7}),0,1.5,2.4,5.2,.6,.03));
+    return g}},
+  gym:{h:5.2,r:3.0,make(){const g=new THREE.Group();const gr=M('#3d4450'),or=M('#ff7a1a');
+    g.add(part(box,gr,0,1.9,-.4,5.4,3.4,3.4));g.add(part(box,or,0,3.7,-.4,5.6,.25,3.6));
+    g.add(part(box,M('#bfe3ff',{roughness:.1,transparent:true,opacity:.7}),0,1.6,1.32,4.6,2.0,.06));
+    // dumbbell sign
+    const db=new THREE.Group();db.position.set(0,4.5,.6);g.add(db);db.add(part(new THREE.CylinderGeometry(.08,.08,2.6,8),M('#bbb',{metalness:.7}),0,0,0).rotateZ(Math.PI/2));
+    for(const x of[-1.1,1.1]){const p=part(new THREE.CylinderGeometry(.45,.45,.25,16),or,x,0,0);p.rotation.z=Math.PI/2;db.add(p)}
+    // treadmill + bench inside window
+    g.add(part(box,M('#1d1d1d'),-1.3,.8,.6,1.2,.15,.6));g.add(part(box,M('#1d1d1d'),-1.8,1.3,.6,.1,1.0,.5));g.add(part(box,M('#c0392b'),1.3,.75,.6,1.4,.15,.4));
+    return g}},
+  choco:{h:7.6,r:3.0,make(){const g=new THREE.Group();const c1=M('#6b3a1e',{roughness:.5}),c2=M('#4a2612'),pk=M('#ff7aa8');
+    g.add(part(box,c1,0,1.9,-.2,5.2,3.4,3.6));for(let i=0;i<4;i++)for(let j=0;j<3;j++)g.add(part(box,c2,-1.95+i*1.3,1.0+j*1.1,1.62,1.1,.9,.08));
+    // icing roof
+    g.add(part(box,pk,0,3.7,-.2,5.4,.3,3.8));for(let i=0;i<7;i++)g.add(part(new THREE.SphereGeometry(.22,8,6),pk,-2.4+i*.8,3.55,1.65));
+    for(const [x,c] of[[-1.6,'#e2452f'],[1.4,'#f2c230']]){g.add(part(new THREE.CylinderGeometry(.35,.4,3.4,12),M('#c9c4bb'),x,5.3,-.8));g.add(part(new THREE.CylinderGeometry(.42,.42,.3,12),M(c),x,6.9,-.8))}
+    // giant candies
+    for(const [x,c] of[[-2.2,'#e2452f'],[2.3,'#2f9e6a']]){g.add(part(new THREE.SphereGeometry(.35,10,8),M(c),x,.75,2.4));for(const s of[-1,1]){const w=part(new THREE.ConeGeometry(.2,.35,6),M(c),x+s*.45,.75,2.4);w.rotation.z=s*Math.PI/2;g.add(w)}}
+    door(g,1.68,'#f2c230');return g}},
+  sushi:{h:5.0,r:2.9,make(){const g=new THREE.Group();const rice=M('#fbf7ef',{roughness:.6}),nori=M('#1d2a1d'),sal=M('#ff8a5c',{roughness:.4});
+    g.add(part(new THREE.CylinderGeometry(2.1,2.1,3.0,28),nori,0,1.9,-.6));g.add(part(new THREE.CylinderGeometry(1.85,1.85,3.05,28),rice,0,1.9,-.6));g.add(part(new THREE.CylinderGeometry(.8,.8,3.1,16),sal,0,1.9,-.6));
+    g.add(part(new THREE.CylinderGeometry(.35,.35,3.12,12),M('#6fbf4a'),.7,1.9,-.2));
+    const nig=part(new THREE.CapsuleGeometry(.5,1.0,6,12),rice,2.0,.75,1.6);nig.rotation.z=Math.PI/2;g.add(nig);const tp=part(box,sal,2.0,1.2,1.6,1.9,.22,.9);g.add(tp);
+    // pool
+    g.add(part(box,M('#d9cfc0'),-1.6,.36,2.0,2.4,.1,1.6));g.add(part(box,M('#4fc3e8',{roughness:.1}),-1.6,.4,2.0,2.1,.06,1.3));
+    const d=part(box,M('#c0392b'),0,1.0,1.5,.8,1.3,.08);g.add(d);return g}},
+  pink:{h:5.6,r:2.8,make(){const g=new THREE.Group();g.add(part(box,M('#ffc4dd'),0,1.7,0,4.4,3.4,3.6));
+    const r=prismRoof(5,1.8,4.1,M('#ff6fa3'));r.position.y=3.4;g.add(r);g.add(part(box,M('#ffffff'),0,3.45,1.85,4.5,.12,.1));
+    windows(g,4.4,3.6,[1.4,2.7]);door(g,1.85,'#e8527f');for(let i=0;i<5;i++)g.add(part(new THREE.SphereGeometry(.25,8,6),M(['#ff7aa8','#ffd84a','#ffffff'][i%3]),-2+i*1,.55,2.3));
+    g.add(part(new THREE.SphereGeometry(.45,12,10),M('#ff2f6d',{emissive:'#ff2f6d',emissiveIntensity:.4}),0,4.6,1.4).rotateZ(.785));
+    return g}},
+  pinkcastle:{h:8.6,r:3.0,make(){const g=new THREE.Group();const pk=M('#ffc4dd'),pk2=M('#ff6fa3'),wh=M('#fff4fa');
+    g.add(part(box,pk,0,2.1,-.3,4.2,3.8,3.2));for(let i=0;i<6;i++)g.add(part(box,pk,-1.75+i*.7,4.15,1.25,.4,.4,.3));
+    for(const [x,z] of[[-2.2,1.2],[2.2,1.2],[-2.2,-1.8],[2.2,-1.8]]){g.add(part(new THREE.CylinderGeometry(.65,.7,5.2,16),wh,x,2.6,z));g.add(part(new THREE.ConeGeometry(.85,1.9,16),pk2,x,6.15,z))}
+    g.add(part(new THREE.CylinderGeometry(.9,.95,6.6,16),wh,0,3.3,-.6));g.add(part(new THREE.ConeGeometry(1.15,2.6,16),pk2,0,7.9,-.6));
+    g.add(part(box,M('#ffd84a'),0,9.4,-.6,.04,.6,.04));g.add(part(box,M('#ff2f6d'),.22,9.6,-.6,.4,.25,.03));
+    const ar=new THREE.Shape();ar.moveTo(-.6,0);ar.lineTo(-.6,1.1);ar.absarc(0,1.1,.6,Math.PI,0,true);ar.lineTo(.6,0);const d=new THREE.Mesh(new THREE.ExtrudeGeometry(ar,{depth:.1,bevelEnabled:false}),pk2);d.position.set(0,.35,1.3);g.add(d);
+    for(const x of[-1.3,1.3])g.add(part(box,winMat,x,2.8,1.32,.5,.8,.05));
+    for(let i=0;i<8;i++){const a=i/8*Math.PI*2;g.add(part(new THREE.SphereGeometry(.12,6,5),M('#ff7aa8',{emissive:'#ff7aa8',emissiveIntensity:.5}),Math.cos(a)*2.9,.5,Math.sin(a)*2.9))}
+    return g}},
+  pandahouse:{h:6.4,r:2.9,make(){const g=new THREE.Group();const wh=M('#f6f6f6',{roughness:.5}),bk=M('#1d1d1d',{roughness:.5});
+    const hd=part(new THREE.SphereGeometry(2.4,24,18),wh,0,2.6,0);hd.scale.set(1.05,.95,1);g.add(hd);
+    for(const x of[-1.7,1.7])g.add(part(new THREE.SphereGeometry(.75,14,12),bk,x,4.5,-.1));
+    for(const x of[-.85,.85]){const e=part(new THREE.SphereGeometry(.62,14,12),bk,x,3.0,1.95);e.scale.set(1,1.25,.5);e.rotation.z=x>0?-.4:.4;g.add(e);
+      const w=part(new THREE.CylinderGeometry(.28,.28,.1,14),winMat,x,3.05,2.2);w.rotation.x=Math.PI/2;g.add(w)}
+    g.add(part(new THREE.SphereGeometry(.3,12,10),bk,0,2.15,2.32));door(g,2.05,'#1d1d1d',.85);
+    for(let i=0;i<4;i++){const b=part(new THREE.CylinderGeometry(.1,.1,3+i*.4,8),M('#5c9a3a'),2.6,1.8,1.6-i*.5);g.add(b)}
+    return g}},
+  strawberry:{h:6.8,r:2.7,make(){const g=new THREE.Group();const red=M('#e8273d',{roughness:.3}),seed=M('#ffe28a'),gr=M('#3f9a3a');
+    const b=part(new THREE.SphereGeometry(2.2,22,18),red,0,2.9,0);b.scale.set(1,1.15,1);g.add(b);const t=part(new THREE.ConeGeometry(1.7,1.9,22),red,0,.95,0);t.rotation.x=Math.PI;g.add(t);
+    for(let i=0;i<46;i++){const a=i*2.4,yy=1.4+(i%9)*.42,r=Math.sqrt(Math.max(0,1-Math.pow((yy-2.9)/2.55,2)))*2.22;if(r<.4)continue;g.add(part(new THREE.SphereGeometry(.07,6,4),seed,Math.sin(a)*r,yy,Math.cos(a)*r))}
+    for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const l=part(new THREE.ConeGeometry(.4,1.4,4),gr,Math.sin(a)*.9,5.3,Math.cos(a)*.9);l.rotation.set(Math.cos(a)*1.2,0,-Math.sin(a)*1.2);g.add(l)}
+    g.add(part(new THREE.CylinderGeometry(.12,.15,.8,8),gr,0,5.8,0));
+    door(g,1.55,'#7a1a24');const w=part(new THREE.CylinderGeometry(.33,.33,.1,14),winMat,0,3.9,2.13);w.rotation.x=Math.PI/2;g.add(w);
+    return g}},
+  coconut:{h:9.0,r:2.8,make(){const g=new THREE.Group();const sh=M('#6b4424',{roughness:.9}),in_=M('#fbf7ef');
+    const c=part(new THREE.SphereGeometry(2.1,20,16),sh,0,2.3,-.3);g.add(c);
+    const cut=part(new THREE.CylinderGeometry(1.9,1.9,.12,22),in_,0,3.75,-.3);g.add(cut);g.add(part(new THREE.CylinderGeometry(.06,.06,1.6,6),M('#ff7aa8'),.6,4.4,-.3).rotateZ(-.3));
+    door(g,1.75,'#3a2410',.9);for(const x of[-1.1,1.1]){const w=part(new THREE.CylinderGeometry(.28,.28,.1,12),winMat,x,2.6,1.55);w.rotation.x=Math.PI/2;g.add(w)}
+    // palm
+    for(let i=0;i<7;i++)g.add(part(new THREE.CylinderGeometry(.18,.22,1,8),M('#9a6a3a'),2.4+i*.03,.8+i,1.6));
+    for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const l=part(box,M('#3f9a3a'),2.6+Math.sin(a)*1,7.3,1.6+Math.cos(a)*1,.4,.08,2.0);l.rotation.y=a;l.rotation.x=.4;g.add(l)}
+    for(const [x,z] of[[2.6,1.9],[2.3,1.4]])g.add(part(new THREE.SphereGeometry(.25,10,8),sh,x,6.9,z));
+    return g}},
+  fridge:{h:7.2,r:2.6,make(){const g=new THREE.Group();const wh=M('#f4f6f8',{roughness:.25,metalness:.15}),gr=M('#9aa0a6',{metalness:.7,roughness:.3});
+    g.add(part(box,wh,0,3.4,0,3.6,6.4,3.0));g.add(part(box,M('#d0d5da'),0,2.4,1.52,3.62,.06,.06));
+    for(const yy of[1.3,4.4])g.add(part(box,gr,1.4,yy,1.6,.12,1.2,.12));
+    g.add(part(box,winMat,-.5,4.6,1.52,1.6,1.4,.04));g.add(part(box,winMat,-.5,1.5,1.52,1.6,1.0,.04));
+    for(const [x,y,c] of[[-1.1,5.8,'#e2452f'],[.4,5.6,'#2f9e6a'],[-.3,3.0,'#f2c230']])g.add(part(box,M(c),x,y,1.55,.4,.4,.04));
+    g.add(part(box,M('#7a4a30'),.9,.85,1.55,.8,1.4,.04));return g}},
+  poop:{h:5.0,r:2.7,make(){const g=new THREE.Group();const br=M('#8a5a2b',{roughness:.35}),br2=M('#7a4a22',{roughness:.35});
+    const rings=[[2.3,.9,.5],[1.8,.8,1.4],[1.3,.7,2.25],[.8,.6,3.0]];rings.forEach(([R,t,y],i)=>{const tr=part(new THREE.TorusGeometry(R-t*.4,t*.62,12,24),i%2?br2:br,0,y,0);tr.rotation.x=Math.PI/2;g.add(tr);g.add(part(new THREE.CylinderGeometry(R-t*.4,R-t*.4,t*1.1,24),i%2?br2:br,0,y,0))});
+    g.add(part(new THREE.ConeGeometry(.5,1.0,14),br,0,3.75,0));
+    for(const x of[-.55,.55]){g.add(part(new THREE.SphereGeometry(.32,12,10),M('#ffffff'),x,2.35,1.55));g.add(part(new THREE.SphereGeometry(.15,10,8),M('#111'),x,2.35,1.82))}
+    const sm=part(new THREE.TorusGeometry(.4,.07,6,14,Math.PI),M('#5a1a1a'),0,1.6,2.0);sm.rotation.z=Math.PI;g.add(sm);
+    door(g,1.85,'#4a2a12',.75);return g}},
+  gadget:{h:5.4,r:3.0,make(){const g=new THREE.Group();const wh=M('#f4f4f4',{roughness:.2}),gl=M('#bfe3ff',{roughness:.05,metalness:.2,transparent:true,opacity:.6});
+    g.add(part(box,wh,0,.45,-.2,5.6,.3,4.0));g.add(part(box,gl,0,2.2,-.2,5.2,3.3,3.6));g.add(part(box,wh,0,4.0,-.2,5.6,.3,4.0));
+    for(let i=0;i<3;i++){g.add(part(box,M('#d9d9d9'),-1.6+i*1.6,1.0,-.2,1.2,.8,.7));g.add(part(box,M('#1d1d1d'),-1.6+i*1.6,1.45,-.2,.35,.08,.6))}
+    const ph=part(box,M('#1d1d1d',{roughness:.2}),0,4.75,.6,.9,1.6,.1);g.add(ph);g.add(part(box,M('#4fc3e8',{emissive:'#2a8fd0',emissiveIntensity:.8}),0,4.75,.66,.78,1.42,.02));
+    return g}},
+  hat:{h:6.6,r:2.8,make(){const g=new THREE.Group();const c1=M('#e2452f',{roughness:.8}),c2=M('#f4f4f4',{roughness:.8});
+    for(let i=0;i<6;i++)g.add(part(new THREE.CylinderGeometry(2.25-i*.08,2.3-i*.08,.6,24),i%2?c2:c1,0,.6+i*.6,0));
+    g.add(part(new THREE.SphereGeometry(2.05,24,16,0,Math.PI*2,0,Math.PI/2),c1,0,3.9,0));
+    g.add(part(new THREE.TorusGeometry(2.3,.38,10,28),c2,0,.65,0).rotateX(Math.PI/2));
+    g.add(part(new THREE.SphereGeometry(.75,14,12),M('#ffffff',{roughness:1}),0,6.0,0));
+    door(g,2.3,'#7a2a1a');for(const yy of[1.9,3.3])for(const x of[-1.1,1.1]){const w=part(box,winMat,x,yy,2.0-(yy>3?.25:0),.6,.6,.06);w.rotation.y=x>0?.45:-.45;g.add(w)}
     return g}},
   pizza:{h:4.2,r:2.8,make(){const g=new THREE.Group();
     const sh=new THREE.Shape();sh.moveTo(0,-2.4);sh.lineTo(2.3,2.0);sh.quadraticCurveTo(0,2.7,-2.3,2.0);sh.lineTo(0,-2.4);
@@ -956,7 +1126,7 @@ document.querySelectorAll('.modal').forEach(m=>m.addEventListener('pointerdown',
 // ---------- pets & police ----------
 const shelterH=houses.find(h=>h.type==='shelter');
 let myPet=null,petObj=null,petEl=null,petPick='dog';
-const PET_EMO={dog:'🐶',cat:'🐱',rabbit:'🐰',fox:'🦊',panda:'🐼'};
+const PET_EMO={dog:'🐶',cat:'🐱',rabbit:'🐰',fox:'🦊',panda:'🐼',hamster:'🐹',rooster:'🐓'};
 $('petList').innerHTML=Object.keys(PET_TYPES).map(k=>`<button data-k="${k}" class="${k==='dog'?'on':''}"><span>${PET_EMO[k]}</span>${PET_TYPES[k].name}</button>`).join('');
 $('petList').querySelectorAll('button').forEach(b=>b.onclick=()=>{petPick=b.dataset.k;$('petList').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
 function spawnPet(kind,name){if(petObj)scene.remove(petObj);if(petEl)petEl.remove();
@@ -1052,7 +1222,7 @@ function updateShopMayor(dt,t,project){
   for(const o of charRoot.children)if(o.userData.aura){const s=1+Math.sin(t*3)*.08;o.scale.set(s,s,s)}
   for(const o of spin2)o.rotation.y=t*1.2}
 const spin2=[];scene.traverse(o=>{if(o.userData.spin2)spin2.push(o)});
-window.__G={THREE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet}};
+window.__G={THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet}};
 // ---------- loop ----------
 const clock=new THREE.Clock(),v=new THREE.Vector3();let driving=null,nearCar=null,lookH=2,walkT=0,camT=new THREE.Vector3().copy(player.position);
 const spinners=[];const blinkers=[];scene.traverse(o=>{if(o.userData.spin)spinners.push(o);if(o.userData.blink)blinkers.push(o)});
