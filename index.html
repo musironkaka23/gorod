@@ -1651,8 +1651,8 @@ function buildCharacter(root,look,mayor){
   }
   if(root.userData.horse){root.userData.horse=0;const LIFT=1.45;for(const o of root.children)if(!o.userData.aura)o.position.y+=LIFT;
     const hw=new THREE.Group();hw.userData.mount=1;hw.scale.setScalar(1.2);root.add(hw);const W=MC('#fbfbf8',{roughness:.5}),mn=MC('#efe6d2',{roughness:.6}),hf=MC('#9a9a9a'),gd=MC('#f2b417',{metalness:.5,roughness:.3}),rd=MC('#b3122e',{roughness:.6});
-    hw.add(part(box,W,0,1.55,0,.75,.75,1.9));hw.add(part(box,W,0,2.15,.95,.42,.95,.48)).rotation.x=-.45;hw.add(part(box,W,0,2.6,1.35,.38,.38,.75));
-    hw.add(part(box,mn,0,2.35,.72,.1,.9,.32)).rotation.x=-.45;hw.add(part(box,mn,0,1.75,-1.05,.14,.8,.16)).rotation.x=.5;
+    hw.add(part(box,W,0,1.55,0,.75,.75,1.9));{const n=part(box,W,0,2.15,.95,.42,.95,.48);n.rotation.x=-.45;hw.add(n)}hw.add(part(box,W,0,2.6,1.35,.38,.38,.75));
+    {const n=part(box,mn,0,2.35,.72,.1,.9,.32);n.rotation.x=-.45;hw.add(n)}{const n=part(box,mn,0,1.75,-1.05,.14,.8,.16);n.rotation.x=.5;hw.add(n)}
     for(const x of[-.1,.1])hw.add(part(new THREE.ConeGeometry(.07,.22,4),W,x,2.85,1.15));for(const x of[-.2,.2])hw.add(part(box,MC('#111'),x,2.68,1.5,.03,.08,.08));
     hw.add(part(box,rd,0,1.96,-.05,.8,.08,.95));hw.add(part(box,gd,0,1.93,-.05,.82,.04,1.0));for(const s of[-1,1])hw.add(part(box,gd,s*.42,1.4,-.05,.04,.5,.04));
     const legs=[];for(const[lx,lz]of[[-.24,.7],[.24,.7],[-.24,-.7],[.24,-.7]]){const lg=new THREE.Group();lg.position.set(lx,1.2,lz);hw.add(lg);lg.add(part(box,W,0,-.55,0,.2,1.1,.2));lg.add(part(box,hf,0,-1.12,0,.22,.12,.22));legs.push(lg)}
