@@ -1625,7 +1625,7 @@ function buildCharacter(root,look,mayor){
     add(part(box,gold,0,.66,-.6,.97,.09,.07));add(part(new THREE.TorusGeometry(.47,.07,6,18),gold,0,2.17,0)).rotation.x=Math.PI/2;
     const sash=part(box,gold,0,1.62,.47,.16,1.35,.04);sash.rotation.z=.75;add(sash);
     add(part(new THREE.SphereGeometry(.09,8,6),MC('#e2452f',{emissive:'#e2452f',emissiveIntensity:.5}),.18,1.85,.5));
-    const ring=part(new THREE.TorusGeometry(1.0,.06,6,32),MC('#ffd84a',{emissive:'#ffb800',emissiveIntensity:1.2}),0,.06,0);ring.rotation.x=Math.PI/2;ring.userData.aura=1;add(ring)}
+    const ring=part(new THREE.TorusGeometry(1.0,.06,6,32),MC('#ffd84a',{emissive:'#ffb800',emissiveIntensity:1.2}),0,.06,0);ring.rotation.x=Math.PI/2;ring.userData.aura=1;add(ring);root.userData.horse=1}
   if(true){
   // ---- shop items ----
   const hand=new THREE.Group();hand.position.set(0,-.85,.12);armR.add(hand);
@@ -1649,10 +1649,19 @@ function buildCharacter(root,look,mayor){
     else{const b=part(new THREE.SphereGeometry(.36,14,12),MC(col,{roughness:.2}),0,0,0);b.scale.y=1.2;bg.add(b)}
     const str=part(new THREE.CylinderGeometry(.008,.008,2.0,4),MC('#ffffff'),0,-1.4,0);bg.add(str)}
   }
+  if(root.userData.horse){root.userData.horse=0;const LIFT=1.45;for(const o of root.children)if(!o.userData.aura)o.position.y+=LIFT;
+    const hw=new THREE.Group();hw.userData.mount=1;hw.scale.setScalar(1.2);root.add(hw);const W=MC('#fbfbf8',{roughness:.5}),mn=MC('#efe6d2',{roughness:.6}),hf=MC('#9a9a9a'),gd=MC('#f2b417',{metalness:.5,roughness:.3}),rd=MC('#b3122e',{roughness:.6});
+    hw.add(part(box,W,0,1.55,0,.75,.75,1.9));hw.add(part(box,W,0,2.15,.95,.42,.95,.48)).rotation.x=-.45;hw.add(part(box,W,0,2.6,1.35,.38,.38,.75));
+    hw.add(part(box,mn,0,2.35,.72,.1,.9,.32)).rotation.x=-.45;hw.add(part(box,mn,0,1.75,-1.05,.14,.8,.16)).rotation.x=.5;
+    for(const x of[-.1,.1])hw.add(part(new THREE.ConeGeometry(.07,.22,4),W,x,2.85,1.15));for(const x of[-.2,.2])hw.add(part(box,MC('#111'),x,2.68,1.5,.03,.08,.08));
+    hw.add(part(box,rd,0,1.96,-.05,.8,.08,.95));hw.add(part(box,gd,0,1.93,-.05,.82,.04,1.0));for(const s of[-1,1])hw.add(part(box,gd,s*.42,1.4,-.05,.04,.5,.04));
+    const legs=[];for(const[lx,lz]of[[-.24,.7],[.24,.7],[-.24,-.7],[.24,-.7]]){const lg=new THREE.Group();lg.position.set(lx,1.2,lz);hw.add(lg);lg.add(part(box,W,0,-.55,0,.2,1.1,.2));lg.add(part(box,hf,0,-1.12,0,.22,.12,.22));legs.push(lg)}
+    const probe=hw.children[0];let lp=null,ph=0;probe.onBeforeRender=()=>{const wp=new THREE.Vector3();hw.getWorldPosition(wp);let sp=0;if(lp){sp=Math.hypot(wp.x-lp.x,wp.z-lp.z)}lp=wp;if(sp>.01){ph+=sp*2.2;legs.forEach((l,i)=>l.rotation.x=Math.sin(ph+(i%2?0:Math.PI)+(i>1?Math.PI/2:0))*.55)}else legs.forEach(l=>l.rotation.x*=.85)}}
   return {legL,legR,armL,armR};
 }
 window.__mayor=(()=>{try{return localStorage.getItem('gorod_mayor')==='1'}catch(e){return false}})();
-let LOOK=(()=>{try{return lookFix(JSON.parse(localStorage.getItem('gorod_look')||'null'))}catch(e){return lookFix(null)}})();
+let LOOK=(()=>{try{return lookFix(JSON.parse(localStorage.getItem('gorod_look')||'null'))}catch(e){return lookFix(null)}
+})();
 const charRoot=new THREE.Group();player.add(charRoot);
 let legL,legR,armL,armR;
 function applyLook(){({legL,legR,armL,armR}=buildCharacter(charRoot,LOOK,window.__mayor));try{localStorage.setItem('gorod_look',JSON.stringify(LOOK))}catch(e){}window.__lookStr=lookStr(LOOK)}
@@ -1827,7 +1836,7 @@ function updateShopMayor(dt,t,project){
   $('shopBtn').style.display=ns?'block':'none';
   if(wardOpen&&Math.hypot(jx,jy)>.3)closeWard();
   if(mallOpen&&Math.hypot(jx,jy)>.3)closeMall();
-  if(window.__mayor&&player.visible){project(meEl,player.position.x,player.position.y+4.0,player.position.z)}else meEl.style.display='none';
+  if(window.__mayor&&player.visible){project(meEl,player.position.x,player.position.y+5.2,player.position.z)}else meEl.style.display='none';
   for(const o of charRoot.children)if(o.userData.aura){const s=1+Math.sin(t*3)*.08;o.scale.set(s,s,s)}
   for(const o of spin2)o.rotation.y=t*1.2}
 const spin2=[];scene.traverse(o=>{if(o.userData.spin2)spin2.push(o)});
@@ -2119,7 +2128,7 @@ window.__onlineTick = (dt, t) => {
     if (window.__inPool && window.__animChar && o.userData.limbs) { const pp = window.__inPool(o.position.x, o.position.z); if (pp && pp.floor < -.5) window.__animChar(o.userData.limbs, o.userData.body, 'swim', t) }
     let dh = P.th - o.rotation.y; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); o.rotation.y += dh * k;
     o.userData.car.visible = P.d; o.children.forEach(c => { if (c !== o.userData.car) c.visible = !P.d });
-    place(P.el, o.position.x, 3.6, o.position.z);
+    place(P.el, o.position.x, P.wasM ? 4.9 : 3.6, o.position.z);
     if (P.e) { P.bub.textContent = P.e; place(P.bub, o.position.x, 4.4, o.position.z); if (P.bub.style.display !== "none") P.bub.style.display = "block" } else P.bub.style.display = "none";
     if (P.pet) {
       const fw = new THREE.Vector3(Math.sin(o.rotation.y), 0, Math.cos(o.rotation.y));
