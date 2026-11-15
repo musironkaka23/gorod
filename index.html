@@ -1204,7 +1204,7 @@ const aqH=(()=>{const R=AQ_RECT,cx=(R.x0+R.x1)/2,cz=(R.z0+R.z1)/2,W=R.x1-R.x0,D=
   const mk=(pts,cols,n,op=.8)=>{const c=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(cx+p[0],p[1],cz+p[2])));
     const geo=new THREE.TubeGeometry(c,Math.round(c.getLength()*3),.75,14,false);stripe(geo,cols,Math.round(c.getLength()/3));
     const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:op,roughness:.25,side:THREE.DoubleSide,depthWrite:false}));m.renderOrder=4;scene.add(m);
-    c.getSpacedPoints(Math.round(c.getLength()/5)).forEach((p,i,a)=>{if(i===0||i>a.length-3||p.y<1.6)return;scene.add(part(new THREE.CylinderGeometry(.14,.14,p.y-.3,6),TW,p.x,p.y/2,p.z))});
+    c.getSpacedPoints(Math.round(c.getLength()/9)).forEach((p,i,a)=>{if(i===0||i>a.length-3||p.y<1.6||Math.hypot(p.x-cx-TX,p.z-cz-TZ)<6.5)return;scene.add(part(new THREE.CylinderGeometry(.14,.14,p.y-.3,6),TW,p.x,p.y/2,p.z))});
     // splash at the end
     const e=c.getPointAt(1);for(let k=0;k<8;k++){const s=part(new THREE.SphereGeometry(.18,6,5),M('#e8fbff',{transparent:true,opacity:.8}),0,0,0);scene.add(s);aqAnim.push(t=>{const u=(t*1.6+k/8)%1,a=k/8*Math.PI*2;s.position.set(e.x+Math.cos(a)*u*1.6,.6+Math.sin(u*Math.PI)*1.5,e.z+Math.sin(a)*u*1.6);s.material.opacity=.8*(1-u)})}
     SLIDES.push(c);return c};
