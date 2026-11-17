@@ -1443,6 +1443,21 @@ function buildHouse(nick,type,lot,pub){const L=lotInfo(lot),def=HOUSE[type]||HOU
   const el=document.createElement('div');el.className='label'+(pub?' pub':'');el.innerHTML='<span class="d"></span>'+nick;labelBox.appendChild(el);
   const h={nick,type,L,g,el,top:def.h+1,r:def.r,pub};g.traverse(o=>houseOf.set(o,h));houses.push(h);return h}
 ALL.forEach(([nick,type,lot,pub])=>buildHouse(nick,type,lot,pub));
+// ---------- name plates at each house (lazy, near camera only) ----------
+const PLATE_POST=M('#3a2a1a',{roughness:.7}),PLATE_GEO=new THREE.BoxGeometry(1,1,1);let MY_NICK='';
+function makePlate(h){const c=document.createElement('canvas');c.width=320;c.height=88;const x=c.getContext('2d');
+  x.fillStyle='#fff8e8';x.fillRect(0,0,320,88);x.fillStyle='#7b4fc9';x.fillRect(0,0,320,10);x.fillRect(0,78,320,10);
+  let fs=40;x.font=`900 ${fs}px Inter,sans-serif`;while(x.measureText(h.nick).width>296&&fs>16){fs-=2;x.font=`900 ${fs}px Inter,sans-serif`}
+  x.fillStyle='#1b1410';x.textAlign='center';x.textBaseline='middle';x.fillText(h.nick,160,46);
+  const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;tx.anisotropy=4;
+  const mat=new THREE.MeshStandardMaterial({map:tx,emissive:'#ffffff',emissiveMap:tx,emissiveIntensity:.25,roughness:.8});
+  const g=new THREE.Group();for(const sx of[-1.05,1.05])g.add(part(new THREE.CylinderGeometry(.06,.07,1.6,6),PLATE_POST,sx,.8,0));
+  const b=new THREE.Mesh(PLATE_GEO,[PLATE_POST,PLATE_POST,PLATE_POST,PLATE_POST,mat,mat]);b.position.set(0,1.75,0);b.rotation.x=-.35;b.scale.set(2.7,.75,.08);g.add(b);
+  const lx=1.4,lz=2.65,cs=Math.cos(h.L.rot),sn=Math.sin(h.L.rot);g.position.set(h.L.x+lx*cs+lz*sn,.32,h.L.z-lx*sn+lz*cs);g.rotation.y=h.L.rot;
+  scene.add(g);h.plate={g,tx,mat}}
+function dropPlate(h){scene.remove(h.plate.g);h.plate.tx.dispose();h.plate.mat.dispose();h.plate=null}
+function updatePlates(){try{MY_NICK=localStorage.getItem('gorod_nick')||''}catch(e){}
+  for(const h of houses){if(h.pub||!h.L||h.type==='park')continue;const d=Math.hypot(h.L.x-camT.x,h.L.z-camT.z);if(d<55&&!h.plate)makePlate(h);else if(d>85&&h.plate)dropPlate(h)}}
 // ---------- park ----------
 const BENCHES=[],parkAnim=[];
 const parkH=(()=>{const b=blocks[PARK_BLOCK],cx=b[0]*PX,cz=b[1]*PZ,g=new THREE.Group();g.position.set(cx,0,cz);scene.add(g);
@@ -2037,9 +2052,10 @@ function frame(){const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
   // labels
   for(const h of houses){const dist=Math.hypot(h.L.x-camT.x,h.L.z-camT.z);
     v.set(h.L.x,h.top,h.L.z).project(camera);
+    if(!h.pub&&h!==target&&h.nick!==MY_NICK){if(h.el.style.display!=='none')h.el.style.display='none';continue}
     if(v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1||(dist>camDist*2.2&&h!==target)){h.el.style.display='none';continue}
     h.el.style.display='flex';h.el.style.left=((v.x+1)/2*innerWidth)+'px';h.el.style.top=((1-v.y)/2*innerHeight)+'px'}
-  if((cullT-=dt)<=0){cullT=.3;const CR=Math.max(120,camDist*3.2);for(const h of houses){const cr=h.big?CR+40:CR;const vis=Math.abs(h.L.x-camT.x)<cr&&Math.abs(h.L.z-camT.z)<cr;if(h.g.visible!==vis)h.g.visible=vis}}
+  if((cullT-=dt)<=0){cullT=.3;updatePlates();const CR=Math.max(120,camDist*3.2);for(const h of houses){const cr=h.big?CR+40:CR;const vis=Math.abs(h.L.x-camT.x)<cr&&Math.abs(h.L.z-camT.z)<cr;if(h.g.visible!==vis)h.g.visible=vis}}
   updatePetsCops(dt,t,(el,x,y,z,flex,hide)=>{v.set(x,y,z).project(camera);if(hide||v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1){el.style.display='none';return}el.style.display=flex?'block':'flex';el.style.left=((v.x+1)/2*innerWidth)+'px';el.style.top=((1-v.y)/2*innerHeight)+'px'});
   updateShopMayor(dt,t,(el,x,y,z)=>{v.set(x,y,z).project(camera);if(v.z>1||Math.abs(v.x)>1.1||Math.abs(v.y)>1.1){el.style.display='none';return}el.style.display='flex';el.style.left=((v.x+1)/2*innerWidth)+'px';el.style.top=((1-v.y)/2*innerHeight)+'px'});
   if(window.__onlineTick)window.__onlineTick(dt,t,v);
