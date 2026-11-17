@@ -1472,6 +1472,12 @@ const parkH=(()=>{const b=blocks[PARK_BLOCK],cx=b[0]*PX,cz=b[1]*PZ,g=new THREE.G
   for(const sx of[-.6,.6]){const sw=new THREE.Group();sw.position.set(sx,2.5,0);pg.add(sw);sw.add(part(box,M('#999'),-.18,-.8,0,.03,1.6,.03));sw.add(part(box,M('#999'),.18,-.8,0,.03,1.6,.03));sw.add(part(box,M('#2f63c9'),0,-1.6,0,.5,.07,.3));parkAnim.push(t=>{sw.rotation.x=Math.sin(t*2+sx)*.5})}
   const car=new THREE.Group();car.position.set(-.2,0,-2.6);pg.add(car);car.add(part(new THREE.CylinderGeometry(1.1,1.1,.15,20),M('#ffd84a'),0,.25,0));for(let i=0;i<4;i++){const a=i/4*Math.PI*2;car.add(part(box,M(['#e2452f','#2f9e6a','#7b4fc9','#ff7aa8'][i]),Math.cos(a)*.75,.55,Math.sin(a)*.75,.25,.45,.25))}car.add(part(new THREE.CylinderGeometry(.06,.06,1,8),M('#999'),0,.7,0));parkAnim.push(t=>{car.rotation.y=t*1.2});
   const sl=new THREE.Group();sl.position.set(-.3,0,2.7);pg.add(sl);sl.add(part(box,M('#2f9e6a'),-.9,.9,0,.8,1.8,.8));const sd=part(box,M('#ffd84a'),.3,.9,0,2.0,.12,.7);sd.rotation.z=-.65;sl.add(sd);
+  if(WINTER){pg.visible=false;const rk=new THREE.Group();rk.position.set(8.3,.36,0);g.add(rk);
+    rk.add(part(new THREE.CylinderGeometry(1,1,.08,40),M('#d9f1ff',{roughness:.05,metalness:.35,emissive:'#9fd8ff',emissiveIntensity:.15}),0,.06,0,3.2,1,4.4));
+    const brd=part(new THREE.TorusGeometry(1,.06,6,48),M('#ffffff'),0,.14,0,3.25,4.45,1);brd.rotation.x=Math.PI/2;brd.scale.set(3.25,4.45,1.6);rk.add(brd);
+    const c2=document.createElement('canvas');c2.width=256;c2.height=64;const y2=c2.getContext('2d');y2.fillStyle='#2f63c9';y2.fillRect(0,0,256,64);y2.fillStyle='#fff';y2.font='900 34px Inter,sans-serif';y2.textAlign='center';y2.textBaseline='middle';y2.fillText('⛸ КАТОК',128,34);
+    const t2=new THREE.CanvasTexture(c2);t2.colorSpace=THREE.SRGBColorSpace;const sg2=part(box,new THREE.MeshStandardMaterial({map:t2,emissive:'#fff',emissiveMap:t2,emissiveIntensity:.4}),0,1.9,-4.7,2.4,.6,.08);rk.add(sg2);for(const sx of[-1.1,1.1])rk.add(part(new THREE.CylinderGeometry(.05,.05,1.9,6),iron,sx,.95,-4.7));
+    window.__RINK={x:cx+8.3,z:cz}}
   // stage (west)
   const st=new THREE.Group();st.position.set(-8.6,.36,0);g.add(st);st.add(part(new THREE.CylinderGeometry(2.4,2.5,.4,24,1,false,0,Math.PI),M('#c9a27a'),0,.2,0).rotateY(Math.PI/2));
   st.add(part(new THREE.TorusGeometry(2.3,.14,8,24,Math.PI),M('#7b4fc9'),0,.4,0).rotateY(Math.PI/2));
