@@ -143,6 +143,33 @@
   body.night .hud{background:rgba(30,36,60,.92)}body.night .hud .city{color:#fff}body.night .hud .stats{color:#aab}body.night .hud .stats b{color:#fff}
   body.night .rb:not(.big):not(#buildBtn){background:rgba(40,46,72,.92)}
   .label.mayor{background:linear-gradient(90deg,#f2b417,#ffd84a);color:#3a2600;font-size:13px;border:2px solid #fff}
+  /* ===== jobs ===== */
+  #jobs .card{max-width:400px;text-align:left}
+  #jobs p{text-align:center}
+  .jp{display:flex;align-items:center;gap:10px;padding:10px;border:2px solid #eee;border-radius:14px;margin-top:8px}
+  .jp.on{border-color:#ff7a1a;background:#fff6ec}
+  .je{font-size:30px;line-height:1}
+  .jt{flex:1;min-width:0}.jt b{display:block;font:900 14px Inter,sans-serif;color:#222}.jt small{display:block;font:700 11.5px Inter,sans-serif;color:#777;margin-top:2px}
+  .jbar{height:6px;background:#eee;border-radius:3px;margin-top:5px;overflow:hidden}.jbar i{display:block;height:100%;background:#ff7a1a;border-radius:3px}
+  .jp button{border:none;border-radius:12px;padding:9px 10px;font:900 12.5px Inter,sans-serif;background:#f1eef4;color:#333;white-space:nowrap}
+  .jp button.jgo{background:#1d7a3a;color:#fff}
+  .jme{background:#fff2cc;border-radius:14px;padding:10px 12px;font:700 14px Inter,sans-serif;margin-top:10px;color:#333}
+  .jtop{background:#f6f4f8;border-radius:12px;padding:8px 12px;margin-bottom:6px;font:800 13px Inter,sans-serif;color:#222}.jtop span{display:block;margin-top:3px;color:#555;font-weight:700}
+  #game{position:fixed;inset:0;z-index:60;background:#1d1d1d;display:flex;flex-direction:column;touch-action:none}
+  #game.hide{display:none}
+  #game .gh{display:flex;align-items:center;gap:6px;padding:calc(10px + env(safe-area-inset-top)) 12px 8px;color:#fff;font:900 15px Inter,sans-serif}
+  #game .gh b{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#game .gh span{background:#333;border-radius:12px;padding:6px 9px;white-space:nowrap}
+  #gX{border:none;background:#fff;border-radius:12px;width:38px;height:34px;font-size:15px}
+  #gWrap{position:relative;flex:1;min-height:0}
+  #gCv{position:absolute;inset:0;width:100%;height:100%}
+  #gPad{display:grid;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}
+  #gPad button{border:none;border-radius:16px;padding:10px 4px;font:900 13px Inter,sans-serif;background:#fff;color:#222}
+  #gPad button:active{transform:scale(.95);background:#ffd84a}
+  #gPad button span{display:block;font-size:28px;line-height:1.15}
+  #gOver{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px}
+  #gOver.hide{display:none}
+  #gOver .card{text-align:center}
+  .gbig{font-size:54px;line-height:1}.gearn{font:900 34px Inter,sans-serif;color:#1d7a3a;margin:6px 0}.grec{font:900 16px Inter,sans-serif;color:#e8a10f}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 </head>
@@ -156,6 +183,7 @@
   <button id="emoBtn" class="rb" data-l="Эмоции">😊</button>
   <button id="chatBtn" class="rb" data-l="Чат">💬</button>
   <button id="buildBtn" class="rb" data-l="Дом">🏗</button>
+  <button id="jobBtn" class="rb" data-l="Работа">💼</button>
   <button id="placesBtn" class="rb" data-l="Места">🗺</button>
   <button id="findBtn" class="rb big" data-l="Найти">🔍</button>
 </div>
@@ -182,6 +210,19 @@
   <div class="wh"><b>🛍 ТЦ «Бишкек»</b><span class="mc">🪙 <b id="mCoins">0</b></span><button id="mClose" style="background:#ffd84a">✅ Готово</button></div>
   <div id="mTabs"></div>
   <div id="mBody"></div>
+</div>
+<div class="modal hide" id="jobs"><div class="card">
+  <div style="font-weight:900;font-size:22px;text-align:center">💼 Биржа труда</div>
+  <div id="jMine"></div>
+  <div id="jList"></div>
+  <div class="wsec">🏆 Лучшие работники</div>
+  <div id="jTop"></div>
+  <button class="btn g" id="jClose">Закрыть</button>
+</div></div>
+<div id="game" class="hide">
+  <div class="gh"><b id="gTitle"></b><span id="gTime"></span><span id="gScore"></span><button id="gX">✖</button></div>
+  <div id="gWrap"><canvas id="gCv"></canvas><div id="gOver" class="hide"></div></div>
+  <div id="gPad"></div>
 </div>
 <div class="modal hide" id="places"><div class="card">
   <div style="font-weight:900;font-size:22px">🗺 Места Бишкека</div>
@@ -1965,6 +2006,7 @@ const OWNED=new Set((()=>{try{return JSON.parse(localStorage.getItem('gorod_owne
 function saveCoins(){try{localStorage.setItem('gorod_coins',String(COINS));localStorage.setItem('gorod_owned',JSON.stringify([...OWNED]))}catch(e){}
   const s=window.__mayor?'∞':String(COINS);$('coinN').textContent=s;$('mCoins').textContent=s}
 (()=>{const d=new Date().toDateString();let last='';try{last=localStorage.getItem('gorod_bonus')||''}catch(e){}if(last!==d){COINS+=50;try{localStorage.setItem('gorod_bonus',d)}catch(e){}setTimeout(()=>toast2('🎁 Ежедневный бонус мэра: +50 🪙'),2500)}saveCoins()})();
+window.__addCoins=n=>{COINS+=n;saveCoins()};
 setInterval(()=>{if(!document.hidden&&$('welcome').classList.contains('hide')){COINS+=1;saveCoins()}},10000);
 $('coins').style.pointerEvents='auto';$('coins').onclick=()=>toast2('🪙 Монеты капают каждые 10 секунд в городе + бонус каждый день. Трать в ТЦ «Бишкек»!');
 // ---------- mall ----------
@@ -2047,7 +2089,7 @@ window.__G={THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera
 // ---------- loop ----------
 let cullT=0;const clock=new THREE.Clock(),v=new THREE.Vector3();let driving=null,nearCar=null,lookH=2,walkT=0,camT=new THREE.Vector3().copy(player.position);
 const spinners=[];const blinkers=[];scene.traverse(o=>{if(o.userData.spin)spinners.push(o);if(o.userData.blink)blinkers.push(o)});
-function frame(){const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+function frame(){if(window.__gameOn){clock.getDelta();requestAnimationFrame(frame);return}const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
   for(const o of spinners){o.rotation.y=t*1.5;o.position.y=6.6+Math.sin(t*2)*.25}
   for(const o of blinkers)o.material.emissiveIntensity=(Math.sin(t*4)>0)?2.4:.2;
   updateCars(t);
@@ -2167,15 +2209,17 @@ function goAway() { if (hiddenOut) return; hiddenOut = true; set(meRef, null).ca
 function comeBack() { if (!hiddenOut) return; hiddenOut = false; onDisconnect(meRef).remove(); lastKey = ""; sendPresence(true) }
 document.addEventListener("visibilitychange", () => { document.hidden ? goAway() : comeBack() });
 addEventListener("pagehide", goAway); addEventListener("pageshow", comeBack);
+let jbOk = true;
 let lastSent = 0, lastKey = "", myEmote = "", emoteUntil = 0;
 function sendPresence(force) {
   if (hiddenOut) return;
   const p = G.player.position, now = performance.now();
   const st = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10, h: Math.round(G.heading * 100) / 100, g: G.gender, d: G.driving ? 1 : 0, pk: G.pet ? G.pet.kind : "", pn: G.pet ? String(G.pet.name).slice(0, 16) : "", lk: G.look, m: G.mayor ? 1 : 0, an: G.anim || "", n: (myNick || "гость").slice(0, 30), e: now < emoteUntil ? myEmote : "" };
+  if (jbOk && window.__jobEmoji && window.__jobEmoji()) st.jb = window.__jobEmoji();
   const key = JSON.stringify(st);
   if (!force && (key === lastKey ? now - lastSent < 8000 : now - lastSent < 250)) return;
   lastKey = key; lastSent = now;
-  set(meRef, { ...st, ts: serverTimestamp() }).catch(() => { });
+  set(meRef, { ...st, ts: serverTimestamp() }).catch(() => { if (st.jb) { jbOk = false; lastKey = "" } });
 }
 document.querySelectorAll(".emo").forEach(b => b.onclick = () => { myEmote = b.textContent.trim(); emoteUntil = performance.now() + 4000; sendPresence(true) });
 
@@ -2205,7 +2249,7 @@ onValue(ref(db, "online"), snap => {
     P.tx = v.x; P.tz = v.z; P.th = v.h || 0; P.d = !!v.d; if (v.an === "fw" && P.an !== "fw" && window.__firework) for (let i = 0; i < 3; i++) setTimeout(() => window.__firework(P.tx + (Math.random() - .5) * 8, P.tz + (Math.random() - .5) * 8, 14 + Math.random() * 6), i * 350);
     P.e = v.e || ""; P.an = v.an || ""; P.seen = nowL; P.ts = v.ts;
     if (v.m && !P.wasM) toast("👑 Мэр города вышла на прогулку!"); P.wasM = !!v.m;
-    P.el.textContent = (v.m ? "👑 Мэр @" : "🟢 ") + String(v.n || "гость").slice(0, 30); P.el.classList.toggle("mayor", !!v.m);
+    P.el.textContent = (v.m ? "👑 Мэр @" : "🟢 ") + (typeof v.jb === "string" ? v.jb.slice(0, 4) + " " : "") + String(v.n || "гость").slice(0, 30); P.el.classList.toggle("mayor", !!v.m);
     if ((v.pk || "") !== P.pk) {
       if (P.pet) { scene.remove(P.pet); P.petEl.remove(); P.pet = null }
       P.pk = v.pk || "";
@@ -2272,6 +2316,218 @@ $("wNick").value = myNick;
 for (const id of ["wFind", "wWalk"]) $(id).addEventListener("click", () => { const n = cleanNick($("wNick").value); if (n && (n !== "ai_toons_kg" || G.mayor)) { myNick = n; ls.set("gorod_nick", n) } sendPresence(true) });
 window.__onMayor = () => { myNick = "ai_toons_kg"; ls.set("gorod_nick", myNick); $("wNick").value = myNick; sendPresence(true) };
 window.__sendPresence = sendPresence;
+
+// ---------- 💼 профессии, биржа труда и мини-игры ----------
+const PROFS = [
+  { k: "taxi", e: "🚕", n: "Таксист", place: "Таксопарк", need: 5, game: true },
+  { k: "cook", e: "🥟", n: "Повар самсы", place: "Чайхана", need: 5, game: true },
+  { k: "seller", e: "🛒", n: "Продавец на Ош-базаре", place: "Ош-базар", need: 10 },
+  { k: "fire", e: "🚒", n: "Пожарный", place: "Пожарная часть", need: 10 },
+  { k: "shepherd", e: "🐑", n: "Чабан", place: "Пастбище", need: 10 },
+  { k: "doctor", e: "🩺", n: "Врач", place: "Больница", need: 10 }
+];
+const PK = Object.fromEntries(PROFS.map(p => [p.k, p]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let myJob = ls.get("gorod_job") || ""; if (!PK[myJob]) myJob = "";
+window.__jobEmoji = () => myJob ? PK[myJob].e : "";
+const myUid = (() => { let v = ls.get("gorod_uid"); if (!v) { v = "u" + Math.random().toString(36).slice(2, 10); ls.set("gorod_uid", v) } return v })();
+const jobKey = () => myNick ? myNick.replace(/\./g, ",") : myUid;
+let best = (() => { try { return JSON.parse(ls.get("gorod_jbest") || "{}") || {} } catch (e) { return {} } })();
+const CAP = 400; // максимум монет за работу в день
+function todayEarned() { const [d, v] = (ls.get("gorod_jday") || "|0").split("|"); return d === new Date().toDateString() ? (+v || 0) : 0 }
+function addEarned(n) { ls.set("gorod_jday", new Date().toDateString() + "|" + (todayEarned() + n)) }
+let JOBS = {}, jobsOk = false;
+onValue(ref(db, "jobs"), s => {
+  JOBS = {}; s.forEach(c => { const v = c.val(); if (v && typeof v.j === "string" && PK[v.j]) JOBS[c.key] = v }); jobsOk = true;
+  if (!$("jobs").classList.contains("hide")) renderJobs();
+}, () => { jobsOk = false });
+function saveJob() {
+  if (!myJob) return;
+  set(ref(db, "jobs/" + jobKey()), { n: (myNick || "гость").slice(0, 30), j: myJob, b: Math.min(999, best[myJob] || 0), t: serverTimestamp() }).catch(() => { });
+}
+function jobCounts() {
+  const c = {}; for (const [key, v] of Object.entries(JOBS)) if (key !== jobKey()) c[v.j] = (c[v.j] || 0) + 1;
+  if (myJob) c[myJob] = (c[myJob] || 0) + 1; return c;
+}
+function renderJobs() {
+  const c = jobCounts(), me = PK[myJob];
+  $("jMine").innerHTML = me
+    ? `<div class="jme">Твоя профессия: <b>${me.e} ${me.n}</b>${me.game ? "<br><small>Жми «На смену» — работай и получай 🪙</small>" : `<br><small>Эта работа откроется, когда запишутся ${me.need} жителей. Зови друзей!</small>`}</div>`
+    : `<p>Выбери профессию, выходи на смену и зарабатывай 🪙 на свой дом!</p>`;
+  $("jList").innerHTML = PROFS.map(p => {
+    const n = c[p.k] || 0, left = Math.max(0, p.need - n), mine = p.k === myJob;
+    const st = left ? `до «${p.place}» нужно ещё ${left}` : `✅ Набрали! Скоро откроется ${p.place}`;
+    const btn = mine ? (p.game ? `<button data-go="${p.k}" class="jgo">▶ На смену</button>` : `<button disabled>✔ Ты тут</button>`)
+      : `<button data-pick="${p.k}">${p.game ? "Выбрать" : "Записаться"}</button>`;
+    return `<div class="jp ${mine ? "on" : ""}"><div class="je">${p.e}</div><div class="jt"><b>${p.n}${p.game ? "" : " 🔒"}</b><small>👥 ${n} · ${st}</small><div class="jbar"><i style="width:${Math.min(100, n / p.need * 100)}%"></i></div></div>${btn}</div>`;
+  }).join("");
+  $("jTop").innerHTML = PROFS.filter(p => p.game).map(p => {
+    const L = Object.values(JOBS).filter(v => v.j === p.k && v.b > 0).sort((a, b) => b.b - a.b).slice(0, 3);
+    return `<div class="jtop">${p.e} ${p.n}${L.length ? L.map((v, i) => `<span>${["🥇", "🥈", "🥉"][i]} @${esc(String(v.n || "гость").slice(0, 30))} — ${+v.b || 0}</span>`).join("") : "<span>Пока никого — стань первым!</span>"}</div>`;
+  }).join("");
+  $("jList").querySelectorAll("[data-pick]").forEach(b => b.onclick = () => {
+    const p = PK[b.dataset.pick]; myJob = p.k; ls.set("gorod_job", myJob); saveJob(); sendPresence(true); renderJobs();
+    toast(p.game ? `${p.e} Теперь ты ${p.n}! Жми «На смену»` : `${p.e} Ты записался: ${p.n}. Зови друзей — откроем вместе!`);
+  });
+  $("jList").querySelectorAll("[data-go]").forEach(b => b.onclick = () => startGame(b.dataset.go));
+}
+$("jobBtn").onclick = () => { renderJobs(); $("jobs").classList.remove("hide") };
+$("jClose").onclick = () => $("jobs").classList.add("hide");
+
+// ----- движок мини-игр -----
+const cv = $("gCv"), cx = cv.getContext("2d");
+let W = 300, H = 400, GAME = null, gLast = 0;
+function gFit() { const r = $("gWrap").getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; cx.setTransform(d, 0, 0, d, 0, 0) }
+addEventListener("resize", () => { if (GAME) gFit() });
+function rr(x, y, w, h, r) { cx.beginPath(); cx.roundRect ? cx.roundRect(x, y, w, h, r) : cx.rect(x, y, w, h) }
+function emo(t, x, y, s) { cx.font = s + "px system-ui,Apple Color Emoji,Segoe UI Emoji,sans-serif"; cx.textAlign = "center"; cx.textBaseline = "middle"; cx.fillText(t, x, y) }
+function txt(t, x, y, s, col, al = "center") { cx.font = "900 " + s + "px Inter,system-ui,sans-serif"; cx.fillStyle = col; cx.textAlign = al; cx.textBaseline = "middle"; cx.fillText(t, x, y) }
+function pops(g, dt) { for (const p of g.pops) { p.t -= dt; p.y -= 40 * dt } g.pops = g.pops.filter(p => p.t > 0); for (const p of g.pops) { cx.globalAlpha = Math.min(1, p.t * 2); txt(p.s, p.x, p.y, 20, "#fff"); cx.globalAlpha = 1 } }
+function startGame(k) {
+  $("jobs").classList.add("hide"); $("game").classList.remove("hide"); $("gOver").classList.add("hide");
+  window.__gameOn = true; gFit(); GAME = k === "taxi" ? taxiGame() : cookGame(); GAME.t = GAME.dur; GAME.age = 0;
+  $("gTitle").textContent = PK[k].e + " " + GAME.title; gLast = performance.now(); requestAnimationFrame(gLoop);
+}
+function gLoop(now) {
+  const g = GAME; if (!g || g.over) return;
+  const dt = Math.min(.05, (now - gLast) / 1000); gLast = now; g.t -= dt; g.age += dt;
+  g.update(dt); g.draw(dt);
+  if (g.age < 3) { cx.globalAlpha = Math.min(1, 3 - g.age); rr(12, H * .42 - 24, W - 24, 48, 16); cx.fillStyle = "rgba(0,0,0,.7)"; cx.fill(); txt(g.hint, W / 2, H * .42, Math.min(15, W / 26), "#fff"); cx.globalAlpha = 1 }
+  $("gTime").textContent = "⏱ " + Math.max(0, Math.ceil(g.t)); $("gScore").textContent = g.label();
+  if (g.t <= 0) gEnd(); else requestAnimationFrame(gLoop);
+}
+function gClose() { if (GAME) GAME.over = true; GAME = null; window.__gameOn = false; $("game").classList.add("hide") }
+$("gX").onclick = gClose;
+function gEnd() {
+  const g = GAME; g.over = true; const p = PK[g.k];
+  const raw = g.score > 0 ? 10 + g.score * g.pay : 0, room = Math.max(0, CAP - todayEarned());
+  const pay = G.mayor ? raw : Math.min(raw, room);
+  if (pay > 0) { window.__addCoins && window.__addCoins(pay); addEarned(pay) }
+  const rec = g.score > (best[g.k] || 0); if (rec) { best[g.k] = g.score; ls.set("gorod_jbest", JSON.stringify(best)) } saveJob();
+  const capMsg = !G.mayor && raw > room ? `<small style="color:#c0392b;font-weight:800">Сегодня ты заработал максимум (${CAP} 🪙). Приходи завтра!</small>` : "";
+  $("gOver").innerHTML = `<div class="card"><div class="gbig">${p.e}</div><div style="font:900 22px Inter,sans-serif;margin-top:6px">Смена окончена!</div>
+    <p style="margin:8px 0 0">${g.sum()}</p><div class="gearn">+${pay} 🪙</div>${rec && g.score ? '<div class="grec">🏆 Новый рекорд!</div>' : `<small style="color:#888;font-weight:700">Твой рекорд: ${best[g.k] || 0}</small>`}${capMsg}
+    <p style="font-size:13px;margin:12px 0 4px">📸 Сделай скрин и отметь <b>@ai_toons_kg</b> — лучших работников покажем в Reels!</p>
+    <button class="btn y" id="gAgain">🔁 Ещё смена</button><button class="btn g" id="gExit">🏙 В город</button></div>`;
+  $("gOver").classList.remove("hide");
+  $("gAgain").onclick = () => startGame(g.k); $("gExit").onclick = gClose;
+}
+addEventListener("keydown", e => { if (!GAME || GAME.over) return; if (GAME.key) GAME.key(e.key) });
+
+// ----- 🚕 Такси «Бишкек» -----
+function taxiGame() {
+  const CARC = ["#e2452f", "#2f63c9", "#ffffff", "#3a3a3a", "#1d7a3a", "#7b4fc9"], PAX = ["🙋‍♀️", "🙋‍♂️", "🙋", "👵", "🧔"];
+  const lw = () => Math.min(92, W / 4), LX = i => W / 2 + (i - 1) * lw(), PY = () => H - 90;
+  const g = { k: "taxi", title: "Такси «Бишкек»", dur: 30, pay: 4, score: 0, lane: 1, x: LX(1), items: [], spawn: .6, speed: 250, off: 0, hurt: 0, pops: [], hint: "Собирай пассажиров 🙋, объезжай машины!" };
+  g.move = d => { g.lane = Math.max(0, Math.min(2, g.lane + d)) };
+  g.key = k => { if (k === "ArrowLeft") g.move(-1); if (k === "ArrowRight") g.move(1) };
+  g.label = () => "🙋 " + g.score;
+  g.sum = () => `Ты отвёз пассажиров: <b>${g.score}</b>`;
+  $("gPad").style.gridTemplateColumns = "1fr 1fr";
+  $("gPad").innerHTML = `<button data-d="-1"><span>⬅️</span>Влево</button><button data-d="1"><span>➡️</span>Вправо</button>`;
+  $("gPad").querySelectorAll("button").forEach(b => b.onpointerdown = e => { e.preventDefault(); g.move(+b.dataset.d) });
+  let sx = null; cv.onpointerdown = e => { sx = e.clientX }; cv.onpointerup = e => { if (sx == null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 25) g.move(dx > 0 ? 1 : -1); else g.move(e.clientX - cv.getBoundingClientRect().left < W / 2 ? -1 : 1) };
+  g.update = dt => {
+    g.speed = 250 + (g.dur - g.t) * 10; g.off = (g.off + g.speed * dt) % 70; g.x += (LX(g.lane) - g.x) * Math.min(1, dt * 14); g.hurt = Math.max(0, g.hurt - dt);
+    g.spawn -= dt;
+    if (g.spawn <= 0) {
+      g.spawn = Math.max(.38, .62 - (g.dur - g.t) * .008) + Math.random() * .3; const r = Math.random();
+      g.items.push({ lane: Math.floor(Math.random() * 3), y: -60, type: r < .55 ? "car" : r < .9 ? "pax" : "hole", col: CARC[Math.floor(Math.random() * CARC.length)], p: PAX[Math.floor(Math.random() * PAX.length)] });
+    }
+    for (const it of g.items) {
+      it.y += g.speed * dt * (it.type === "car" ? .55 : 1);
+      if (!it.hit && it.lane === g.lane && Math.abs(it.y - PY()) < (it.type === "car" ? 58 : 36)) {
+        if (it.type === "pax") { it.hit = true; g.score++; g.pops.push({ x: LX(it.lane), y: PY() - 50, t: 1, s: "+" + g.pay + " 🪙" }) }
+        else if (g.hurt <= 0) { it.hit = true; g.hurt = 1.1; g.t -= 2; g.pops.push({ x: g.x, y: PY() - 50, t: 1.2, s: it.type === "car" ? "💥 −2 сек" : "🕳 Яма! −2 сек" }); navigator.vibrate && navigator.vibrate(120) }
+      }
+    }
+    g.items = g.items.filter(it => it.y < H + 90 && !(it.hit && it.type === "pax"));
+  };
+  function car(x, y, col, taxi) {
+    cx.fillStyle = "rgba(0,0,0,.25)"; rr(x - 21, y - 34, 46, 72, 12); cx.fill();
+    cx.fillStyle = col; rr(x - 23, y - 38, 46, 76, 12); cx.fill();
+    cx.fillStyle = "#1e2a38"; rr(x - 17, y - 24, 34, 15, 5); cx.fill(); rr(x - 17, y + 12, 34, 12, 5); cx.fill();
+    cx.fillStyle = "#fff6b0"; cx.fillRect(x - 19, y - 38, 9, 4); cx.fillRect(x + 10, y - 38, 9, 4);
+    if (taxi) { cx.fillStyle = "#1d1d1d"; rr(x - 13, y - 6, 26, 12, 3); cx.fill(); txt("TAXI", x, y, 9, "#ffd84a") }
+  }
+  g.draw = dt => {
+    const rw = lw() * 3 + 24, l = W / 2 - rw / 2;
+    cx.fillStyle = "#6fbf4e"; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = "#cfc6b8"; cx.fillRect(l - 16, 0, 16, H); cx.fillRect(l + rw, 0, 16, H);
+    for (let y = -70 + g.off * 1; y < H + 70; y += 140) { emo("🌳", l - 40, y, 34); emo(y % 280 < 140 ? "🏢" : "🌲", l + rw + 40, y + 70, 34) }
+    cx.fillStyle = "#4a4d55"; cx.fillRect(l, 0, rw, H);
+    cx.fillStyle = "#f2f2f2"; for (let i = 1; i < 3; i++) { const x = l + 12 + lw() * i; for (let y = -70 + g.off; y < H; y += 70) cx.fillRect(x - 2, y, 4, 36) }
+    for (const it of g.items) {
+      const x = LX(it.lane);
+      if (it.type === "car") car(x, it.y, it.col, false);
+      else if (it.type === "hole") { cx.fillStyle = "#26272b"; cx.beginPath(); cx.ellipse(x, it.y, 26, 15, 0, 0, 7); cx.fill() }
+      else { cx.fillStyle = "rgba(255,216,74,.35)"; cx.beginPath(); cx.arc(x, it.y, 26, 0, 7); cx.fill(); emo(it.p, x, it.y, 36) }
+    }
+    if (!(g.hurt > 0 && Math.floor(g.hurt * 10) % 2)) car(g.x, PY(), "#ffd84a", true);
+    pops(g, dt);
+  };
+  return g;
+}
+
+// ----- 🥟 Самса из тандыра -----
+function cookGame() {
+  const ING = [["dough", "🫓", "Тесто"], ["meat", "🥩", "Мясо"], ["pump", "🎃", "Тыква"], ["pot", "🥔", "Картошка"], ["onion", "🧅", "Лук"], ["fire", "🔥", "В тандыр"]];
+  const IE = Object.fromEntries(ING.map(i => [i[0], i[1]])), REC = { meat: "с мясом", pump: "с тыквой", pot: "с картошкой" };
+  const FACES = ["🧔", "👵", "👨", "👩", "👴", "👧", "👦", "🧕"];
+  const g = { k: "cook", title: "Самса из тандыра", dur: 35, pay: 5, score: 0, step: [], cust: null, pops: [], shake: 0, bake: 0, hint: "Собери самсу по заказу и в тандыр!" };
+  const need = r => ["dough", r, "onion", "fire"];
+  g.newCust = () => { const ks = Object.keys(REC), pat = Math.max(5, 9 - g.score * .3); g.cust = { r: ks[Math.floor(Math.random() * ks.length)], f: FACES[Math.floor(Math.random() * FACES.length)], pat, max: pat }; g.step = [] };
+  g.newCust();
+  g.press = k => {
+    if (g.bake > 0 || g.over) return; const want = need(g.cust.r)[g.step.length];
+    if (k === want) { g.step.push(k); if (k === "fire") g.bake = .7 }
+    else { g.step = []; g.shake = .4; g.pops.push({ x: W / 2, y: H * .62, t: 1, s: "💨 Не то! Заново" }); navigator.vibrate && navigator.vibrate(80) }
+  };
+  g.key = k => { const i = +k - 1; if (ING[i]) g.press(ING[i][0]) };
+  g.label = () => "🥟 " + g.score;
+  g.sum = () => `Ты испёк самсы: <b>${g.score}</b>`;
+  $("gPad").style.gridTemplateColumns = "repeat(3,1fr)";
+  $("gPad").innerHTML = ING.map(([k, e, n]) => `<button data-k="${k}"><span>${e}</span>${n}</button>`).join("");
+  $("gPad").querySelectorAll("button").forEach(b => b.onpointerdown = e => { e.preventDefault(); g.press(b.dataset.k) });
+  cv.onpointerdown = cv.onpointerup = null;
+  g.update = dt => {
+    g.shake = Math.max(0, g.shake - dt);
+    if (g.bake > 0) { g.bake -= dt; if (g.bake <= 0) { g.score++; g.pops.push({ x: W / 2, y: H * .55, t: 1.1, s: "+" + g.pay + " 🪙 Рахмат!" }); g.newCust() } }
+    else { g.cust.pat -= dt; if (g.cust.pat <= 0) { g.pops.push({ x: W / 2, y: H * .3, t: 1.1, s: "😠 Клиент ушёл" }); g.newCust() } }
+  };
+  g.draw = dt => {
+    const sh = g.shake > 0 ? Math.sin(g.shake * 60) * 6 : 0;
+    cx.fillStyle = "#f6dfb4"; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = "#e9c88f"; for (let x = 0; x < W; x += 46) cx.fillRect(x, 0, 23, H * .5);
+    rr(W / 2 - 90, 14, 180, 40, 12); cx.fillStyle = "#b5442f"; cx.fill(); txt("ЧАЙХАНА", W / 2, 34, 20, "#ffe9a8"); emo("🏮", W / 2 - 112, 36, 26); emo("🏮", W / 2 + 112, 36, 26);
+    // клиент и заказ
+    const c = g.cust, cy0 = Math.max(110, H * .24);
+    emo(c.f, W * .22, cy0, 64);
+    rr(W * .38, cy0 - 46, W * .58, 92, 18); cx.fillStyle = "#fff"; cx.fill();
+    txt("Самсу " + REC[c.r] + "!", W * .67, cy0 - 26, 15, "#222");
+    need(c.r).forEach((k, i) => { const x = W * .38 + W * .58 * (i + .5) / 4, done = i < g.step.length; cx.globalAlpha = done ? .35 : 1; emo(IE[k], x, cy0 + 10, 26); cx.globalAlpha = 1; if (done) txt("✔", x + 12, cy0 + 22, 14, "#1d7a3a") });
+    cx.fillStyle = "#eee"; rr(W * .42, cy0 + 32, W * .5, 7, 4); cx.fill();
+    const pr = Math.max(0, c.pat / c.max); cx.fillStyle = pr > .5 ? "#1d7a3a" : pr > .25 ? "#e8a10f" : "#e2452f"; rr(W * .42, cy0 + 32, W * .5 * pr, 7, 4); cx.fill();
+    // стол
+    const ty = H * .55, k = Math.min(1.5, W / 260); cx.fillStyle = "#8a5a2b"; cx.fillRect(0, ty, W, H - ty); cx.fillStyle = "#a06a35"; cx.fillRect(0, ty, W, 12);
+    // тандыр
+    const tx = W * .8, tb = ty + 12; cx.fillStyle = "#b5603a"; cx.beginPath(); cx.ellipse(tx, tb, 46 * k, 80 * k, 0, Math.PI, 0); cx.fill();
+    cx.fillStyle = g.bake > 0 ? "#ff8a1a" : "#3a1e10"; cx.beginPath(); cx.ellipse(tx, tb - 70 * k, 20 * k, 9 * k, 0, 0, 7); cx.fill();
+    if (g.bake > 0) { emo("🔥", tx, tb - 92 * k - Math.sin(g.bake * 30) * 4, 30 * k); emo("🥟", tx, tb - 40 * k, 30 * k) }
+    // самса
+    const sx = W * .36 + sh, sy = ty + (H - ty) * .42, n = g.step.length;
+    cx.save(); cx.translate(sx, sy); cx.scale(k, k); cx.translate(-sx, -sy);
+    if (n >= 1 && g.bake <= 0) {
+      cx.fillStyle = n >= 4 ? "#d99a3c" : "#f7eedd"; cx.strokeStyle = "#c9b48e"; cx.lineWidth = 3;
+      cx.beginPath(); cx.moveTo(sx - 58, sy + 28); cx.lineTo(sx + 58, sy + 28); cx.lineTo(sx, sy - 44); cx.closePath(); cx.fill(); cx.stroke();
+      if (n >= 2) emo(IE[g.step[1]], sx, sy + 4, 28);
+      if (n >= 3) emo("🧅", sx + 22, sy + 14, 18);
+    } else if (g.bake <= 0) { cx.fillStyle = "#e9e2d4"; cx.beginPath(); cx.ellipse(sx, sy + 26, 70, 12, 0, 0, 7); cx.fill(); txt("Начни с теста 🫓", sx, sy - 6, 14, "#ffe9c4") }
+    cx.restore();
+    pops(g, dt);
+  };
+  return g;
+}
 
 </script>
 </body>
