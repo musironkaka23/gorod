@@ -1678,6 +1678,14 @@ const parkH=(()=>{const b=blocks[PARK_BLOCK],cx=b[0]*PX,cz=b[1]*PZ,g=new THREE.G
     const c2=document.createElement('canvas');c2.width=256;c2.height=64;const y2=c2.getContext('2d');y2.fillStyle='#2f63c9';y2.fillRect(0,0,256,64);y2.fillStyle='#fff';y2.font='900 34px Inter,sans-serif';y2.textAlign='center';y2.textBaseline='middle';y2.fillText('⛸ КАТОК',128,34);
     const t2=new THREE.CanvasTexture(c2);t2.colorSpace=THREE.SRGBColorSpace;const sg2=part(box,new THREE.MeshStandardMaterial({map:t2,emissive:'#fff',emissiveMap:t2,emissiveIntensity:.4}),0,1.9,-4.7,2.4,.6,.08);rk.add(sg2);for(const sx of[-1.1,1.1])rk.add(part(new THREE.CylinderGeometry(.05,.05,1.9,6),iron,sx,.95,-4.7));
     window.__RINK={x:cx+8.3,z:cz}}
+  {const sg=new THREE.Group();sg.position.set(0,.36,-6.6);g.add(sg);const cv=document.createElement('canvas');cv.width=512;cv.height=256;const x=cv.getContext('2d');
+    const gr=x.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#3a1d4e');gr.addColorStop(1,'#120a22');x.fillStyle=gr;x.fillRect(0,0,512,256);x.strokeStyle='#f2b417';x.lineWidth=14;x.strokeRect(7,7,498,242);
+    x.textAlign='center';x.textBaseline='middle';x.font='900 150px Inter,sans-serif';x.lineWidth=10;x.strokeStyle='#161616';x.strokeText('2000',256,112);x.fillStyle='#ffd84a';x.fillText('2000',256,112);
+    x.font='900 36px Inter,sans-serif';x.fillStyle='#fff';x.fillText('ЖИТЕЛЕЙ! СПАСИБО!',256,212);
+    const tx=new THREE.CanvasTexture(cv);tx.colorSpace=THREE.SRGBColorSpace;sg.add(part(box,new THREE.MeshStandardMaterial({map:tx,emissive:'#fff',emissiveMap:tx,emissiveIntensity:.55}),0,3.2,0,5.2,2.6,.18));
+    for(const sx of[-2.3,2.3])sg.add(part(new THREE.CylinderGeometry(.12,.12,3.4,10),M('#f2b417',{metalness:.6,roughness:.3}),sx,1.7,-.12));
+    const bl=[];for(let i=0;i<16;i++){const a=i/16*Math.PI*2;const b=part(new THREE.SphereGeometry(.11,8,6),new THREE.MeshStandardMaterial({color:'#ffe27a',emissive:'#ffcc33',emissiveIntensity:1}),Math.cos(a)*2.8,3.2+Math.sin(a)*1.55,.12);sg.add(b);bl.push(b)}
+    parkAnim.push(t=>{bl.forEach((b,i)=>b.material.emissiveIntensity=.4+.8*(Math.sin(t*4+i)>0?1:0))});window.__SIGN2000={x:cx,z:cz-6.6}}
   // stage (west)
   const st=new THREE.Group();st.position.set(-8.6,.36,0);g.add(st);st.add(part(new THREE.CylinderGeometry(2.4,2.5,.4,24,1,false,0,Math.PI),M('#c9a27a'),0,.2,0).rotateY(Math.PI/2));
   st.add(part(new THREE.TorusGeometry(2.3,.14,8,24,Math.PI),M('#7b4fc9'),0,.4,0).rotateY(Math.PI/2));
