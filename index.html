@@ -1686,6 +1686,39 @@ const VIPQ=(()=>{const bs=VIP_BL.map(k=>blocks[k]);const x0=Math.min(...bs.map(b
     q.add(part(new THREE.CylinderGeometry(1.6,1.8,.3,24),pav2,0,.15,0));const s2=part(box,fm,0,1.6,1.6,2.2,1.1,.12);s2.rotation.x=-.2;q.add(s2);for(const sx of[-.8,.8])q.add(part(new THREE.CylinderGeometry(.05,.05,1.2,6),GOLD,sx,.7,1.62));
     const cr=makeCrown();cr.scale.setScalar(.7);cr.position.y=1.2;q.add(cr);free.push(cr)}
   vipAnim.push(t=>free.forEach((c,i)=>{c.rotation.y=t+i;c.position.y=1.2+Math.sin(t*2+i)*.2}));
+  // ===== эксклюзив: вечное лето, газоны, пальмы, забор, фонтан, прожекторы, гигантская корона =====
+  const W=x1-x0+BW+2*SIDE,D=BD+2*SIDE,grass=M('#4fc26a',{roughness:.9}),red=M('#c8102e',{roughness:.7}),white=M('#fff8ea',{roughness:.5}),purple=M('#5b2a86',{roughness:.6});
+  for(const b of bs){const bx=b[0]*PX;g.add(part(box,grass,bx,.36,zc,BW,.04,BD));for(let i=0;i<4;i++)for(const rz of[LOT/2,-LOT/2])g.add(part(box,M('#e9d9b0'),bx-BW/2+LOT*(i+.5),.385,zc+rz*1.55,1.4,.02,1.6))}
+  g.add(part(box,red,cx,.39,zc,W-2,.03,1.6));g.add(part(box,red,cx,.39,zc-D/2+1,2.2,.03,2));
+  // fence
+  const fence=(ax,az2,bx2,bz2)=>{const L=Math.hypot(bx2-ax,bz2-az2),n=Math.round(L/1.6);for(let i=0;i<=n;i++){const u=i/n,px=ax+(bx2-ax)*u,pz=az2+(bz2-az2)*u;g.add(part(new THREE.CylinderGeometry(.07,.07,1.4,6),GOLD,px,1,pz));if(i%3===0)g.add(part(new THREE.SphereGeometry(.14,8,6),GOLD,px,1.75,pz))}
+    const r=part(box,GOLD,(ax+bx2)/2,1.55,(az2+bz2)/2,Math.abs(bx2-ax)+.1,.1,Math.abs(bz2-az2)+.1);g.add(r)};
+  const fx0=cx-W/2+.2,fx1=cx+W/2-.2,fz0=zc-D/2+.2,fz1=zc+D/2-.2;fence(fx0,fz1,fx1,fz1);fence(fx0,fz0,fx0,fz1);fence(fx1,fz0,fx1,fz1);fence(fx0,fz0,cx-5.6,fz0);fence(cx+5.6,fz0,fx1,fz0);
+  // palms
+  const palm=(x,z,s=1)=>{const tr=M('#a87a45'),lf=M('#2f9e4a',{roughness:.8});for(let i=0;i<6;i++)g.add(part(new THREE.CylinderGeometry(.16*s,.2*s,.9*s,8),tr,x+i*.06*s,.75+i*.85*s,z));
+    for(let i=0;i<7;i++){const a=i/7*Math.PI*2;const l=part(box,lf,x+.36*s+Math.cos(a)*1.1*s,5.9*s,z+Math.sin(a)*1.1*s,2.4*s,.08,.6*s);l.rotation.y=-a;l.rotation.z=Math.cos(a)*.35;l.rotation.x=Math.sin(a)*.35;g.add(l)}
+    g.add(part(new THREE.SphereGeometry(.22*s,8,6),M('#6b4a2a'),x+.36*s,5.6*s,z))};
+  for(let i=0;i<=8;i++){const px=fx0+1.2+(fx1-fx0-2.4)*i/8;palm(px,fz1-1.1,.9);if(Math.abs(px-cx)>6)palm(px,fz0+1.1,.9)}
+  // central fountain with crown statue (on the road between blocks)
+  g.add(part(new THREE.CylinderGeometry(3.6,3.9,.6,32),white,cx,.62,zc));g.add(part(new THREE.CylinderGeometry(3.2,3.2,.1,32),M('#58c8ff',{emissive:'#1f7fbf',emissiveIntensity:.35,roughness:.1,metalness:.2}),cx,.9,zc));
+  g.add(part(new THREE.CylinderGeometry(.6,.9,2.6,16),white,cx,2,zc));const bigC=makeCrown();bigC.scale.setScalar(1.6);bigC.position.set(cx,3.9,zc);g.add(bigC);
+  const jets=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const j=part(new THREE.CylinderGeometry(.06,.14,2.2,6),new THREE.MeshBasicMaterial({color:'#bfefff',transparent:true,opacity:.7}),cx+Math.cos(a)*2.2,2,zc+Math.sin(a)*2.2);j.rotation.z=Math.cos(a)*.35;j.rotation.x=-Math.sin(a)*.35;g.add(j);jets.push(j)}
+  // red carpet + velvet ropes at entrance
+  for(const sx of[-1.4,1.4])for(let i=0;i<4;i++)g.add(part(new THREE.CylinderGeometry(.08,.1,1,8),GOLD,cx+sx,.85,fz0-1.5+i*1.6));
+  // searchlights
+  const beams=[];for(const [bx2,bz2] of[[fx0+1,fz0+1],[fx1-1,fz0+1],[fx0+1,fz1-1],[fx1-1,fz1-1]]){g.add(part(new THREE.CylinderGeometry(.5,.6,.8,12),M('#333'),bx2,.7,bz2));
+    const bm=new THREE.Mesh(new THREE.CylinderGeometry(.4,2.8,60,16,1,true),new THREE.MeshBasicMaterial({color:'#ffe9a0',transparent:true,opacity:.16,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));bm.geometry.translate(0,30,0);bm.position.set(bx2,1,bz2);g.add(bm);beams.push(bm)}
+  // banners on lamps
+  for(let i=0;i<6;i++){const px=fx0+4+(fx1-fx0-8)*i/5;g.add(part(new THREE.CylinderGeometry(.07,.07,5,6),GOLD,px,2.8,fz0-.2));g.add(part(box,i%2?purple:red,px+.55,4.3,fz0-.2,1,1.8,.05))}
+  // giant floating crown visible from the whole city
+  const giant=makeCrown();giant.scale.setScalar(5);giant.position.set(cx,34,zc);g.add(giant);
+  const glow=new THREE.Mesh(new THREE.SphereGeometry(7,20,16),new THREE.MeshBasicMaterial({color:'#ffd84a',transparent:true,opacity:.12,depthWrite:false,blending:THREE.AdditiveBlending}));glow.position.copy(giant.position);g.add(glow);
+  // gold sparkles in the air
+  const SN=160,sp2=new Float32Array(SN*3);for(let i=0;i<SN;i++){sp2[i*3]=cx+(Math.random()-.5)*W;sp2[i*3+1]=Math.random()*14;sp2[i*3+2]=zc+(Math.random()-.5)*D}
+  const sgeo=new THREE.BufferGeometry();sgeo.setAttribute('position',new THREE.BufferAttribute(sp2,3));g.add(new THREE.Points(sgeo,new THREE.PointsMaterial({color:'#ffe27a',size:4,sizeAttenuation:false,transparent:true,opacity:.85,depthWrite:false})));
+  vipAnim.push(t=>{giant.rotation.y=t*.5;giant.position.y=34+Math.sin(t*.8)*1.5;glow.position.y=giant.position.y+1;glow.material.opacity=.1+.05*Math.sin(t*2);bigC.rotation.y=-t*.6;
+    beams.forEach((b,i)=>{b.rotation.z=Math.sin(t*.6+i*1.7)*.35;b.rotation.x=Math.cos(t*.5+i)*.3});jets.forEach((j,i)=>j.scale.y=.85+.25*Math.sin(t*6+i));
+    for(let i=0;i<SN;i++){let y=sp2[i*3+1]+.02;if(y>14)y=0;sp2[i*3+1]=y}sgeo.attributes.position.needsUpdate=true});
   return{x:cx,z:zc,az}})();
 // ---------- name plates at each house (lazy, near camera only) ----------
 const PLATE_POST=M('#3a2a1a',{roughness:.7}),PLATE_GEO=new THREE.BoxGeometry(1,1,1);let MY_NICK='';
@@ -1759,8 +1792,8 @@ if(WINTER){
   const NF=2600,R=70,HH=45,pos=new Float32Array(NF*3),spd=new Float32Array(NF);for(let i=0;i<NF;i++){pos[i*3]=(Math.random()*2-1)*R;pos[i*3+1]=Math.random()*HH;pos[i*3+2]=(Math.random()*2-1)*R;spd[i]=1.2+Math.random()*1.6}
   const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(pos,3));
   const flake=(()=>{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');const gr=x.createRadialGradient(16,16,0,16,16,16);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.5,'rgba(255,255,255,.8)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,32,32);const t=new THREE.CanvasTexture(c);return t})();
-  const SNOW=new THREE.Points(sg,new THREE.PointsMaterial({map:flake,size:7,sizeAttenuation:false,transparent:true,depthWrite:false,opacity:.9}));SNOW.frustumCulled=false;scene.add(SNOW);
-  let lt=null;parkAnim.push(t=>{const dt=lt===null?0:Math.min(.1,Math.max(0,t-lt));lt=t;const c=(typeof camT!=='undefined'&&camT)?camT:{x:0,y:0,z:0};SNOW.position.set(Math.round(c.x/10)*10,0,Math.round(c.z/10)*10);
+  const SNOW=new THREE.Points(sg,new THREE.PointsMaterial({map:flake,size:7,sizeAttenuation:false,transparent:true,depthWrite:false,opacity:.9}));SNOW.frustumCulled=false;
+  let lt=null;if(false)parkAnim.push(t=>{const dt=lt===null?0:Math.min(.1,Math.max(0,t-lt));lt=t;const c=(typeof camT!=='undefined'&&camT)?camT:{x:0,y:0,z:0};SNOW.position.set(Math.round(c.x/10)*10,0,Math.round(c.z/10)*10);
     for(let i=0;i<NF;i++){let y=pos[i*3+1]-spd[i]*dt;if(y<0)y+=HH;pos[i*3+1]=y;pos[i*3]+=Math.sin(t*.7+i)*dt*.35}sg.attributes.position.needsUpdate=true});
 }
 
