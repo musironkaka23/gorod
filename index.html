@@ -103,6 +103,10 @@
   #rail{position:fixed;right:12px;bottom:calc(26px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;align-items:center;z-index:5}
   .rb{position:relative;width:50px;height:50px;border-radius:50%;border:none;background:rgba(255,255,255,.95);font-size:23px;box-shadow:0 4px 12px rgba(0,0,0,.3);padding:0;cursor:pointer}
   .rb::before{content:attr(data-l);position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:1px;font:900 10px Inter,sans-serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8);white-space:nowrap}
+  #vipBtn{background:linear-gradient(#ffe27a,#f2b417);font-size:22px}
+  #vipM .card{background:linear-gradient(#fffaf0,#fff3cf);border:3px solid #f2b417}#vipM .tier{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border-radius:16px;padding:12px;margin-top:10px;box-shadow:0 2px 0 #e8d08a,0 0 0 2px #f2d27a}
+  #vipM .tier .e{font-size:30px}#vipM .tier b{font-size:16px}#vipM .tier .pr{margin-left:auto;font:900 18px Inter;color:#b8860b;white-space:nowrap}#vipM .tier small{display:block;color:#666;font-weight:600;font-size:12.5px;line-height:1.3;margin-top:2px}
+  #vipM .how{background:#2a1d45;color:#fff;border-radius:16px;padding:12px;margin-top:12px;font-weight:700;font-size:14px;line-height:1.4;text-align:left}#vipM .how b{color:#ffd84a}
   .rb.big{width:62px;height:62px;background:#ffd84a;font-size:28px}
   #buildBtn{position:relative;left:auto;top:auto;background:#ff7a1a;color:#fff;padding:0;font-size:23px}
   #chatBtn{position:relative;right:auto;top:auto;width:50px;height:50px}
@@ -180,6 +184,7 @@
   <div id="coins">🪙 <b id="coinN">0</b></div>
 </div>
 <div id="rail">
+  <button id="vipBtn" class="rb" data-l="VIP">👑</button>
   <button id="emoBtn" class="rb" data-l="Эмоции">😊</button>
   <button id="chatBtn" class="rb" data-l="Чат">💬</button>
   <button id="buildBtn" class="rb" data-l="Дом">🏗</button>
@@ -194,6 +199,15 @@
 <div id="chat" class="hide"><div style="display:flex;justify-content:space-between;align-items:center;font:900 15px Inter">💬 Чат города<button id="chatClose" style="border:none;background:none;font-size:18px">✕</button></div><div id="chatLog"></div>
 <form id="chatForm"><input id="chatIn" maxlength="80" placeholder="Напиши жителям…" autocomplete="off"><button>➤</button></form></div>
 <div id="toast"></div>
+<div class="modal hide" id="vipM"><div class="card">
+  <div style="font-weight:900;font-size:24px">👑 VIP-дом в Бишкеке</div>
+  <div style="color:#666;font-weight:600;font-size:13.5px;margin-top:4px">Обычный дом — бесплатно. VIP — для тех, кто хочет выделиться ✨</div>
+  <div class="tier"><span class="e">👑</span><div><b>VIP-корона</b><small>Золотая корона над твоим домом и золотая табличка с ником</small></div><span class="pr">100 сом</span></div>
+  <div class="tier"><span class="e">🏰</span><div><b>Дом в Золотом квартале</b><small>Любой дом на твой выбор в элитном районе + корона + без очереди</small></div><span class="pr">300 сом</span></div>
+  <div class="tier"><span class="e">💎</span><div><b>Супер-VIP</b><small>Всё из 300 + салют и блёстки над домом + твой дом покажем в Reels</small></div><span class="pr">500 сом</span></div>
+  <div class="how"><b>Как купить:</b><br>1. Напиши в директ <b>@ai_toons_kg</b> слово <b>VIP</b><br>2. Получишь номер для перевода через <b>MBank</b><br>3. Отправь скрин чека и свой ник<br><br>⚠️ Если тебе меньше 18 — сначала спроси разрешения у родителей.</div>
+  <button class="btn y" id="vipGo">🏰 Посмотреть Золотой квартал</button><button class="btn g" id="vipClose">Закрыть</button>
+</div></div>
 <div class="modal hide" id="buildModal"><div class="card">
   <div style="font-weight:900;font-size:22px">🏗 Построй свой дом</div>
   <input id="bNick" placeholder="Твой ник в Instagram" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-top:12px">
@@ -1631,19 +1645,54 @@ const HOUSE={
 
 const houseOf=new WeakMap();const houses=[],labelBox=document.getElementById('labels');
 const PARK_BLOCK=13;const AQ_BL=[[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1]].map(([x,z])=>blocks.findIndex(b=>b[0]===x&&b[1]===z));const AQ_RECT={x0:2*PX-BW/2-SIDE-.5,x1:3*PX+BW/2+SIDE+.5,z0:-PZ-BD/2-SIDE-.5,z1:PZ+BD/2+SIDE+.5};
-const RES_LOTS=new Set([...PUBLIC.map(x=>x[0]),...Array.from({length:8},(_,i)=>PARK_BLOCK*8+i),...AQ_BL.flatMap(k=>Array.from({length:8},(_,i)=>k*8+i))]);let slotK=0;function nextSlot(){while(RES_LOTS.has(slotK))slotK++;return slotK++}const slotOf=RESIDENTS.map(()=>nextSlot());
-const ALL=[...RESIDENTS.map((r,i)=>[r[0],r[1],slotOf[i],false]),...PUBLIC.map(p=>[p[1],p[2],p[0],true])];
+const VIP={/*ник:уровень 1=корона 2=Золотой квартал 3=Супер-VIP*/};
+const VIP_BL=[[-1,6],[0,6]].map(([x,z])=>blocks.findIndex(b=>b[0]===x&&b[1]===z));const VIP_LOTS=VIP_BL.flatMap(k=>Array.from({length:8},(_,i)=>k*8+i));
+const RES_LOTS=new Set([...VIP_LOTS,...PUBLIC.map(x=>x[0]),...Array.from({length:8},(_,i)=>PARK_BLOCK*8+i),...AQ_BL.flatMap(k=>Array.from({length:8},(_,i)=>k*8+i))]);let slotK=0;function nextSlot(){while(RES_LOTS.has(slotK))slotK++;return slotK++}const slotOf=RESIDENTS.map(()=>nextSlot());
+let vipK=0;const ALL=[...RESIDENTS.map((r,i)=>[r[0],r[1],(VIP[r[0]]>=2&&vipK<VIP_LOTS.length)?VIP_LOTS[vipK++]:slotOf[i],false]),...PUBLIC.map(p=>[p[1],p[2],p[0],true])];
 function buildHouse(nick,type,lot,pub){const L=lotInfo(lot),def=HOUSE[type]||HOUSE.house,g=def.make(nick);
   g.position.set(L.x,.32,L.z);g.rotation.y=L.rot;scene.add(g);
   const el=document.createElement('div');el.className='label'+(pub?' pub':'');el.innerHTML='<span class="d"></span>'+nick;labelBox.appendChild(el);
   const h={nick,type,L,g,el,top:def.h+1,r:def.r,pub};g.traverse(o=>houseOf.set(o,h));houses.push(h);return h}
 ALL.forEach(([nick,type,lot,pub])=>buildHouse(nick,type,lot,pub));
+// ---------- VIP ----------
+const vipAnim=[];const GOLD=M('#f2b417',{metalness:.75,roughness:.25,emissive:'#7a5200',emissiveIntensity:.35});
+function makeCrown(){const g=new THREE.Group();g.add(part(new THREE.CylinderGeometry(1,1,.7,12,1,true),GOLD,0,0,0));for(let i=0;i<6;i++){const a=i/6*Math.PI*2;g.add(part(new THREE.ConeGeometry(.28,.75,6),GOLD,Math.cos(a)*.92,.7,Math.sin(a)*.92));
+  g.add(part(new THREE.SphereGeometry(.13,8,6),M(['#ff3b5c','#3fb8ff','#3fe08a'][i%3],{emissive:['#ff3b5c','#3fb8ff','#3fe08a'][i%3],emissiveIntensity:.8}),Math.cos(a)*1.01,.05,Math.sin(a)*1.01))}return g}
+for(const h of houses){const lv=VIP[h.nick];if(!lv)continue;h.vip=lv;const cr=makeCrown();const top=Math.min(h.top,40);cr.position.set(h.L.x,top+1.6,h.L.z);cr.scale.setScalar(1.3);scene.add(cr);
+  vipAnim.push(t=>{cr.rotation.y=t*1.2;cr.position.y=top+1.6+Math.sin(t*2+h.L.x)*.3});
+  if(lv>=3){const n=40,pos=new Float32Array(n*3);const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));const sp=new THREE.Points(geo,new THREE.PointsMaterial({color:'#ffe27a',size:5,sizeAttenuation:false,transparent:true,opacity:.9,depthWrite:false}));scene.add(sp);let nf=0;
+    vipAnim.push(t=>{for(let i=0;i<n;i++){const a=i*2.4+t*.8,r=2.5+(i%5)*.5;pos[i*3]=h.L.x+Math.cos(a)*r;pos[i*3+1]=((i*1.7+t*1.5)%Math.max(6,top));pos[i*3+2]=h.L.z+Math.sin(a)*r}geo.attributes.position.needsUpdate=true;
+      if(t>nf&&Math.hypot(h.L.x-camT.x,h.L.z-camT.z)<70){nf=t+5+Math.random()*3;firework(h.L.x,h.L.z,top+10)}})}}
+const VIPQ=(()=>{const bs=VIP_BL.map(k=>blocks[k]);const x0=Math.min(...bs.map(b=>b[0]))*PX,x1=Math.max(...bs.map(b=>b[0]))*PX,zc=bs[0][1]*PZ,cx=(x0+x1)/2;const g=new THREE.Group();scene.add(g);
+  const pav=M('#e9c66a',{roughness:.6}),pav2=M('#d4a93f',{roughness:.6});
+  g.add(part(box,pav,cx,.335,zc,x1-x0+BW+2*SIDE,.05,BD+2*SIDE));
+  for(const b of bs){const bx=b[0]*PX;for(let i=0;i<4;i++){g.add(part(box,pav2,bx-BW/2+LOT*i,.345,zc,.12,.04,BD))}}
+  // arch on the road side facing city (south, -z)
+  const az=zc-BD/2-SIDE+.5;for(const sx of[-5.2,5.2]){g.add(part(new THREE.CylinderGeometry(.45,.55,7,12),GOLD,cx+sx,3.5,az));g.add(part(new THREE.SphereGeometry(.6,12,10),GOLD,cx+sx,7.3,az))}
+  const c=document.createElement('canvas');c.width=1024;c.height=200;const x=c.getContext('2d');const gr=x.createLinearGradient(0,0,0,200);gr.addColorStop(0,'#3a1d4e');gr.addColorStop(1,'#14081f');x.fillStyle=gr;x.fillRect(0,0,1024,200);x.strokeStyle='#f2b417';x.lineWidth=14;x.strokeRect(7,7,1010,186);
+  let qf=96;x.font=`900 ${qf}px Inter,sans-serif`;while(x.measureText('👑 ЗОЛОТОЙ КВАРТАЛ').width>960&&qf>40){qf-=4;x.font=`900 ${qf}px Inter,sans-serif`}x.textAlign='center';x.textBaseline='middle';x.fillStyle='#ffd84a';x.fillText('👑 ЗОЛОТОЙ КВАРТАЛ',512,104);
+  const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;const sm=new THREE.MeshStandardMaterial({map:tx,emissive:'#fff',emissiveMap:tx,emissiveIntensity:.6});
+  const sg=part(box,sm,cx,6.4,az,10.6,2.1,.3);g.add(sg);
+  const bl=[];for(let i=0;i<12;i++){const b=part(new THREE.SphereGeometry(.13,8,6),new THREE.MeshStandardMaterial({color:'#ffe27a',emissive:'#ffcc33',emissiveIntensity:1}),cx-5+i*10/11,7.55,az);g.add(b);bl.push(b)}
+  vipAnim.push(t=>bl.forEach((b,i)=>b.material.emissiveIntensity=(Math.sin(t*5+i)>0?1.4:.3)));
+  // gold lamps
+  for(const b of bs)for(const sx of[-BW/2-.6,BW/2+.6])for(const sz of[-BD/2-.6,BD/2+.6]){const lx=b[0]*PX+sx,lz=zc+sz;g.add(part(new THREE.CylinderGeometry(.08,.1,3.2,8),GOLD,lx,1.9,lz));g.add(part(new THREE.SphereGeometry(.28,10,8),M('#fff3b0',{emissive:'#ffcc55',emissiveIntensity:1.4}),lx,3.6,lz))}
+  // free lots: pedestal + sign
+  const used=new Set(houses.filter(h=>h.vip>=2).map(h=>h.L.x.toFixed(1)+','+h.L.z.toFixed(1)));
+  const fc=document.createElement('canvas');fc.width=256;fc.height=128;const f=fc.getContext('2d');f.fillStyle='#fff8e1';f.fillRect(0,0,256,128);f.strokeStyle='#f2b417';f.lineWidth=10;f.strokeRect(5,5,246,118);f.textAlign='center';f.textBaseline='middle';
+  f.font='900 40px Inter,sans-serif';f.fillStyle='#b8860b';f.fillText('СВОБОДНО',128,48);f.font='900 30px Inter,sans-serif';f.fillStyle='#2a1d45';f.fillText('VIP 👑',128,92);
+  const ft=new THREE.CanvasTexture(fc);ft.colorSpace=THREE.SRGBColorSpace;const fm=new THREE.MeshStandardMaterial({map:ft,emissive:'#fff',emissiveMap:ft,emissiveIntensity:.35});
+  const free=[];for(const k of VIP_LOTS){const L=lotInfo(k);if(used.has(L.x.toFixed(1)+','+L.z.toFixed(1)))continue;const q=new THREE.Group();q.position.set(L.x,.32,L.z);q.rotation.y=L.rot;g.add(q);
+    q.add(part(new THREE.CylinderGeometry(1.6,1.8,.3,24),pav2,0,.15,0));const s2=part(box,fm,0,1.6,1.6,2.2,1.1,.12);s2.rotation.x=-.2;q.add(s2);for(const sx of[-.8,.8])q.add(part(new THREE.CylinderGeometry(.05,.05,1.2,6),GOLD,sx,.7,1.62));
+    const cr=makeCrown();cr.scale.setScalar(.7);cr.position.y=1.2;q.add(cr);free.push(cr)}
+  vipAnim.push(t=>free.forEach((c,i)=>{c.rotation.y=t+i;c.position.y=1.2+Math.sin(t*2+i)*.2}));
+  return{x:cx,z:zc,az}})();
 // ---------- name plates at each house (lazy, near camera only) ----------
 const PLATE_POST=M('#3a2a1a',{roughness:.7}),PLATE_GEO=new THREE.BoxGeometry(1,1,1);let MY_NICK='';
 function makePlate(h){const c=document.createElement('canvas');c.width=320;c.height=88;const x=c.getContext('2d');
-  x.fillStyle='#fff8e8';x.fillRect(0,0,320,88);x.fillStyle='#7b4fc9';x.fillRect(0,0,320,10);x.fillRect(0,78,320,10);
+  const vp=!!h.vip;x.fillStyle=vp?'#ffe9a8':'#fff8e8';x.fillRect(0,0,320,88);x.fillStyle=vp?'#d4a017':'#7b4fc9';x.fillRect(0,0,320,10);x.fillRect(0,78,320,10);
   let fs=40;x.font=`900 ${fs}px Inter,sans-serif`;while(x.measureText(h.nick).width>296&&fs>16){fs-=2;x.font=`900 ${fs}px Inter,sans-serif`}
-  x.fillStyle='#1b1410';x.textAlign='center';x.textBaseline='middle';x.fillText(h.nick,160,46);
+  x.fillStyle='#1b1410';x.textAlign='center';x.textBaseline='middle';x.fillText((vp?'👑 ':'')+h.nick,160,46);
   const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;tx.anisotropy=4;
   const mat=new THREE.MeshStandardMaterial({map:tx,emissive:'#ffffff',emissiveMap:tx,emissiveIntensity:.25,roughness:.8});
   const g=new THREE.Group();for(const sx of[-1.05,1.05])g.add(part(new THREE.CylinderGeometry(.06,.07,1.6,6),PLATE_POST,sx,.8,0));
@@ -1654,7 +1703,7 @@ function dropPlate(h){scene.remove(h.plate.g);h.plate.tx.dispose();h.plate.mat.d
 function updatePlates(){try{MY_NICK=localStorage.getItem('gorod_nick')||''}catch(e){}
   for(const h of houses){if(h.pub||!h.L||h.type==='park')continue;const d=Math.hypot(h.L.x-camT.x,h.L.z-camT.z);if(d<55&&!h.plate)makePlate(h);else if(d>85&&h.plate)dropPlate(h)}}
 // ---------- park ----------
-const BENCHES=[],parkAnim=[];
+const BENCHES=[],parkAnim=[];parkAnim.push(t=>{for(const fn of vipAnim)fn(t)});
 const parkH=(()=>{const b=blocks[PARK_BLOCK],cx=b[0]*PX,cz=b[1]*PZ,g=new THREE.Group();g.position.set(cx,0,cz);scene.add(g);
   const lawn=M(WINTER?'#eef3f7':'#7fbf4f'),path=M('#e9d9b8'),stone=M('#cfc8bb'),wood=M('#9a6a3a'),iron=M('#2c2a2c');
   g.add(part(box,lawn,0,.34,0,BW,.06,BD));g.add(part(box,path,0,.38,0,BW,.04,1.8));g.add(part(box,path,0,.38,0,1.8,.04,BD));
@@ -2181,8 +2230,9 @@ $('kinoBtn').onclick=openKino;$('kClose').onclick=closeKino;
 // ---------- places ----------
 function placesList(){const my=(()=>{try{return localStorage.getItem('gorod_nick')||''}catch(e){return''}})();const L=[];
   const mh=my&&houses.find(h=>h.nick===my);if(mh)L.push(['🏠','Мой дом',mh]);
-  for(const [t,e,n] of[['aquapark','🌊','Аквапарк — бассейн и горки'],['mall','🛍','ТЦ «Бишкек» — покупки'],['cinema','🎬','Кинотеатр — смотреть кино'],['park','🌳','Парк общения'],['shop','👗','Магазин одежды'],['shelter','🐾','Приют — взять питомца'],['school','🏫','Школа №1']]){const h=houses.find(x=>x.type===t);if(h)L.push([e,n,h])}
+  for(const [t,e,n] of[['aquapark','🌊','Аквапарк — бассейн и горки'],['mall','🛍','ТЦ «Бишкек» — покупки'],['cinema','🎬','Кинотеатр — смотреть кино'],['__vip','👑','Золотой квартал — VIP'],['park','🌳','Парк общения'],['shop','👗','Магазин одежды'],['shelter','🐾','Приют — взять питомца'],['school','🏫','Школа №1']]){const h=t==='__vip'?{L:{x:VIPQ.x,z:VIPQ.az-6,rot:Math.PI,front:-1},top:8,r:4,nick:'Золотой квартал',type:'vipq'}:houses.find(x=>x.type===t);if(h)L.push([e,n,h])}
   $('plList').innerHTML='';L.forEach(([e,n,h])=>{const b=document.createElement('button');b.innerHTML=`<span>${e}</span>${n}`;b.onclick=()=>{$('places').classList.add('hide');goTo(h)};$('plList').appendChild(b)})}
+$('vipBtn').onclick=()=>$('vipM').classList.remove('hide');$('vipClose').onclick=()=>$('vipM').classList.add('hide');$('vipGo').onclick=()=>{$('vipM').classList.add('hide');goTo({L:{x:VIPQ.x,z:VIPQ.az-6,rot:Math.PI,front:-1},top:8,r:4,nick:'Золотой квартал',type:'vipq'})};
 $('placesBtn').onclick=()=>{placesList();$('places').classList.remove('hide')};$('plClose').onclick=()=>$('places').classList.add('hide');
 // ---------- emotes & animations ----------
 $('emoBtn').onclick=()=>$('emos').classList.toggle('hide');
@@ -2224,7 +2274,7 @@ function updateAnim(dt,t,moving){
   const nm=mallH&&!driving&&!mallOpen&&!wardOpen&&Math.hypot(player.position.x-mallH.L.x,player.position.z-mallH.L.z)<7.5;$('mallBtn').style.display=nm?'block':'none';const kH=houses.find(h=>h.type==='cinema');const nk=kH&&!driving&&!kinoOpen&&!mallOpen&&Math.hypot(player.position.x-kH.L.x,player.position.z-kH.L.z)<7.5;$('kinoBtn').style.display=nk?'block':'none';
   for(const fn of parkAnim)fn(t);updateAqua(dt,t,moving)}
 
-window.__G={THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet},get anim(){return myAnim}};
+window.__G={VIPQ,THREE,HOUSE,scene,houses,buildHouse,nextSlot,RESIDENTS,player,camera,labelBox,M,part,box,makePet,PET_TYPES,goTo:(h)=>goTo(h),get heading(){return heading},get driving(){return driving},get gender(){return LOOK.g},get look(){return lookStr(LOOK)},get mayor(){return !!window.__mayor},buildCharacter,lookParse,lookFix,get pet(){return myPet},get anim(){return myAnim}};
 // ---------- loop ----------
 let cullT=0;const clock=new THREE.Clock(),v=new THREE.Vector3();let driving=null,nearCar=null,lookH=2,walkT=0,camT=new THREE.Vector3().copy(player.position);
 const spinners=[];const blinkers=[];scene.traverse(o=>{if(o.userData.spin)spinners.push(o);if(o.userData.blink)blinkers.push(o)});
